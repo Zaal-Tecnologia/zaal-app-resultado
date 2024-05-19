@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Zaal Resultado",
+    "slug": "zaal-resultado-3-ihwtoq5o5rscwwfywrd",
+    "version": "2.0.0",
+    "scheme": "zaal-resultado-app",
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E33530"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zaal.resultado"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E33530"
+      },
+      "package": "com.zaal.result"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0cdedc9f-eed6-403c-b421-202f4e483d10"
+      }
+    },
+    "owner": "zaal"
+  }
+}
