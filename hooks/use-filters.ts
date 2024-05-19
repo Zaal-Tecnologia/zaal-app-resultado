@@ -36,7 +36,7 @@ export const useFilter = create<Props>((set) => ({
           PERIOD: filter.PERIOD || prev.filter.PERIOD,
           VARIANT: filter.VARIANT || prev.filter.VARIANT,
           CHART: filter.CHART || prev.filter.CHART,
-          SHOW: prev.filter.SHOW || filter.SHOW,
+          SHOW: !prev.filter.SHOW,
           EXPAND: filter.EXPAND,
           SIZE: filter.SIZE || prev.filter.SIZE,
         },

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Zaal Resultado",
-    "slug": "zaal-resultado-3-ihwtoq5o5rscwwfywrd",
+    "slug": "zaal-resultado-app-v7el6uxxd5qefyskg9",
     "version": "2.0.0",
     "scheme": "zaal-resultado-app",
     "plugins": [
@@ -39,7 +39,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "0cdedc9f-eed6-403c-b421-202f4e483d10"
+        "projectId": "6ef5e762-29ca-44fa-b145-be826e8aa239"
       }
     },
     "owner": "zaal"
