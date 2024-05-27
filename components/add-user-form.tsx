@@ -46,13 +46,13 @@ type Props = {
 
 export function AddUserForm(props: Props) {
   const { add } = useUsers()
-  const { user } = useUsers()
+  // const { user } = useUsers()
 
   const [errors, setErrors] = useState<string[]>([])
 
   const { control, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(Schema),
-    defaultValues: user
+    /** defaultValues: user
       ? {
           empresaId: '3B55A873',
           dispositivoHash: '5FF93EB5',
@@ -64,7 +64,7 @@ export function AddUserForm(props: Props) {
           dispositivoHash: '5962AE39',
           login: 'MATHEUS',
           senha: '0112A',
-        },
+        }, */
   })
 
   const { mutate, isPending } = useMutation<unknown, unknown, FormInput>({
