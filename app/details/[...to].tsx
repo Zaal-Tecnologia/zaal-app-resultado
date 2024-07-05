@@ -146,8 +146,6 @@ export default function SalesDetails() {
     [chartData, filter.VARIANT, selected?.id],
   )
 
-  console.log(chartData)
-
   return (
     <Container>
       <Header.Root style={{ paddingHorizontal: 24 }}>
@@ -161,7 +159,7 @@ export default function SalesDetails() {
       {filter.EXPAND ? null : (
         <>
           <P className="px-6 font-urbanist-semibold text-[24px]">
-            R$ {filter.SHOW ? currency(TOTAL) : '-'}
+            {filter.SHOW ? currency(TOTAL) : '-'}
           </P>
 
           <Filter.Root className="my-10">
@@ -189,15 +187,15 @@ export default function SalesDetails() {
                 bigger={
                   dataByPeriod
                     ? currency(dataByPeriod[dataByPeriod.length - 1].valorTotal)
-                    : 'R$ 0'
+                    : ' 0'
                 }
                 average={
                   dataByPeriod && TOTAL
                     ? currency(TOTAL / dataByPeriod.length)
-                    : 'R$ 0'
+                    : ' 0'
                 }
                 smaller={
-                  dataByPeriod ? currency(dataByPeriod[0].valorTotal) : 'R$ 0'
+                  dataByPeriod ? currency(dataByPeriod[0].valorTotal) : ' 0'
                 }
               /> */}
 
@@ -273,7 +271,7 @@ export default function SalesDetails() {
                     <Sheet.ListItemTitle>
                       {filter.VARIANT === 'QUANTIDADE'
                         ? item.quantidadeTotal
-                        : `R$ ${currency(item.valorTotal)}`}
+                        : ` ${currency(item.valorTotal)}`}
                     </Sheet.ListItemTitle>
                   </Sheet.ListItem>
                 </Sheet.ListRow>

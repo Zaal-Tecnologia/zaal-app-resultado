@@ -4,6 +4,7 @@ import { useMMKVObject } from 'react-native-mmkv'
 import { useRouter } from 'expo-router'
 
 import type { User } from '~/types/user'
+import { FAKE_BRANCH_TO_INITIAL_DATA, useBranch } from './use-branch'
 
 export function useUsers() {
   const toast = useToast()
@@ -111,15 +112,11 @@ export function useUsers() {
 
   /** MMKV */
   const { push } = useRouter()
+  const { setBranch } = useBranch()
 
   const [users, setUsers] = useMMKVObject<User[] | undefined>(
     'zaal-result-app:users',
     undefined,
-  )
-
-  const user = useMemo(
-    () => (users ? users.find((user) => user.active) : null),
-    [users],
   )
 
   const add = useCallback(
@@ -127,15 +124,24 @@ export function useUsers() {
       if (!users) {
         setUsers([user])
       } else {
-        setUsers([...users, { ...user, active: false }])
+        const userWithSameId = users.some((item) => item.userId === user.userId)
 
-        // const userWithSameId = users.some((item) => item.userId === user.userId)
-
-        /** if (userWithSameId) {
+        if (userWithSameId) {
           return toast.show('Usuário já existe!')
         } else {
-          setUsers([...users, user])
-        } */
+          setUsers([
+            ...users.map((item) => ({
+              ...item,
+              active: false,
+            })),
+            {
+              ...user,
+              active: true,
+            },
+          ])
+        }
+
+        // setUsers([...users, { ...user, active: false }])
       }
 
       onSuccess()
@@ -152,22 +158,22 @@ export function useUsers() {
   const change = useCallback(
     (userId: string) => {
       if (users) {
-        const userThatNeedsToBeActivated = users.find(
-          (item) => item.userId === userId,
+        setUsers(
+          users.map((user) => ({
+            ...user,
+            active: user.userId === userId,
+          })),
         )
 
-        if (user && userThatNeedsToBeActivated) {
-          setUsers([
-            { ...userThatNeedsToBeActivated, active: true },
-            { ...user, active: false },
-            ...users.filter(
-              (item) => item.userId !== userId && item.userId !== user.userId,
-            ),
-          ])
-        }
+        setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
       }
     },
-    [setUsers, user, users],
+    [setBranch, setUsers, users],
+  )
+
+  const user = useMemo(
+    () => (users ? users.find((user) => user.active) : null),
+    [users],
   )
 
   const removeCurrentUser = useCallback(() => {

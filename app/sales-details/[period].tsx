@@ -136,7 +136,7 @@ export default function SalesDetails() {
       {filter.EXPAND ? null : (
         <>
           <P className="px-6 font-urbanist-semibold text-[24px]">
-            R$ {filter.SHOW ? currency(TOTAL) : '-'}
+            {filter.SHOW ? currency(TOTAL) : '-'}
           </P>
 
           <Filter.Root className="my-10">
@@ -206,7 +206,7 @@ export default function SalesDetails() {
                 </P>
                 <View className="flex-row items-center">
                   <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
-                    R$ {currency(selected.valorTotal)}
+                    {currency(selected.valorTotal)}
                   </P>
 
                   {TOTAL && (
@@ -266,7 +266,7 @@ export default function SalesDetails() {
 
                   <Sheet.ListItem className="w-[33%]">
                     <Sheet.ListItemTitle>
-                      R$ {currency(item.valorTotal)}
+                      {currency(item.valorTotal)}
                     </Sheet.ListItemTitle>
                   </Sheet.ListItem>
 

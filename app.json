@@ -2,11 +2,19 @@
   "expo": {
     "name": "Zaal Resultado",
     "slug": "zaal-resultado-app-v7el6uxxd5qefyskg9",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "scheme": "zaal-resultado-app",
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -32,6 +40,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#E33530"
       },
+      "versionCode": 4,
       "package": "com.zaal.result"
     },
     "extra": {

@@ -69,9 +69,18 @@ export default function Profile() {
                 <ProfileUserCard.Content>
                   <ProfileUserCard.Name name={item.userName} />
                 </ProfileUserCard.Content>
-                <ProfileUserCard.Status isActive={item.active} />
+                <ProfileUserCard.Status
+                  isActive={item.active}
+                  system={item.companySystem}
+                />
               </ProfileUserCard.Root>
             ))}
+
+          <ProfileCard.Root onPress={() => setIsAddingUser(true)}>
+            <ProfileCard.Svg name="add-circle" />
+
+            <ProfileCard.Name>Adicionar nova conta</ProfileCard.Name>
+          </ProfileCard.Root>
 
           <ProfileCard.Root className="rounded-b-3xl" onPress={removeAll}>
             <ProfileCard.Svg name="log-out" />
@@ -82,14 +91,6 @@ export default function Profile() {
                 : 'Sair de todas as contas'}
             </ProfileCard.Name>
           </ProfileCard.Root>
-
-          {/** <ProfileCard.Root
-            onPress={() => setIsAddingUser(true)}
-            className="rounded-b-3xl">
-            <ProfileCard.Svg name="add-circle" />
-
-            <ProfileCard.Name>Adicionar nova conta</ProfileCard.Name>
-          </ProfileCard.Root> */}
 
           <View className="mt-5 px-5">
             <Support />

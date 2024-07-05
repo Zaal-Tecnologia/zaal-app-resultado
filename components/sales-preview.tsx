@@ -51,6 +51,11 @@ export function SalesPreview() {
 
   const { BORDER_PRIMARY } = useTheme()
 
+  // 739C3F09
+  // 5B09E807
+  // LARISSA
+  // 12750302706
+
   return (
     <>
       <Link asChild href="/sales-details/MÊS">
@@ -64,7 +69,7 @@ export function SalesPreview() {
           </View>
 
           <P className="mb-1.5 font-urbanist-regular text-[44px]">
-            R$ {currency(TOTAL?.MONTH)}
+            {currency(TOTAL?.MONTH)}
           </P>
         </Pressable>
       </Link>
@@ -77,7 +82,7 @@ export function SalesPreview() {
             Vendas {'\n'}Dessa Semana
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            R$ {currency(TOTAL?.WEEK)}
+            {currency(TOTAL?.WEEK)}
           </P>
         </Pressable>
       </Link>
@@ -90,7 +95,7 @@ export function SalesPreview() {
             Vendas {'\n'}De Hoje
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            R$ {currency(TOTAL?.DAY)}
+            {currency(TOTAL?.DAY)}
           </P>
         </Pressable>
       </Link>

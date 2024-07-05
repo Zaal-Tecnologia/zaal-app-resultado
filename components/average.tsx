@@ -16,7 +16,7 @@ export function Average({
   return (
     <View className="mt-2.5 flex-row items-center px-10">
       <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">máx.</P> R$ {smaller || 0}
+        <P className="font-inter-medium">máx.</P> {smaller || 0}
       </P>
 
       <View
@@ -25,7 +25,7 @@ export function Average({
       />
 
       <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">média </P> R$ {average || 0}
+        <P className="font-inter-medium">média </P> {average || 0}
       </P>
 
       <View
@@ -34,7 +34,7 @@ export function Average({
       />
 
       <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">mín.</P> R$ {bigger || 0}
+        <P className="font-inter-medium">mín.</P> {bigger || 0}
       </P>
     </View>
   )

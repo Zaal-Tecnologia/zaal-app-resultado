@@ -178,7 +178,7 @@ export default function Branch() {
         {filter.EXPAND ? null : (
           <>
             <P className="px-6 font-urbanist-semibold text-[24px]">
-              R$ {filter.SHOW ? currency(TOTAL) : '-'}
+              {filter.SHOW ? currency(TOTAL) : '-'}
             </P>
 
             <Filter.Root className="my-10">
@@ -209,15 +209,15 @@ export default function Branch() {
                       ? currency(
                           dataByPeriod[dataByPeriod.length - 1].valorTotal,
                         )
-                      : 'R$ 0'
+                      : ' 0'
                   }
                   average={
                     dataByPeriod && TOTAL
                       ? currency(TOTAL / dataByPeriod.length)
-                      : 'R$ 0'
+                      : ' 0'
                   }
                   smaller={
-                    dataByPeriod ? currency(dataByPeriod[0].valorTotal) : 'R$ 0'
+                    dataByPeriod ? currency(dataByPeriod[0].valorTotal) : ' 0'
                   }
                 />
 
@@ -287,7 +287,7 @@ export default function Branch() {
                       </P>
                       <View className="flex-row items-center">
                         <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
-                          R$ {currency(selected.valorTotal)}
+                          {currency(selected.valorTotal)}
                         </P>
 
                         {TOTAL && (
@@ -360,7 +360,7 @@ export default function Branch() {
                           <Sheet.ListItemTitle>
                             {filter.VARIANT === 'QUANTIDADE'
                               ? item.quantidadeTotal
-                              : `R$ ${currency(item.valorTotal)}`}
+                              : ` ${currency(item.valorTotal)}`}
                           </Sheet.ListItemTitle>
                         </Sheet.ListItem>
                       </Sheet.ListRow>

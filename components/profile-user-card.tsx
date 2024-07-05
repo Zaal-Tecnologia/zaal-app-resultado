@@ -23,13 +23,14 @@ function Root(props: TouchableOpacityProps & { index: number }) {
       className={clsx('mb-1 h-16 flex-row items-center justify-between px-5', {
         'rounded-t-2xl': props.index === 0,
       })}
-      style={{ backgroundColor: theme === 'dark' ? zinc[800] : zinc[100] }}>
+      style={{ backgroundColor: theme === 'dark' ? zinc[800] : zinc[100] }}
+      {...props}>
       {props.children}
     </TouchableOpacity>
   )
 }
 
-function Status(props: { isActive: boolean }) {
+function Status(props: { isActive: boolean; system: string }) {
   return (
     <View className="flex-row items-center">
       {props.isActive ? (
@@ -40,7 +41,12 @@ function Status(props: { isActive: boolean }) {
           </Text>
         </View>
       ) : (
-        <Icon name="chevron-forward" size={14} />
+        <>
+          <P className="mr-1 font-inter-semibold text-[9px] uppercase -tracking-wide">
+            {props.system}
+          </P>
+          <Icon name="chevron-forward" size={14} />
+        </>
       )}
     </View>
   )
@@ -66,9 +72,11 @@ function Name(props: { name: string }) {
         </P>
       </View>
 
-      <P className="ml-2.5 font-inter-medium text-sm capitalize -tracking-wide">
-        {props.name}
-      </P>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <P className="ml-2.5 font-inter-medium text-sm capitalize -tracking-wide">
+          {props.name}
+        </P>
+      </View>
     </>
   )
 }

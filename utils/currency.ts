@@ -3,7 +3,7 @@ export function currency(value: number | undefined) {
     ? '0'
     : new Intl.NumberFormat('pt-BR', {
         currency: 'BRL',
-        maximumSignificantDigits: 2,
         minimumFractionDigits: 2,
+        style: 'currency',
       }).format(value)
 }

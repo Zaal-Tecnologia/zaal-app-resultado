@@ -176,8 +176,10 @@ function Bar(
           tickFormat={(tick) =>
             filter.VARIANT === 'VALOR'
               ? tick >= 1000
-                ? `R$ ${currency(tick / 1000)} K`.replace(',', '.')
-                : `R$ ${currency(tick)}`
+                ? `${currency(tick / 1000)} K`
+                    .replace(',', '.')
+                    .replace('.00', '')
+                : `${currency(tick).replace('.00', '')}`
               : tick.toFixed(2).replace('.00', '')
           }
           style={{

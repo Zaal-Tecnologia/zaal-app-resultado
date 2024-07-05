@@ -5,7 +5,7 @@ import {
   TouchableOpacityProps,
   View,
 } from 'react-native'
-import { white, zinc } from 'tailwindcss/colors'
+import { zinc } from 'tailwindcss/colors'
 
 import { useTheme } from '~/hooks/use-theme'
 
@@ -38,12 +38,8 @@ function Svg(props: IconProps) {
 }
 
 function Name(props: TextProps) {
-  const { theme } = useTheme()
-
   return (
-    <P
-      className="ml-2.5 font-inter-medium text-sm -tracking-wide"
-      style={{ color: theme === 'light' ? zinc[800] : white }}>
+    <P className="ml-2.5 font-inter-medium text-sm -tracking-wide">
       {props.children}
     </P>
   )
