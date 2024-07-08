@@ -92,7 +92,11 @@ export default function Profile() {
             </ProfileCard.Name>
           </ProfileCard.Root>
 
-          <View className="mt-5 px-5">
+          <P className="my-5 ml-3 font-inter-medium text-xs -tracking-wide">
+            CONFIGURAÇÕES
+          </P>
+
+          <View className="px-2.5">
             <Support />
 
             <Theme />

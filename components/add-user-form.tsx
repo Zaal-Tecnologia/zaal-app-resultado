@@ -56,16 +56,16 @@ export function AddUserForm(props: Props) {
 
   const { control, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(Schema),
-    // defaultValues: {
-    //   dispositivoHash: props?.defaultValues?.dispositivoHash,
-    //   empresaId: props?.defaultValues?.empresaId,
-    // },
     defaultValues: {
-      empresaId: '59E6FEFD',
-      dispositivoHash: '5962AE39',
-      login: 'MATHEUS',
-      senha: '0112A',
+      dispositivoHash: props?.defaultValues?.dispositivoHash,
+      empresaId: props?.defaultValues?.empresaId,
     },
+    // defaultValues: {
+    //   empresaId: '59E6FEFD',
+    //   dispositivoHash: '5962AE39',
+    //   login: 'MATHEUS',
+    //   senha: '0112A',
+    // },
     /** defaultValues: user
       ? {
           empresaId: '3B55A873',

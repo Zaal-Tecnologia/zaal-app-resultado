@@ -1,7 +1,8 @@
-import { Linking, Pressable } from 'react-native'
+import { Linking, Pressable, View } from 'react-native'
 
 import { Icon } from './icon'
 import { P } from './p'
+import { useTheme } from '~/hooks/use-theme'
 
 export function Support() {
   function onContactSupport() {
@@ -13,11 +14,23 @@ export function Support() {
     Linking.openURL(whatsappUrl)
   }
 
+  const { BACKGROUND_SECONDARY } = useTheme()
+
   return (
     <Pressable
       className="h-14 flex-row items-center"
       onPress={onContactSupport}>
-      <Icon name="help-circle" size={20} />
+      <View
+        style={{
+          alignItems: 'center',
+          backgroundColor: BACKGROUND_SECONDARY,
+          justifyContent: 'center',
+          height: 40,
+          width: 40,
+          borderRadius: 99,
+        }}>
+        <Icon name="help-circle" size={20} />
+      </View>
 
       <P className="ml-3 font-inter-medium text-sm -tracking-wide">
         Contato com o suporte

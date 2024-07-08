@@ -42,7 +42,7 @@ export default function Layout() {
         backgroundColor: theme === 'dark' ? zinc[900] : white,
       }}>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider>
+        <ToastProvider textStyle={{ fontFamily: 'inter-medium' }}>
           <Stack
             screenOptions={{
               headerShown: false,

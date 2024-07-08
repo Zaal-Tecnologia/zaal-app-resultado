@@ -5,19 +5,56 @@ import { useRouter } from 'expo-router'
 import { CameraView, useCameraPermissions } from 'expo-camera/next'
 
 import { P } from '~/components/p'
+import { useToast } from 'react-native-toast-notifications'
 
 export default function AuthWithQRCode() {
   const [permission, requestPermission] = useCameraPermissions()
 
   const { push } = useRouter()
+  const toast = useToast()
 
   const onBarcodeScanned = useCallback(
     ({ data }: { data: string }) => {
-      const content = JSON.parse(data)
+      try {
+        const content = JSON.parse(data) as {
+          dispositivoHash: string
+          empresaId: string
+        }
 
-      push(`/auth-with-text/${content.dispositivoHash}/${content.empresaId}`)
+        if (
+          // eslint-disable-next-line no-prototype-builtins
+          !content.hasOwnProperty('empresaId') ||
+          // eslint-disable-next-line no-prototype-builtins
+          !content.hasOwnProperty('dispositivoHash')
+        ) {
+          if (!toast.isOpen('object-error')) {
+            toast.show(
+              'Esse QR Code não contém as informações corretas para preencher os campos.',
+              {
+                id: 'object-error',
+                onPress() {
+                  push(`/auth-with-text/nothing`)
+                },
+              },
+            )
+          }
+        } else {
+          push(
+            `/auth-with-text/${content.dispositivoHash}/${content.empresaId}`,
+          )
+        }
+      } catch (error) {
+        if (!toast.isOpen('error')) {
+          toast.show('Não foi possível ler o QR Code, clique aqui.', {
+            id: 'error',
+            onPress() {
+              push(`/auth-with-text/nothing`)
+            },
+          })
+        }
+      }
     },
-    [push],
+    [toast],
   )
 
   useEffect(() => {

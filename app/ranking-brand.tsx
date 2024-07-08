@@ -306,7 +306,9 @@ export default function Brand() {
                         QUANTIDADE
                       </P>
                       <View className="flex-row items-center">
-                        <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
+                        <P
+                          className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider"
+                          numberOfLines={1}>
                           {selected.quantidadeTotal}
                         </P>
                       </View>

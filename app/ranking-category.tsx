@@ -319,7 +319,9 @@ export default function Category() {
                     <TouchableOpacity
                       activeOpacity={0.8}
                       className="mt-10 h-14 flex-row items-center justify-center rounded-lg border-4 border-[#305a96]/20 bg-[#305a96] px-2.5">
-                      <Text className="mr-2.5 font-inter-semibold text-xs text-white">
+                      <Text
+                        className="mr-2.5 font-inter-semibold text-xs text-white"
+                        numberOfLines={1}>
                         VER MAIS DETALHES
                       </Text>
                       <Ionicons name="arrow-forward" size={16} color={white} />
