@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 
-// import { useSession } from './use-session'
 import { useBranch } from './use-branch'
-import { useUsers } from './use-users'
 import { useFilter } from './use-filters'
+
+import { getToken } from '~/utils/secure-store'
 
 type Key = string | undefined
 
@@ -11,23 +12,28 @@ export function useFetch<D>(
   queryKey: Key[],
   queryFn: (token: string, branchId: string) => void,
 ) {
-  const { user } = useUsers()
   const { branch } = useBranch()
   const { filter } = useFilter()
 
+  const [token, setToken] = useState<string | null>(null)
+
   const { data, error, isLoading, refetch } = useQuery<unknown, unknown, D>({
-    queryKey: [...queryKey, user?.token, branch.id],
+    queryKey: [...queryKey, token, branch.id],
     queryFn: async () => {
       const QUANTITY = filter.SIZE === '50+' ? '80' : filter.SIZE
 
       return queryFn(
-        user ? user.token : '',
+        token || '',
         branch.id === 0
           ? `?quantidade=${QUANTITY}&orderBy=${filter.VARIANT}`
           : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${filter.VARIANT}&`,
       )
     },
   })
+
+  useEffect(() => {
+    getToken('zaal-result-token').then(setToken)
+  }, [])
 
   return { data, error, isLoading, refetch }
 }

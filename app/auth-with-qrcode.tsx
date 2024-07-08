@@ -13,9 +13,9 @@ export default function AuthWithQRCode() {
 
   const onBarcodeScanned = useCallback(
     ({ data }: { data: string }) => {
-      // setQRCodeResult({ dispositivoHash: data, empresaId: data })
+      const content = JSON.parse(data)
 
-      push(`/auth-with-text/dispositvoHash/empresaId`)
+      push(`/auth-with-text/${content.dispositivoHash}/${content.empresaId}`)
     },
     [push],
   )

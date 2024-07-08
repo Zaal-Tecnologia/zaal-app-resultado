@@ -129,7 +129,7 @@ export default function Home() {
               <Link asChild href="/ranking-category">
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  className="mb-1 h-24 flex-1 items-center justify-center rounded-xl bg-[#699DC6]">
+                  className="mb-1 h-24 flex-1 items-center justify-center rounded rounded-tr-xl bg-[#699DC6]">
                   <Text className="mr-1 font-inter-semibold text-[12px] text-white">
                     CATEGORIAS
                   </Text>
@@ -139,7 +139,7 @@ export default function Home() {
               <Link asChild href="/ranking-branch">
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  className="my-1 h-24 flex-1 items-center justify-center rounded-xl bg-[#50B79B]">
+                  className="my-1 h-24 flex-1 items-center justify-center rounded bg-[#50B79B]">
                   <Text className="mr-1 font-inter-semibold text-[12px] text-white">
                     FILIAIS
                   </Text>
@@ -149,7 +149,7 @@ export default function Home() {
               <Link asChild href="/ranking-brand">
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  className="mt-1 h-24 flex-1 items-center justify-center rounded-xl rounded-br-[32px] bg-[#A079F8]">
+                  className="mt-1 h-24 flex-1 items-center justify-center rounded rounded-br-[32px] bg-[#A079F8]">
                   <Text className="mr-1 font-inter-semibold text-[12px] text-white">
                     MARCAS
                   </Text>

@@ -27,6 +27,7 @@ import { generateToken } from '~/utils/generate-token'
 
 import type { CompanyResponseDTO } from '~/types/company-response-dto'
 import type { UserResponseDTO } from '~/types/user-response-dto'
+import { saveToken } from '~/utils/secure-store'
 
 const Schema = z.object({
   empresaId: z.string(),
@@ -55,16 +56,16 @@ export function AddUserForm(props: Props) {
 
   const { control, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      dispositivoHash: props?.defaultValues?.dispositivoHash,
-      empresaId: props?.defaultValues?.empresaId,
-    },
     // defaultValues: {
-    //   empresaId: '59E6FEFD',
-    //   dispositivoHash: '5962AE39',
-    //   login: 'MATHEUS',
-    //   senha: '0112A',
+    //   dispositivoHash: props?.defaultValues?.dispositivoHash,
+    //   empresaId: props?.defaultValues?.empresaId,
     // },
+    defaultValues: {
+      empresaId: '59E6FEFD',
+      dispositivoHash: '5962AE39',
+      login: 'MATHEUS',
+      senha: '0112A',
+    },
     /** defaultValues: user
       ? {
           empresaId: '3B55A873',
@@ -102,6 +103,8 @@ export function AddUserForm(props: Props) {
 
             const user = await validateUser(token)
 
+            await saveToken('zaal-result-token', token)
+
             if (user) {
               add(
                 {
@@ -109,7 +112,6 @@ export function AddUserForm(props: Props) {
                   userName: user.nome,
                   userLastName: user.usuario,
                   deviceHash: input.dispositivoHash,
-                  token,
                   companyId: input.empresaId,
                   companySystem: company.sistema,
                   companyCode: company.codigo,

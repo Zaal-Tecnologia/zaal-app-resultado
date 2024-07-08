@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 import { Pressable, View } from 'react-native'
 import { Link } from 'expo-router'
-import { useQuery } from '@tanstack/react-query'
 
 import { api } from '~/api/api'
 
 import { currency } from '~/utils/currency'
 
-import { useUsers } from '~/hooks/use-users'
 import { useBranch } from '~/hooks/use-branch'
 
 import { useTheme } from '~/hooks/use-theme'
@@ -16,25 +14,24 @@ import { Icon } from './icon'
 import { P } from './p'
 
 import type { TotalSalesResponseDTO } from '~/types/total-sales-response-dto'
+import { useFetch } from '~/hooks/use-fetch'
 
 export function SalesPreview() {
-  const { user } = useUsers()
-
   const { branch } = useBranch()
 
-  const { data } = useQuery({
-    queryKey: ['get-total-sales-query', user, branch],
-    queryFn: async () => {
+  const { data } = useFetch<TotalSalesResponseDTO>(
+    ['get-sales-query', String(branch?.id)],
+    async (authorization) => {
       const response = await api('vendatotal', {
         headers: {
           'Content-Type': 'application/json',
-          authorization: user ? user.token : '',
+          authorization,
         },
       })
 
-      return (await response.json()) as TotalSalesResponseDTO
+      return await response.json()
     },
-  })
+  )
 
   const TOTAL = useMemo(() => {
     if (data) {
@@ -69,7 +66,7 @@ export function SalesPreview() {
           </View>
 
           <P className="mb-1.5 font-urbanist-regular text-[44px]">
-            {currency(TOTAL?.MONTH)}
+            {TOTAL ? currency(TOTAL?.MONTH) : 'R$ 0'}
           </P>
         </Pressable>
       </Link>
@@ -82,7 +79,7 @@ export function SalesPreview() {
             Vendas {'\n'}Dessa Semana
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            {currency(TOTAL?.WEEK)}
+            {TOTAL ? currency(TOTAL?.WEEK) : 'R$ 0'}
           </P>
         </Pressable>
       </Link>
@@ -95,7 +92,7 @@ export function SalesPreview() {
             Vendas {'\n'}De Hoje
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            {currency(TOTAL?.DAY)}
+            {TOTAL ? currency(TOTAL?.DAY) : 'R$ 0'}
           </P>
         </Pressable>
       </Link>
