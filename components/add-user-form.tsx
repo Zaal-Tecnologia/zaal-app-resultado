@@ -57,7 +57,10 @@ export function AddUserForm(props: Props) {
   const { control, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(Schema),
     defaultValues: {
-      dispositivoHash: props?.defaultValues?.dispositivoHash,
+      dispositivoHash:
+        props?.defaultValues?.dispositivoHash === 'nothing'
+          ? ''
+          : props?.defaultValues?.dispositivoHash,
       empresaId: props?.defaultValues?.empresaId,
     },
     // defaultValues: {

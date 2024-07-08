@@ -1,20 +1,17 @@
-import { Redirect, Stack, useRouter } from 'expo-router'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Redirect, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useMMKVString } from 'react-native-mmkv'
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native'
+import { Image, SafeAreaView, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { white, zinc } from 'tailwindcss/colors'
 
 import { useUsers } from '~/hooks/use-users'
 
 import { P } from '~/components/p'
+import { AddUserForm } from '~/components/add-user-form'
 
 export default function Home() {
   // const { user } = useSession()
   const { user } = useUsers()
-  const { push } = useRouter()
   const { top } = useSafeAreaInsets()
 
   const [theme] = useMMKVString('zaal-result-theme', undefined)
@@ -46,7 +43,7 @@ export default function Home() {
                 Seja bem-vindo ao Zaal Resultado
               </P>
 
-              <View
+              {/** <View
                 style={{ marginHorizontal: 32 }}
                 className="mt-10 flex-row items-center justify-start">
                 <MaterialCommunityIcons
@@ -58,10 +55,10 @@ export default function Home() {
                 <P className="ml-2.5 font-inter-regular text-[15px] -tracking-wider">
                   Selecione uma forma de autenticação
                 </P>
-              </View>
+              </View> */}
             </View>
 
-            <View style={{ padding: 24, marginTop: 20 }}>
+            {/** <View style={{ padding: 24, marginTop: 20 }}>
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => push('/auth-with-qrcode')}
@@ -121,7 +118,11 @@ export default function Home() {
                   color="black"
                 />
               </TouchableOpacity>
-            </View>
+            </View> */}
+
+            <AddUserForm onSuccess={() => console.log('success')}>
+              <></>
+            </AddUserForm>
           </View>
         </>
       ) : (
@@ -130,12 +131,3 @@ export default function Home() {
     </SafeAreaView>
   )
 }
-
-const s = StyleSheet.create({
-  button: {
-    height: 64,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-})
