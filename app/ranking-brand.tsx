@@ -356,7 +356,7 @@ export default function Brand() {
 
                         <Sheet.ListItem>
                           <Sheet.ListItemTitle>
-                            {filter.VARIANT === 'QUANTIDADE'
+                            {filter.VARIANT === 'QTD'
                               ? item.quantidadeTotal
                               : ` ${currency(item.valorTotal)}`}
                           </Sheet.ListItemTitle>

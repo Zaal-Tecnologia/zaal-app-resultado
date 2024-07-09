@@ -37,8 +37,8 @@ export const PERIOD = {
 } as const
 
 export const VARIANT = {
-  VALOR: 'valorTotal',
-  QUANTIDADE: 'quantidadeTotal',
+  VLR: 'valorTotal',
+  QNT: 'quantidadeTotal',
 } as const
 
 export const CHART = {
@@ -68,7 +68,7 @@ function Variant() {
 
   return (
     <View className="ml-2 flex-row justify-center rounded-full bg-[#305a96]/10 p-2 dark:bg-[#305a96]/20">
-      {(['VALOR', 'QUANTIDADE'] as (keyof typeof VARIANT)[]).map((item) => (
+      {(['VLR', 'QNT'] as (keyof typeof VARIANT)[]).map((item) => (
         <Pressable
           key={item}
           className={clsx(

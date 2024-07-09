@@ -8,6 +8,11 @@ import { getToken } from '~/utils/secure-store'
 
 type Key = string | undefined
 
+const NEW_VARIANT = {
+  VLR: 'VALOR',
+  QNT: 'QUANTIDADE',
+} as const
+
 export function useFetch<D>(
   queryKey: Key[],
   queryFn: (token: string, branchId: string) => void,
@@ -22,11 +27,13 @@ export function useFetch<D>(
     queryFn: async () => {
       const QUANTITY = filter.SIZE === '50+' ? '80' : filter.SIZE
 
+      console.log('filter.VARIANT', filter.VARIANT)
+
       return queryFn(
         token || '',
         branch.id === 0
-          ? `?quantidade=${QUANTITY}&orderBy=${filter.VARIANT}`
-          : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${filter.VARIANT}&`,
+          ? `?quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[filter.VARIANT!]}`
+          : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[filter.VARIANT!]}&`,
       )
     },
   })

@@ -49,26 +49,25 @@ type Props = {
 }
 
 export function AddUserForm(props: Props) {
-  const { add } = useUsers()
-  // const { user } = useUsers()
+  const { add, user } = useUsers()
 
   const [errors, setErrors] = useState<string[]>([])
 
   const { control, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      dispositivoHash:
-        props?.defaultValues?.dispositivoHash === 'nothing'
-          ? ''
-          : props?.defaultValues?.dispositivoHash,
-      empresaId: props?.defaultValues?.empresaId,
-    },
     // defaultValues: {
-    //   empresaId: '59E6FEFD',
-    //   dispositivoHash: '5962AE39',
-    //   login: 'MATHEUS',
-    //   senha: '0112A',
+    //   dispositivoHash:
+    //     props?.defaultValues?.dispositivoHash === 'nothing'
+    //       ? ''
+    //       : props?.defaultValues?.dispositivoHash || user?.deviceHash,
+    //   empresaId: props?.defaultValues?.empresaId || user?.companyId,
     // },
+    defaultValues: {
+      empresaId: 'E6F31DE3',
+      dispositivoHash: 'E71CF716',
+      login: '543',
+      senha: '12750302706',
+    },
     /** defaultValues: user
       ? {
           empresaId: '3B55A873',

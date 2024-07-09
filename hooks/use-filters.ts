@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 type Period = 'DIA' | 'MÊS' | 'SEMANA'
-type Variant = 'VALOR' | 'QUANTIDADE'
+type Variant = 'VLR' | 'QNT'
 type Chart = 'ROSCA' | 'PIZZA' | 'B. VERTICAL' | 'B. HORIZONTAL'
 
 type Filter = {
@@ -15,7 +15,7 @@ type Filter = {
 
 const DEFAULT_FILTER_VALUES: Filter = {
   PERIOD: 'MÊS',
-  VARIANT: 'VALOR',
+  VARIANT: 'VLR',
   CHART: 'B. VERTICAL',
   SHOW: true,
   EXPAND: false,
@@ -37,7 +37,7 @@ export const useFilter = create<Props>((set) => ({
           VARIANT: filter.VARIANT || prev.filter.VARIANT,
           CHART: filter.CHART || prev.filter.CHART,
           SHOW: !prev.filter.SHOW,
-          EXPAND: filter.EXPAND,
+          EXPAND: !prev.filter.EXPAND,
           SIZE: filter.SIZE || prev.filter.SIZE,
         },
       }

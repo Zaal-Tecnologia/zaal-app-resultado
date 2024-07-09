@@ -1,7 +1,7 @@
 import { Redirect, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useMMKVString } from 'react-native-mmkv'
-import { Image, SafeAreaView, View } from 'react-native'
+import { Image, SafeAreaView, ScrollView, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useUsers } from '~/hooks/use-users'
@@ -23,7 +23,9 @@ export default function Home() {
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
 
       {!user ? (
-        <>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}>
           <View className="flex-1 justify-center">
             <View className="justify-center">
               <Image
@@ -124,7 +126,7 @@ export default function Home() {
               <></>
             </AddUserForm>
           </View>
-        </>
+        </ScrollView>
       ) : (
         <Redirect href="/home" />
       )}

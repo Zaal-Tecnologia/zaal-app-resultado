@@ -360,7 +360,7 @@ export default function Branch() {
 
                         <Sheet.ListItem>
                           <Sheet.ListItemTitle>
-                            {filter.VARIANT === 'QUANTIDADE'
+                            {filter.VARIANT === 'QTD'
                               ? item.quantidadeTotal
                               : ` ${currency(item.valorTotal)}`}
                           </Sheet.ListItemTitle>

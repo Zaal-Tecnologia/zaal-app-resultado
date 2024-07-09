@@ -138,7 +138,7 @@ function Bar(
           labels={({ datum, index }) =>
             props.data && props.data.length > 10
               ? !props.horizontal
-                ? filter.VARIANT === 'VALOR'
+                ? filter.VARIANT === 'VLR'
                   ? index % 2 === 0
                     ? renderTheLabelAboveTheBar(datum._y)
                     : null
@@ -174,7 +174,7 @@ function Bar(
           dependentAxis
           label={({ datum }) => datum}
           tickFormat={(tick) =>
-            filter.VARIANT === 'VALOR'
+            filter.VARIANT === 'VLR'
               ? tick >= 1000
                 ? `${currency(tick / 1000)} K`
                     .replace(',', '.')

@@ -351,7 +351,7 @@ export default function Product() {
 
                         <Sheet.ListItem>
                           <Sheet.ListItemTitle>
-                            {filter.VARIANT === 'QUANTIDADE'
+                            {filter.VARIANT === 'QTD'
                               ? item.quantidadeTotal
                               : ` ${currency(item.valorTotal)}`}
                           </Sheet.ListItemTitle>
