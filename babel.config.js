@@ -1,13 +1,10 @@
 module.exports = function (api) {
   api.cache(true)
-  const plugins = ['react-native-reanimated/plugin']
-
   return {
+    plugins: ['react-native-reanimated/plugin'],
     presets: [
       ['babel-preset-expo', { jsxImportSource: 'nativewind' }],
       'nativewind/babel',
     ],
-
-    plugins,
   }
 }

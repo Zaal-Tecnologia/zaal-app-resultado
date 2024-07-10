@@ -52,8 +52,33 @@ import { CustomSlider } from '~/components/custom-slider'
 import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
+import {
+  Bar,
+  CartesianChart,
+  ChartBounds,
+  Line,
+  PointsArray,
+  useBarPath,
+} from 'victory-native'
+import { Path, point } from '@shopify/react-native-skia'
 
 let updateTimeout: NodeJS.Timeout
+
+function MyCustomBar({
+  points,
+  chartBounds,
+  innerPadding,
+  color,
+}: {
+  points: PointsArray
+  chartBounds: ChartBounds
+  innerPadding?: number
+  color: string
+}) {
+  const { path, barWidth } = useBarPath(points, chartBounds, innerPadding)
+
+  return <Path path={path} color={color} />
+}
 
 export default function Product() {
   const sheetRef = useSheet()
@@ -63,6 +88,7 @@ export default function Product() {
   const { chart } = useChart()
   const { show } = useShow()
   const { expand } = useExpand()
+  const { variant } = useVariant()
 
   const { BACKGROUND_SECONDARY } = useTheme()
 
@@ -123,10 +149,10 @@ export default function Product() {
 
   return (
     <Container>
-      <Header.Root style={{ paddingHorizontal: 20 }}>
+      {/* <Header.Root style={{ paddingHorizontal: 20 }}>
         <Header.Back>PRODUTOS</Header.Back>
         <Header.Content />
-      </Header.Root>
+      </Header.Root> */}
 
       <ScrollView
         contentContainerStyle={{ height: HEIGHT, width: WIDTH }}
@@ -136,7 +162,7 @@ export default function Product() {
             <RefreshControl refreshing={isLoading} onRefresh={refetch} />
           ) : undefined
         }>
-        {expand ? null : (
+        {/* {expand ? null : (
           <>
             <P className="px-6 font-urbanist-semibold text-[24px]">
               {show ? currency(TOTAL) : '-'}
@@ -148,7 +174,7 @@ export default function Product() {
               <FilterChart />
             </Filter>
           </>
-        )}
+        )} */}
 
         {isLoading ? (
           <View className="flex-1 flex-row items-center justify-center">
@@ -163,7 +189,7 @@ export default function Product() {
               <Chart.Empty />
             ) : (
               <>
-                <Average
+                {/* <Average
                   bigger={
                     DATA_BY_PERIOD
                       ? currency(
@@ -181,16 +207,16 @@ export default function Product() {
                       ? currency(DATA_BY_PERIOD[0].valorTotal)
                       : ' 0'
                   }
-                />
+                /> */}
 
-                <View style={styles.sliderContainer}>
+                {/* <View style={styles.sliderContainer}>
                   <CustomSlider
                     range={[0, DATA_BY_PERIOD.length]}
                     maximumValue={DATA_BY_PERIOD.length}
                     // onValueChange={onSlideValueChange}
                     onValueChange={console.log}
                   />
-                </View>
+                </View> */}
 
                 <View
                   className="relative flex-1 items-center justify-center"
@@ -198,18 +224,42 @@ export default function Product() {
                     marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
                   }}>
                   {/* {CHART_COMPONENT[chart!]} */}
+
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      height: 300,
+                      minWidth: WIDTH - 20,
+                      padding: 12,
+                    }}>
+                    <CartesianChart
+                      data={DATA_BY_PERIOD}
+                      xKey="posicao"
+                      domainPadding={{ left: 20 }}
+                      domain={{ x: [0, 15] }}
+                      yKeys={['quantidadeTotal', 'valorTotal']}>
+                      {({ points, chartBounds, index }) => (
+                        <Bar
+                          points={points[VARIANT[variant!]]}
+                          chartBounds={chartBounds}
+                          color={COLORS[index]}
+                          roundedCorners={{ topLeft: 1, topRight: 1 }}
+                        />
+                      )}
+                    </CartesianChart>
+                  </ScrollView>
                 </View>
               </>
             )}
-
+            {/* 
             {chart === 'PIZZA' || chart === 'ROSCA' ? (
               <View className="flex-1" />
-            ) : null}
+            ) : null} */}
           </>
         )}
       </ScrollView>
 
-      <Sheet.Root
+      {/* <Sheet.Root
         ref={sheetRef}
         index={!DATA_BY_PERIOD ? 0 : selected || expand ? 3 : 1}>
         {selected ? (
@@ -322,10 +372,10 @@ export default function Product() {
                   </Sheet.ListItem>
                 </Sheet.ListRow>
               )}
-            /> */}
+            /> 
           </>
         )}
-      </Sheet.Root>
+      </Sheet.Root> */}
     </Container>
   )
 }
