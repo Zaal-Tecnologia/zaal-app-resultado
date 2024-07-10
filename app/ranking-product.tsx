@@ -93,8 +93,9 @@ export default function Product() {
 
   const TOTAL = useMemo(
     () =>
-      DATA_BY_PERIOD &&
-      DATA_BY_PERIOD.reduce((acc, curr) => acc + curr.valorTotal, 0),
+      DATA_BY_PERIOD
+        ? DATA_BY_PERIOD.reduce((acc, curr) => acc + curr.valorTotal, 0)
+        : 0,
     [DATA_BY_PERIOD],
   )
 
@@ -163,7 +164,7 @@ export default function Product() {
               <Chart.Empty />
             ) : (
               <>
-                <Average
+                {/* <Average
                   bigger={
                     DATA_BY_PERIOD
                       ? currency(
@@ -190,7 +191,7 @@ export default function Product() {
                     // onValueChange={onSlideValueChange}
                     onValueChange={console.log}
                   />
-                </View>
+                </View> */}
 
                 <View
                   className="relative flex-1 items-center justify-center"
