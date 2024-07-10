@@ -15,9 +15,11 @@ import { COLORS } from '~/utils/colors'
 import { P } from './p'
 
 import { currency } from '~/utils/currency'
-import { useFilter } from '~/hooks/use-filters'
+import { useExpand, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
 import { renderTheLabelAboveTheBar } from '~/utils/render-the-label-above-the-bar'
+import { VARIANT } from './filter'
+import { useSelected } from '~/hooks/use-selected'
 
 function Empty() {
   return (
@@ -41,15 +43,15 @@ function Empty() {
   )
 }
 
-type Selected = number
+function Pie(props: ComponentProps<typeof VictoryPie>) {
+  const { variant } = useVariant()
+  const { selected } = useSelected()
 
-function Pie(
-  props: ComponentProps<typeof VictoryPie> & { selected: Selected | undefined },
-) {
   return (
     <VictoryPie
       data={props.data}
       x="posicao"
+      y={VARIANT[variant!]}
       height={CHART_SIZE}
       width={CHART_SIZE}
       innerRadius={props.innerRadius || CHART_SIZE / 2.5}
@@ -59,16 +61,13 @@ function Pie(
         ...props.style,
         data: {
           stroke: ({ datum }) =>
-            props.selected && props.selected === datum.id
-              ? datum.color
-              : 'none',
+            selected && selected === datum.id ? datum.color : 'none',
           fill: ({ datum }) => datum.color,
           strokeWidth: 10,
           strokeOpacity: 0.25,
         },
         labels: {
-          display: ({ datum }) =>
-            props.selected === datum.id ? 'flex' : 'none',
+          display: ({ datum }) => (selected === datum.id ? 'flex' : 'none'),
           fontFamily: 'urbanist-semibold',
           fontSize: 12,
         },
@@ -78,12 +77,11 @@ function Pie(
   )
 }
 
-function Bar(
-  props: ComponentProps<typeof VictoryBar> & {
-    selected: Selected | undefined
-  },
-) {
-  const { filter } = useFilter()
+function Bar(props: ComponentProps<typeof VictoryBar>) {
+  // const { filter } = useFilter()
+  const { expand } = useExpand()
+  const { variant } = useVariant()
+  const { selected } = useSelected()
   const { TEXT_PRIMARY } = useTheme()
 
   return (
@@ -107,11 +105,7 @@ function Bar(
             : WIDTH
         }
         height={
-          !props.horizontal
-            ? filter.EXPAND
-              ? HEIGHT * 0.65
-              : HEIGHT * 0.5
-            : HEIGHT
+          !props.horizontal ? (expand ? HEIGHT * 0.65 : HEIGHT * 0.5) : HEIGHT
         }>
         <VictoryBar
           horizontal={props.horizontal}
@@ -120,9 +114,7 @@ function Bar(
             ...props.style,
             data: {
               stroke: ({ datum }) =>
-                props.selected && props.selected === datum.id
-                  ? datum.color
-                  : 'none',
+                selected && selected === datum.id ? datum.color : 'none',
               fill: ({ datum }) => datum.color,
               strokeWidth: 10,
               strokeOpacity: 0.25,
@@ -138,7 +130,7 @@ function Bar(
           labels={({ datum, index }) =>
             props.data && props.data.length > 10
               ? !props.horizontal
-                ? filter.VARIANT === 'VLR'
+                ? variant === 'VLR'
                   ? index % 2 === 0
                     ? renderTheLabelAboveTheBar(datum._y)
                     : null
@@ -150,6 +142,7 @@ function Bar(
           colorScale={COLORS}
           data={props.data}
           x="posicao"
+          y={VARIANT[variant!]}
           {...props}
         />
 
@@ -174,7 +167,7 @@ function Bar(
           dependentAxis
           label={({ datum }) => datum}
           tickFormat={(tick) =>
-            filter.VARIANT === 'VLR'
+            variant === 'VLR'
               ? tick >= 1000
                 ? `${currency(tick / 1000)} K`
                     .replace(',', '.')

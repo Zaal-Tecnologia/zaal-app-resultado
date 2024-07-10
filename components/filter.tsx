@@ -5,7 +5,7 @@ import { white } from 'tailwindcss/colors'
 
 import { P } from './p'
 
-import { useFilter } from '~/hooks/use-filters'
+import { useChart, usePeriod, useShow, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
 
 export const PERIOD = {
@@ -48,22 +48,30 @@ export const CHART = {
   'B. HORIZONTAL': 'B. HORIZONTAL',
 } as const
 
-function Show() {
-  const { filter, setFilter } = useFilter()
+export function FilterShow() {
+  const { setShow, show } = useShow()
+  const { BORDER_PRIMARY, BACKGROUND_SECONDARY } = useTheme()
 
   return (
-    <View className="mr-2 flex-row justify-center rounded-full bg-[#305a96]/10 p-2">
-      <Pressable
-        className="h-8 w-8 items-center justify-center rounded-full bg-[#305a96]"
-        onPress={() => setFilter({ SHOW: !filter.SHOW })}>
-        <Ionicons name={!filter.SHOW ? 'eye' : 'eye-off'} color={white} />
-      </Pressable>
-    </View>
+    <Pressable
+      style={{
+        borderColor: BORDER_PRIMARY,
+        backgroundColor: BACKGROUND_SECONDARY,
+        height: 40,
+        width: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 9999,
+        borderWidth: 1,
+      }}
+      onPress={() => setShow(!show)}>
+      <Ionicons name={!show ? 'eye' : 'eye-off'} color="#305a96" size={16} />
+    </Pressable>
   )
 }
 
-function Variant() {
-  const { filter, setFilter } = useFilter()
+export function FilterVariant() {
+  const { setVariant, variant } = useVariant()
   const { TEXT_PRIMARY } = useTheme()
 
   return (
@@ -74,12 +82,12 @@ function Variant() {
           className={clsx(
             'h-8 w-14 items-center justify-center rounded-full px-2',
             {
-              'bg-[#305a96]': item === filter.VARIANT,
+              'bg-[#305a96]': item === variant,
             },
           )}
-          onPress={() => setFilter({ VARIANT: item })}>
+          onPress={() => setVariant(item)}>
           <P
-            style={{ color: item === filter.VARIANT ? white : TEXT_PRIMARY }}
+            style={{ color: item === variant ? white : TEXT_PRIMARY }}
             className="font-inter-semibold text-xs">
             {item.slice(0, 3)}
           </P>
@@ -89,8 +97,9 @@ function Variant() {
   )
 }
 
-function Chart() {
-  const { filter, setFilter } = useFilter()
+export function FilterChart() {
+  // const { filter, setFilter } = useFilter()
+  const { setChart, chart } = useChart()
   const { TEXT_PRIMARY } = useTheme()
 
   return (
@@ -108,12 +117,12 @@ function Chart() {
           className={clsx(
             'h-8 w-20 items-center justify-center rounded-full px-2',
             {
-              'bg-[#305a96]': item === filter.CHART,
+              'bg-[#305a96]': item === chart,
             },
           )}
-          onPress={() => setFilter({ CHART: item })}>
+          onPress={() => setChart(item)}>
           <P
-            style={{ color: item === filter.CHART ? white : TEXT_PRIMARY }}
+            style={{ color: item === chart ? white : TEXT_PRIMARY }}
             className="font-inter-semibold text-xs">
             {item.slice(0, 7)}
           </P>
@@ -123,8 +132,8 @@ function Chart() {
   )
 }
 
-function Period() {
-  const { filter, setFilter } = useFilter()
+export function FilterPeriod() {
+  const { period, setPeriod } = usePeriod()
   const { TEXT_PRIMARY } = useTheme()
 
   return (
@@ -135,12 +144,12 @@ function Period() {
           className={clsx(
             'h-8 w-14 items-center justify-center rounded-full px-2',
             {
-              'bg-[#305a96]': item === filter.PERIOD,
+              'bg-[#305a96]': item === period,
             },
           )}
-          onPress={() => setFilter({ PERIOD: item })}>
+          onPress={() => setPeriod(item)}>
           <P
-            style={{ color: item === filter.PERIOD ? white : TEXT_PRIMARY }}
+            style={{ color: item === period ? white : TEXT_PRIMARY }}
             className="font-inter-semibold text-xs">
             {item.slice(0, 3)}
           </P>
@@ -150,23 +159,15 @@ function Period() {
   )
 }
 
-function Root(props: ScrollViewProps) {
+export function Filter(props: ScrollViewProps) {
   return (
     <ScrollView
       horizontal
-      style={{ maxHeight: 40 }}
+      style={{ maxHeight: 40, marginVertical: 40 }}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ maxHeight: 40, paddingHorizontal: 20 }}
       {...props}>
       {props.children}
     </ScrollView>
   )
-}
-
-export const Filter = {
-  Root,
-  Period,
-  Variant,
-  Chart,
-  Show,
 }

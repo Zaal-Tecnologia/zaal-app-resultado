@@ -51,7 +51,7 @@ export function Size() {
       <Pressable
         onPress={() => setOpen((prev) => !prev)}
         style={{
-          height: 48,
+          height: 40,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',

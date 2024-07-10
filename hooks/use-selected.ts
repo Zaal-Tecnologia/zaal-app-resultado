@@ -1,7 +1,24 @@
-import { useState } from 'react'
+import { create } from 'zustand'
 
-export function useSelected<T>() {
-  const [selected, setSelected] = useState<T | null>(null)
-
-  return { selected, setSelected } as const
+interface ISelected {
+  color: string
+  id: number
+  produtoNome: string
+  localId: string
+  posicao: string
+  quantidadeTotal: number
+  valorTotal: number
 }
+
+interface ISelectedData {
+  setSelected(selected: ISelected | null): void
+  selected: ISelected | null
+}
+
+export const useSelected = create<ISelectedData>((set) => ({
+  selected: null,
+  setSelected: (selected) =>
+    set(() => {
+      return { selected }
+    }),
+}))

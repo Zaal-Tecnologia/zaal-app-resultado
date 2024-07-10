@@ -33,7 +33,7 @@ export const useFilter = create<Props>((set) => ({
     set((prev) => {
       return {
         filter: {
-          PERIOD: filter.PERIOD || prev.filter.PERIOD,
+          // PERIOD: filter.PERIOD || prev.filter.PERIOD,
           VARIANT: filter.VARIANT || prev.filter.VARIANT,
           CHART: filter.CHART || prev.filter.CHART,
           SHOW: !prev.filter.SHOW,
@@ -41,5 +41,83 @@ export const useFilter = create<Props>((set) => ({
           SIZE: filter.SIZE || prev.filter.SIZE,
         },
       }
+    }),
+}))
+
+interface IShow {
+  setShow(show: boolean): void
+  show: boolean
+}
+
+export const useShow = create<IShow>((set) => ({
+  show: DEFAULT_FILTER_VALUES.SHOW!,
+  setShow: (show) =>
+    set(() => {
+      return { show }
+    }),
+}))
+
+interface IExpand {
+  setExpand(expand: boolean): void
+  expand: boolean
+}
+
+export const useExpand = create<IExpand>((set) => ({
+  expand: DEFAULT_FILTER_VALUES.EXPAND!,
+  setExpand: (expand) =>
+    set(() => {
+      return { expand }
+    }),
+}))
+
+interface ISize {
+  setSize(size: string): void
+  size: string
+}
+
+export const useSize = create<ISize>((set) => ({
+  size: DEFAULT_FILTER_VALUES.SIZE!,
+  setSize: (size) =>
+    set(() => {
+      return { size }
+    }),
+}))
+
+interface IPeriod {
+  setPeriod(period: Period): void
+  period: Period
+}
+
+export const usePeriod = create<IPeriod>((set) => ({
+  period: DEFAULT_FILTER_VALUES.PERIOD!,
+  setPeriod: (period) =>
+    set(() => {
+      return { period }
+    }),
+}))
+
+interface IVariant {
+  setVariant(variant: Variant): void
+  variant: Variant
+}
+
+export const useVariant = create<IVariant>((set) => ({
+  variant: DEFAULT_FILTER_VALUES.VARIANT!,
+  setVariant: (variant) =>
+    set(() => {
+      return { variant }
+    }),
+}))
+
+interface IChart {
+  setChart(chart: Chart): void
+  chart: Chart
+}
+
+export const useChart = create<IChart>((set) => ({
+  chart: DEFAULT_FILTER_VALUES.CHART!,
+  setChart: (chart) =>
+    set(() => {
+      return { chart }
     }),
 }))

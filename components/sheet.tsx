@@ -20,9 +20,10 @@ import {
 } from 'react-native'
 import clsx from 'clsx'
 
-import { P } from './p'
-import { useFilter } from '~/hooks/use-filters'
+import { useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
+
+import { P } from './p'
 
 const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
   (props, ref) => {
@@ -48,7 +49,7 @@ const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
 )
 
 function Header(props: ViewProps) {
-  const { filter } = useFilter()
+  const { variant } = useVariant()
 
   return (
     <View
@@ -66,7 +67,9 @@ function Header(props: ViewProps) {
       </View>
 
       <View className="h-full w-[30%] items-start justify-center">
-        <P className="font-inter-semibold text-xs">{filter.VARIANT}</P>
+        <P className="font-inter-semibold text-xs">
+          {variant === 'QNT' ? 'QUANTIDADE' : 'VALOR'}
+        </P>
       </View>
 
       {/** <View className="h-full w-[20%] items-start justify-center">

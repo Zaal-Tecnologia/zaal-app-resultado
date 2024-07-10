@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import { useBranch } from './use-branch'
-import { useFilter } from './use-filters'
+import { useSize, useVariant } from './use-filters'
 
 import { getToken } from '~/utils/secure-store'
 
@@ -18,22 +18,21 @@ export function useFetch<D>(
   queryFn: (token: string, branchId: string) => void,
 ) {
   const { branch } = useBranch()
-  const { filter } = useFilter()
+  const { size } = useSize()
+  const { variant } = useVariant()
 
   const [token, setToken] = useState<string | null>(null)
 
   const { data, error, isLoading, refetch } = useQuery<unknown, unknown, D>({
-    queryKey: [...queryKey, token, branch.id],
+    queryKey: [...queryKey, token, branch.id, size, variant],
     queryFn: async () => {
-      const QUANTITY = filter.SIZE === '50+' ? '80' : filter.SIZE
-
-      console.log('filter.VARIANT', filter.VARIANT)
+      const QUANTITY = size === '50+' ? '80' : size
 
       return queryFn(
         token || '',
         branch.id === 0
-          ? `?quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[filter.VARIANT!]}`
-          : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[filter.VARIANT!]}&`,
+          ? `?quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[variant!]}`
+          : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[variant!]}&`,
       )
     },
   })
