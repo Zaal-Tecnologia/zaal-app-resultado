@@ -1,7 +1,6 @@
 import { SafeAreaView, ViewProps } from 'react-native'
 import { clsx } from 'clsx'
 import { white, zinc } from 'tailwindcss/colors'
-
 import { useMMKVString } from 'react-native-mmkv'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 

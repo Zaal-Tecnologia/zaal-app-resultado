@@ -18,11 +18,13 @@ import { P } from './p'
 import type { TotalSalesResponseDTO } from '~/types/total-sales-response-dto'
 import { useFetch } from '~/hooks/use-fetch'
 import { zinc } from 'tailwindcss/colors'
+import { useShow } from '~/hooks/use-filters'
 
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
 export function SalesPreview() {
   const { theme } = useTheme()
+  const { show } = useShow()
 
   const SHIMMER_COLORS =
     theme === 'dark' ? [zinc[700], zinc[800]] : [zinc[100], zinc[200]]
@@ -113,7 +115,7 @@ export function SalesPreview() {
   }
 
   return (
-    <>
+    <View className="px-6">
       <Link asChild href="/sales-details/MÊS">
         <Pressable className="mb-5 mt-10 justify-between">
           <View className="my-2.5 flex-row items-center">
@@ -125,7 +127,7 @@ export function SalesPreview() {
           </View>
 
           <P className="mb-1.5 font-urbanist-regular text-[44px]">
-            {TOTAL?.MONTH ? currency(TOTAL?.MONTH) : 'R$ 0'}
+            {show ? (TOTAL?.MONTH ? currency(TOTAL?.MONTH) : 'R$ 0') : '-'}
           </P>
         </Pressable>
       </Link>
@@ -138,7 +140,7 @@ export function SalesPreview() {
             Vendas {'\n'}Dessa Semana
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            {TOTAL?.WEEK ? currency(TOTAL?.WEEK) : 'R$ 0'}
+            {show ? (TOTAL?.WEEK ? currency(TOTAL?.WEEK) : 'R$ 0') : '-'}
           </P>
         </Pressable>
       </Link>
@@ -151,10 +153,10 @@ export function SalesPreview() {
             Vendas {'\n'}De Hoje
           </P>
           <P className="font-urbanist-medium text-[24px]">
-            {TOTAL?.DAY ? currency(TOTAL?.DAY) : 'R$ 0'}
+            {show ? (TOTAL?.DAY ? currency(TOTAL?.DAY) : 'R$ 0') : '-'}
           </P>
         </Pressable>
       </Link>
-    </>
+    </View>
   )
 }

@@ -2,13 +2,14 @@ import { Ionicons } from '@expo/vector-icons'
 import { Modal, Pressable, Text, View } from 'react-native'
 import { useState } from 'react'
 
-import { useFilter } from '~/hooks/use-filters'
+import { useSize } from '~/hooks/use-filters'
 
 import { P } from './p'
 import { useTheme } from '~/hooks/use-theme'
 
 export function Size() {
-  const { setFilter, filter } = useFilter()
+  // const { setFilter, filter } = useFilter()
+  const { setSize, size } = useSize()
   const {
     BORDER_PRIMARY,
     BACKGROUND_PRIMARY,
@@ -38,7 +39,7 @@ export function Size() {
                 key={item}
                 onPress={() => {
                   setOpen((prev) => !prev)
-                  setFilter({ SIZE: item })
+                  setSize(item)
                 }}
                 className="h-12 flex-row items-center justify-center rounded-full px-5">
                 <P className="font-inter-semibold text-sm uppercase">{item}</P>
@@ -69,7 +70,7 @@ export function Size() {
             textTransform: 'uppercase',
             color: TEXT_PRIMARY,
           }}>
-          {filter.SIZE}
+          {size}
         </Text>
         <Ionicons name="chevron-down-outline" color="#305a96" size={18} />
       </Pressable>

@@ -23,7 +23,9 @@ import { useSelected } from '~/hooks/use-selected'
 
 function Empty() {
   return (
-    <View className="h-screen items-center justify-center pb-20">
+    <View
+      className="flex-1 items-center justify-center"
+      style={{ paddingBottom: 200 }}>
       <P className="font-inter-medium text-2xl -tracking-wide">Vazio!</P>
       <View className="mt-5 w-[80%]">
         <P className="text-center font-inter-medium text-xs leading-6 text-zinc-500 dark:text-zinc-400">
@@ -78,7 +80,6 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
 }
 
 function Bar(props: ComponentProps<typeof VictoryBar>) {
-  // const { filter } = useFilter()
   const { expand } = useExpand()
   const { variant } = useVariant()
   const { selected } = useSelected()

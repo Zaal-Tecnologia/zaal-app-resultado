@@ -18,10 +18,8 @@ import {
   Filter,
   FilterChart,
   FilterPeriod,
-  FilterShow,
   FilterVariant,
   PERIOD,
-  VARIANT,
 } from '~/components/filter'
 
 import { Chart } from '~/components/chart'
@@ -34,17 +32,15 @@ import { COLORS } from '~/utils/colors'
 import {
   useChart,
   useExpand,
-  useFilter,
   usePeriod,
   useShow,
-  useSize,
   useVariant,
 } from '~/hooks/use-filters'
 import { useFetch } from '~/hooks/use-fetch'
 import { useSelected } from '~/hooks/use-selected'
 import { useSheet } from '~/hooks/use-sheet'
 
-import { CHART_SIZE, HEIGHT, WIDTH } from '~/utils/chart-size'
+import { HEIGHT, WIDTH } from '~/utils/chart-size'
 
 import type { RankingProductDTO } from '~/types/ranking-product-dto'
 import { Average } from '~/components/average'
@@ -52,6 +48,7 @@ import { CustomSlider } from '~/components/custom-slider'
 import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
+import { SelectedChart } from '~/components/selected-chart'
 
 let updateTimeout: NodeJS.Timeout
 
@@ -63,6 +60,7 @@ export default function Product() {
   const { chart } = useChart()
   const { show } = useShow()
   const { expand } = useExpand()
+  const { variant } = useVariant()
 
   const { BACKGROUND_SECONDARY } = useTheme()
 
@@ -99,28 +97,41 @@ export default function Product() {
     [DATA_BY_PERIOD],
   )
 
-  // const [chartData, setChartData] = useState<ByPeriod[]>([])
+  const [chartData, setChartData] = useState<
+    {
+      color: string
+      id: number
+      localId: string
+      posicao: string
+      produtoId: number
+      produtoNome: string
+      quantidadeTotal: number
+      valorTotal: number
+    }[]
+  >([])
 
-  // const onSlideValueChange = useCallback(
-  //   (value: [number, number]) => {
-  //     if (DATA_BY_PERIOD) {
-  //       clearTimeout(updateTimeout)
+  const onSlideValueChange = useCallback(
+    (value: [number, number]) => {
+      if (DATA_BY_PERIOD) {
+        clearTimeout(updateTimeout)
 
-  //       updateTimeout = setTimeout(() => {
-  //         setChartData(DATA_BY_PERIOD.slice(value[0], value[1]))
-  //       }, 500)
-  //     }
-  //   },
-  //   [DATA_BY_PERIOD],
-  // )
+        updateTimeout = setTimeout(() => {
+          setChartData(DATA_BY_PERIOD.slice(value[0], value[1]))
+        }, 500)
+      }
+    },
+    [DATA_BY_PERIOD],
+  )
 
-  // useEffect(() => {
-  //   if (DATA_BY_PERIOD) setChartData(DATA_BY_PERIOD)
-  // }, [DATA_BY_PERIOD])
+  useEffect(() => {
+    if (DATA_BY_PERIOD) setChartData(DATA_BY_PERIOD)
+  }, [DATA_BY_PERIOD])
 
-  // useEffect(() => {
-  //   if (!DATA_BY_PERIOD) setSelected(null)
-  // }, [DATA_BY_PERIOD, setSelected])
+  useEffect(() => {
+    if (!DATA_BY_PERIOD) setSelected(null)
+  }, [DATA_BY_PERIOD, setSelected])
+
+
 
   return (
     <Container>
@@ -131,7 +142,7 @@ export default function Product() {
 
       <ScrollView
         contentContainerStyle={{ height: HEIGHT, width: WIDTH }}
-        // scrollEnabled={false}
+        scrollEnabled={false}
         refreshControl={
           chart !== 'B. HORIZONTAL' ? (
             <RefreshControl refreshing={isLoading} onRefresh={refetch} />
@@ -164,7 +175,7 @@ export default function Product() {
               <Chart.Empty />
             ) : (
               <>
-                {/* <Average
+                <Average
                   bigger={
                     DATA_BY_PERIOD
                       ? currency(
@@ -188,17 +199,16 @@ export default function Product() {
                   <CustomSlider
                     range={[0, DATA_BY_PERIOD.length]}
                     maximumValue={DATA_BY_PERIOD.length}
-                    // onValueChange={onSlideValueChange}
-                    onValueChange={console.log}
+                    onValueChange={onSlideValueChange}
                   />
-                </View> */}
+                </View>
 
                 <View
                   className="relative flex-1 items-center justify-center"
                   style={{
                     marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
                   }}>
-                  {/* {CHART_COMPONENT[chart!]} */}
+                  <SelectedChart data={DATA_BY_PERIOD} />
                 </View>
               </>
             )}
@@ -296,12 +306,12 @@ export default function Product() {
           <>
             <Sheet.Header />
 
-            {/* <Sheet.List
+            <Sheet.List
               data={!chartData ? [] : chartData}
               keyExtractor={(item) => item.produtoNome}
               renderItem={({ item }) => (
                 <Sheet.ListRow
-                  onPress={() => setSelected((prev) => (!prev ? item : null))}>
+                  onPress={() => setSelected(!selected ? item : null)}>
                   <Sheet.ListColor color={item.color} />
 
                   <Sheet.ListItem className="w-[20%] items-center">
@@ -323,7 +333,7 @@ export default function Product() {
                   </Sheet.ListItem>
                 </Sheet.ListRow>
               )}
-            /> */}
+            />
           </>
         )}
       </Sheet.Root>

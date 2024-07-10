@@ -32,7 +32,7 @@ export function useFetch<D>(
         token || '',
         branch.id === 0
           ? `?quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[variant!]}`
-          : `?codigoFilial=${String(branch.id)}&quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[variant!]}&`,
+          : `?codigoFilial=${branch.id}&quantidade=${QUANTITY}&orderBy=${NEW_VARIANT[variant!]}&`,
       )
     },
   })
