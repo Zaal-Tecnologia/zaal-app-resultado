@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { WIDTH } from '~/utils/chart-size'
@@ -52,6 +52,7 @@ export default function Home() {
 
   //   const { removeAll } = useUsers()
   const { theme } = useTheme()
+  const { push } = useRouter()
 
   return (
     <>
@@ -76,7 +77,8 @@ export default function Home() {
           <BestSellers />
 
           <Button
-            style={[{ borderColor: themes[theme].border }, s.branchButton]}>
+            style={[{ borderColor: themes[theme].border }, s.branchButton]}
+            onPress={() => push('/branches')}>
             <Icon name="storefront" size={24} color="#305A96" />
             <P style={s.branchButtonTitle}>
               {branch.id === 0 ? 'TODAS AS FILIAIS' : `${branch.nomeFantasia}`}

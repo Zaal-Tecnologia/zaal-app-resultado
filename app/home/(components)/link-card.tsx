@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Feather } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useRouter } from 'expo-router'
 import { StyleProp, StyleSheet, Text, ViewStyle } from 'react-native'
 
 import { Button } from '~/components/button'
@@ -19,9 +21,18 @@ const COLORS = {
   MARCAS: ['#A079C8', '#A079F8'],
 }
 
+const LINKS = {
+  PRODUTOS: '/ranking-product',
+  CATEGORIAS: '/ranking-category',
+  FILIAIS: '/ranking-branch',
+  MARCAS: '/ranking-brand',
+} as const
+
 export function LinkCard({ from, style }: Props) {
+  const { push } = useRouter()
+
   return (
-    <Button style={s.container}>
+    <Button style={s.container} onPress={() => push(LINKS[from])}>
       <LinearGradient colors={COLORS[from]} style={[s.gradient, style]}>
         <Text style={s.title}>{from}</Text>
 

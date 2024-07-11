@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { white } from 'tailwindcss/colors'
 import { useRouter } from 'expo-router'
 import { CameraView, useCameraPermissions } from 'expo-camera/next'
@@ -64,8 +64,6 @@ export default function AuthWithQRCode() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-
       <CameraView
         style={styles.camera}
         barcodeScannerSettings={{

@@ -131,8 +131,6 @@ export default function Product() {
     if (!DATA_BY_PERIOD) setSelected(null)
   }, [DATA_BY_PERIOD, setSelected])
 
-
-
   return (
     <Container>
       <Header.Root style={{ paddingHorizontal: 20 }}>

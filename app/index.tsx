@@ -1,6 +1,4 @@
 import { Redirect, Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import { useMMKVString } from 'react-native-mmkv'
 import { Image, SafeAreaView, ScrollView, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -14,13 +12,9 @@ export default function Home() {
   const { user } = useUsers()
   const { top } = useSafeAreaInsets()
 
-  const [theme] = useMMKVString('zaal-result-theme', undefined)
-
   return (
     <SafeAreaView style={{ paddingTop: top, flex: 1 }}>
       <Stack.Screen options={{ title: 'Home' }} />
-
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
 
       {!user ? (
         <ScrollView
@@ -128,7 +122,7 @@ export default function Home() {
           </View>
         </ScrollView>
       ) : (
-        <Redirect href="/home" />
+        <Redirect href="/home/" />
       )}
     </SafeAreaView>
   )

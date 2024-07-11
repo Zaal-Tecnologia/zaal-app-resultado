@@ -9,13 +9,7 @@ import { api } from '~/api/api'
 import { Chart } from '~/components/chart'
 import { P } from '~/components/p'
 import { Sheet } from '~/components/sheet'
-import {
-  Filter,
-  FilterChart,
-  FilterPeriod,
-  FilterShow,
-  PERIOD,
-} from '~/components/filter'
+import { Filter, FilterChart, FilterPeriod, PERIOD } from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
 import { useChart, useExpand, usePeriod, useShow } from '~/hooks/use-filters'
@@ -110,7 +104,6 @@ export default function SalesDetails() {
           </P>
 
           <Filter className="my-10">
-            <FilterShow />
             <FilterPeriod />
             <FilterChart />
           </Filter>

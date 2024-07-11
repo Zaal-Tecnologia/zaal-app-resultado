@@ -6,12 +6,10 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ToastProvider } from 'react-native-toast-notifications'
 import { white, zinc } from 'tailwindcss/colors'
-import { useMMKVString } from 'react-native-mmkv'
 import { StatusBar } from 'expo-status-bar'
 
 import { queryClient } from '~/api/client'
 
-import { Container } from '~/components/Container'
 import { InitialPageLoading } from '~/components/initial-page-loading'
 import { useEffect } from 'react'
 import { useTheme } from '~/hooks/use-theme'
@@ -54,7 +52,7 @@ export default function Layout() {
         </ToastProvider>
       </QueryClientProvider>
 
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar backgroundColor="#305a96" style="light" />
     </GestureHandlerRootView>
   )
 }
