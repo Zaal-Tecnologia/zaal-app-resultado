@@ -27,6 +27,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { User } from './(components)/user'
 import { BestSellerCard } from './(components)/best-seller-card'
+import { BestSellers } from './(components)/best-sellers'
 
 // import { api } from '~/api/api'
 
@@ -119,13 +120,7 @@ export default function Home() {
               <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             } */
           contentContainerStyle={{ paddingBottom: 80 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: 24,
-            }}>
+          <View style={s.header}>
             <User />
 
             <FilterShow />
@@ -133,23 +128,7 @@ export default function Home() {
 
           <SalesPreview />
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            overScrollMode="never"
-            contentContainerStyle={{
-              paddingHorizontal: 24,
-              paddingBottom: 32,
-            }}>
-            {[
-              'rankingmarca',
-              'rankingproduto',
-              'rankingcategoria',
-              'rankingfilial',
-            ].map((item) => (
-              <BestSellerCard key={item} from={item} />
-            ))}
-          </ScrollView>
+          <BestSellers />
 
           <Link asChild href="/branches">
             <TouchableOpacity
@@ -264,3 +243,12 @@ export default function Home() {
     </>
   )
 }
+
+const s = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+  },
+})

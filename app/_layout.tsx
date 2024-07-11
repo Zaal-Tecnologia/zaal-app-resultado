@@ -13,10 +13,10 @@ import { queryClient } from '~/api/client'
 
 import { Container } from '~/components/Container'
 import { InitialPageLoading } from '~/components/initial-page-loading'
+import { useEffect } from 'react'
+import { useTheme } from '~/hooks/use-theme'
 
 export default function Layout() {
-  const [theme] = useMMKVString('zaal-result-theme', undefined)
-
   const [fontsLoaded] = useFonts({
     'urbanist-regular': require('../assets/fonts/urbanist/Urbanist-Regular.ttf'),
     'urbanist-medium': require('../assets/fonts/urbanist/Urbanist-Medium.ttf'),
@@ -27,13 +27,13 @@ export default function Layout() {
     'inter-semibold': require('../assets/fonts/inter/Inter-SemiBold.ttf'),
   })
 
-  if (!fontsLoaded) {
-    return (
-      <Container className="p-6">
-        <InitialPageLoading />
-      </Container>
-    )
-  }
+  const { setTheme, theme } = useTheme()
+
+  useEffect(() => {
+    if (!theme) setTheme('light')
+  }, [setTheme, theme])
+
+  if (!fontsLoaded) return <InitialPageLoading />
 
   return (
     <GestureHandlerRootView

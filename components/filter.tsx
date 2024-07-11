@@ -1,5 +1,11 @@
 import clsx from 'clsx'
-import { Pressable, ScrollView, View, ScrollViewProps } from 'react-native'
+import {
+  Pressable,
+  ScrollView,
+  View,
+  ScrollViewProps,
+  StyleSheet,
+} from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { white } from 'tailwindcss/colors'
 
@@ -7,6 +13,8 @@ import { P } from './p'
 
 import { useChart, usePeriod, useShow, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
+
+import { themes } from '~/styles/themes'
 
 export const PERIOD = {
   BRAND: {
@@ -50,25 +58,33 @@ export const CHART = {
 
 export function FilterShow() {
   const { setShow, show } = useShow()
-  const { BORDER_PRIMARY, BACKGROUND_SECONDARY } = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Pressable
-      style={{
-        borderColor: BORDER_PRIMARY,
-        backgroundColor: BACKGROUND_SECONDARY,
-        height: 40,
-        width: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 9999,
-        borderWidth: 1,
-      }}
+      style={[
+        {
+          borderColor: themes[theme].border,
+          backgroundColor: themes[theme].foreground,
+        },
+        s.singleButtonContainer,
+      ]}
       onPress={() => setShow(!show)}>
       <Ionicons name={!show ? 'eye' : 'eye-off'} color="#305a96" size={16} />
     </Pressable>
   )
 }
+
+const s = StyleSheet.create({
+  singleButtonContainer: {
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 9999,
+    borderWidth: 1,
+  },
+})
 
 export function FilterVariant() {
   const { setVariant, variant } = useVariant()

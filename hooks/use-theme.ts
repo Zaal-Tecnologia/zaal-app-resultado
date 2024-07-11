@@ -40,7 +40,7 @@ export function useTheme() {
 
   return {
     setTheme,
-    theme,
+    theme: theme as 'dark' | 'light',
     BACKGROUND_PRIMARY,
     BACKGROUND_SECONDARY,
     TEXT_PRIMARY,

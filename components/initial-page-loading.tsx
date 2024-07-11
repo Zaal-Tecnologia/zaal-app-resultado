@@ -1,24 +1,19 @@
-import { Image, Text, View } from 'react-native'
-import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
-import { LinearGradient } from 'expo-linear-gradient'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { zinc } from 'tailwindcss/colors'
 import { useMMKVString } from 'react-native-mmkv'
 
 import { P } from './p'
 import { Icon } from './icon'
-
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
+import { Container } from './Container'
+import { Shimmer } from './shimmer'
 
 export function InitialPageLoading() {
   const [theme] = useMMKVString('zaal-result-theme', undefined)
 
-  const SHIMMER_COLORS =
-    theme === 'dark' ? [zinc[700], zinc[800]] : [zinc[100], zinc[200]]
-
   return (
-    <>
-      <View className="mt-10 flex-row items-center justify-between">
+    <Container style={s.container}>
+      <View style={{}} className="mt-10 flex-row items-center justify-between">
         <View className="flex-row items-center">
           <View
             className="h-16 w-16 items-center justify-center rounded-full"
@@ -33,7 +28,7 @@ export function InitialPageLoading() {
             />
           </View>
           <View className="ml-2.5">
-            <ShimmerPlaceholder width={80} shimmerColors={SHIMMER_COLORS} />
+            <Shimmer width={80} />
           </View>
         </View>
       </View>
@@ -47,11 +42,7 @@ export function InitialPageLoading() {
           <Icon name="chevron-forward" size={12} />
         </View>
 
-        <ShimmerPlaceholder
-          width={200}
-          height={44}
-          shimmerColors={SHIMMER_COLORS}
-        />
+        <Shimmer width={200} height={44} />
       </View>
 
       <View
@@ -61,11 +52,7 @@ export function InitialPageLoading() {
           Vendas {'\n'}Dessa Semana
         </P>
 
-        <ShimmerPlaceholder
-          width={100}
-          height={24}
-          shimmerColors={SHIMMER_COLORS}
-        />
+        <Shimmer width={100} height={24} />
       </View>
 
       <View
@@ -74,11 +61,7 @@ export function InitialPageLoading() {
         <P className="font-inter-medium text-xs leading-6 -tracking-wide text-zinc-600 dark:text-zinc-200">
           Vendas {'\n'}De Hoje
         </P>
-        <ShimmerPlaceholder
-          width={100}
-          height={24}
-          shimmerColors={SHIMMER_COLORS}
-        />
+        <Shimmer width={100} height={24} />
       </View>
 
       <View className="h-80 flex-row items-center">
@@ -112,6 +95,13 @@ export function InitialPageLoading() {
           </View>
         </View>
       </View>
-    </>
+    </Container>
   )
 }
+
+const s = StyleSheet.create({
+  container: {
+    padding: 24,
+  },
+  header: {},
+})

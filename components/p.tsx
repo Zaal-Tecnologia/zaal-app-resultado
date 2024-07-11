@@ -1,13 +1,14 @@
 import { Text, TextProps } from 'react-native'
-import { white, zinc } from 'tailwindcss/colors'
 
 import { useTheme } from '~/hooks/use-theme'
 
-export function P(props: TextProps) {
+import { themes } from '~/styles/themes'
+
+export function P({ style, ...props }: TextProps) {
   const { theme } = useTheme()
 
   return (
-    <Text style={{ color: theme === 'dark' ? white : zinc[800] }} {...props}>
+    <Text style={[{ color: themes[theme].text }, style]} {...props}>
       {props.children}
     </Text>
   )

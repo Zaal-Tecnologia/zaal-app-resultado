@@ -1,9 +1,7 @@
 export function currency(value: number | undefined) {
-  return !value
-    ? '0'
-    : new Intl.NumberFormat('pt-BR', {
-        currency: 'BRL',
-        minimumFractionDigits: 2,
-        style: 'currency',
-      }).format(value)
+  return new Intl.NumberFormat('pt-BR', {
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    style: 'currency',
+  }).format(!value ? 0 : value)
 }
