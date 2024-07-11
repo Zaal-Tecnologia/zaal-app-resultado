@@ -9,10 +9,22 @@ import { api } from '~/api/api'
 import { Chart } from '~/components/chart'
 import { P } from '~/components/p'
 import { Sheet } from '~/components/sheet'
-import { Filter, PERIOD, VARIANT } from '~/components/filter'
+import {
+  Filter,
+  FilterChart,
+  FilterPeriod,
+  FilterShow,
+  PERIOD,
+} from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
-import { useFilter } from '~/hooks/use-filters'
+import {
+  useChart,
+  useExpand,
+  usePeriod,
+  useShow,
+  useVariant,
+} from '~/hooks/use-filters'
 import { useSelected } from '~/hooks/use-selected'
 import { useSheet } from '~/hooks/use-sheet'
 
@@ -63,35 +75,38 @@ export default function SalesDetails() {
   )
 
   const sheetRef = useSheet()
-
-  const { filter } = useFilter()
+  const { period } = usePeriod()
+  const { expand } = useExpand()
+  const { show } = useShow()
+  const { chart } = useChart()
+  const { variant } = useVariant()
 
   const dataByPeriod: SalesByPeriod[] | false = useMemo(
     () =>
       (data as { status: number })?.status !== 404
         ? data
-          ? data[PERIOD.SALES[filter.PERIOD!]].length === 0
+          ? data[PERIOD.SALES[period!]].length === 0
             ? false
-            : data[PERIOD.SALES[filter.PERIOD!]].map((item, index) => ({
+            : data[PERIOD.SALES[period!]].map((item, index) => ({
                 ...item,
                 id: item.indice,
                 posicao:
-                  filter.PERIOD === 'SEMANA'
+                  period === 'SEMANA'
                     ? // @ts-ignore
                       `${PERIOD_WEEK[item.indice]}`
-                    : filter.PERIOD === 'MÊS'
+                    : period === 'MÊS'
                       ? `SEM. ${item.indice}`
-                      : filter.PERIOD === 'DIA'
+                      : period === 'DIA'
                         ? `${item.indice}H`
                         : '',
                 color: COLORS[index],
               }))
           : false
         : false,
-    [data, filter.PERIOD],
+    [data, period],
   )
 
-  const { selected, setSelected } = useSelected<SalesByPeriod>()
+  const { selected, setSelected } = useSelected()
 
   const TOTAL = useMemo(() => {
     if (dataByPeriod) {
@@ -111,39 +126,12 @@ export default function SalesDetails() {
 
   const CHART_COMPONENT = useMemo(
     () => ({
-      ROSCA: (
-        <Chart.Pie
-          data={chartData}
-          y={VARIANT[filter.VARIANT!]}
-          selected={selected?.id}
-          innerRadius={CHART_SIZE / 2.5}
-        />
-      ),
-      PIZZA: (
-        <Chart.Pie
-          data={chartData}
-          y={VARIANT[filter.VARIANT!]}
-          selected={selected?.id}
-          innerRadius={0}
-        />
-      ),
-      'B. HORIZONTAL': (
-        <Chart.Bar
-          selected={selected?.id}
-          data={chartData}
-          horizontal
-          y={VARIANT[filter.VARIANT!]}
-        />
-      ),
-      'B. VERTICAL': (
-        <Chart.Bar
-          selected={selected?.id}
-          data={chartData}
-          y={VARIANT[filter.VARIANT!]}
-        />
-      ),
+      ROSCA: <Chart.Pie data={chartData} innerRadius={CHART_SIZE / 2.5} />,
+      PIZZA: <Chart.Pie data={chartData} innerRadius={0} />,
+      'B. HORIZONTAL': <Chart.Bar data={chartData} horizontal />,
+      'B. VERTICAL': <Chart.Bar data={chartData} />,
     }),
-    [chartData, filter.VARIANT, selected?.id],
+    [chartData],
   )
 
   return (
@@ -156,17 +144,17 @@ export default function SalesDetails() {
         <Header.Content />
       </Header.Root>
 
-      {filter.EXPAND ? null : (
+      {expand ? null : (
         <>
           <P className="px-6 font-urbanist-semibold text-[24px]">
-            {filter.SHOW ? currency(TOTAL) : '-'}
+            {show ? currency(TOTAL) : '-'}
           </P>
 
-          <Filter.Root className="my-10">
-            <Filter.Show />
-            <Filter.Period />
-            <Filter.Chart />
-          </Filter.Root>
+          <Filter className="my-10">
+            <FilterShow />
+            <FilterPeriod />
+            <FilterChart />
+          </Filter>
         </>
       )}
 
@@ -174,7 +162,7 @@ export default function SalesDetails() {
         <View className="flex-1 flex-row items-center justify-center">
           <ActivityIndicator color="#305a96" />
           <P className="ml-5 font-inter-semibold text-xs uppercase">
-            CARREGANDO CATEGORIAS...
+            CARREGANDO...
           </P>
         </View>
       ) : (
@@ -210,23 +198,20 @@ export default function SalesDetails() {
               <View
                 className="relative flex-1 items-center justify-center"
                 style={{
-                  marginTop:
-                    filter.CHART === 'PIZZA' || filter.CHART === 'ROSCA'
-                      ? 56
-                      : 0,
+                  marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
                 }}>
-                {CHART_COMPONENT[filter.CHART!]}
+                {CHART_COMPONENT[chart!]}
               </View>
             </>
           )}
 
-          {filter.CHART === 'PIZZA' || filter.CHART === 'ROSCA' ? (
+          {chart === 'PIZZA' || chart === 'ROSCA' ? (
             <View className="flex-1" />
           ) : null}
 
           <Sheet.Root
             ref={sheetRef}
-            index={!dataByPeriod ? 0 : selected || filter.EXPAND ? 1 : 2}>
+            index={!dataByPeriod ? 0 : selected || expand ? 1 : 2}>
             <View
               className="h-16 w-full flex-row items-center"
               style={{
@@ -254,7 +239,7 @@ export default function SalesDetails() {
               keyExtractor={(item) => item.posicao}
               renderItem={({ item }) => (
                 <Sheet.ListRow
-                  onPress={() => setSelected((prev) => (!prev ? item : null))}>
+                  onPress={() => setSelected(!selected ? item : null)}>
                   <Sheet.ListColor color={item.color} />
 
                   <Sheet.ListItem className="w-[20%] items-center">
@@ -269,7 +254,7 @@ export default function SalesDetails() {
 
                   <Sheet.ListItem>
                     <Sheet.ListItemTitle>
-                      {filter.VARIANT === 'QTD'
+                      {variant === 'QTD'
                         ? item.quantidadeTotal
                         : ` ${currency(item.valorTotal)}`}
                     </Sheet.ListItemTitle>

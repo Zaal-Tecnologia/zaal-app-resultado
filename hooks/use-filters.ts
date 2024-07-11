@@ -22,28 +22,6 @@ const DEFAULT_FILTER_VALUES: Filter = {
   SIZE: '20',
 }
 
-type Props = {
-  setFilter(value: Filter): void
-  filter: Filter
-}
-
-export const useFilter = create<Props>((set) => ({
-  filter: DEFAULT_FILTER_VALUES,
-  setFilter: (filter) =>
-    set((prev) => {
-      return {
-        filter: {
-          // PERIOD: filter.PERIOD || prev.filter.PERIOD,
-          VARIANT: filter.VARIANT || prev.filter.VARIANT,
-          CHART: filter.CHART || prev.filter.CHART,
-          SHOW: !prev.filter.SHOW,
-          EXPAND: !prev.filter.EXPAND,
-          SIZE: filter.SIZE || prev.filter.SIZE,
-        },
-      }
-    }),
-}))
-
 interface IShow {
   setShow(show: boolean): void
   show: boolean

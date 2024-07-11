@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router'
 import { Pressable, TextProps, ViewProps, View } from 'react-native'
 import { white, zinc } from 'tailwindcss/colors'
 
-import { useExpand, useFilter } from '~/hooks/use-filters'
+import { useChart, useExpand } from '~/hooks/use-filters'
 
 import { Icon } from './icon'
 import { P } from './p'
@@ -48,12 +48,12 @@ function Back(props: TextProps & { onBack?: () => void }) {
 }
 
 function Content() {
-  const { filter } = useFilter()
+  const { chart } = useChart()
 
   return (
     <View className="flex-row items-center" style={{ gap: 8 }}>
       <FilterShow />
-      {filter.CHART === 'B. HORIZONTAL' || filter.CHART === 'B. VERTICAL' ? (
+      {chart === 'B. HORIZONTAL' || chart === 'B. VERTICAL' ? (
         <ExpandButton />
       ) : null}
       <Size />

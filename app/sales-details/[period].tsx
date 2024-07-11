@@ -9,10 +9,16 @@ import { api } from '~/api/api'
 import { Chart } from '~/components/chart'
 import { P } from '~/components/p'
 import { Sheet } from '~/components/sheet'
-import { Filter, PERIOD, VARIANT } from '~/components/filter'
+import {
+  Filter,
+  FilterChart,
+  FilterPeriod,
+  FilterShow,
+  PERIOD,
+} from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
-import { useFilter } from '~/hooks/use-filters'
+import { useChart, useExpand, usePeriod, useShow } from '~/hooks/use-filters'
 import { useSelected } from '~/hooks/use-selected'
 import { useSheet } from '~/hooks/use-sheet'
 
@@ -25,21 +31,16 @@ import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 
-type SalesByPeriod = {
-  color: string
-  indice: number
-  id: number
-  posicao: string
-  quantidadeTotal: number
-  valorTotal: number
-}
-
 export default function SalesDetails() {
   const { period } = useLocalSearchParams() as {
     period: 'MÊS' | 'SEMANA' | 'DIA'
   }
 
   const sheetRef = useSheet()
+  const { period: filterPeriod, setPeriod } = usePeriod()
+  const { expand } = useExpand()
+  const { show } = useShow()
+  const { chart } = useChart()
   const { BACKGROUND_SECONDARY } = useTheme()
 
   const { data, isLoading } = useFetch<TotalSalesDTO>(
@@ -56,24 +57,18 @@ export default function SalesDetails() {
     },
   )
 
-  const { filter, setFilter } = useFilter()
+  const dataByPeriod = useMemo(() => {
+    if (!(data && data[PERIOD.SALES[filterPeriod]].length !== 0)) return false
 
-  const dataByPeriod: SalesByPeriod[] | false = useMemo(
-    () =>
-      data
-        ? data[PERIOD.SALES[filter.PERIOD!]].length === 0
-          ? false
-          : data[PERIOD.SALES[filter.PERIOD!]].map((item, index) => ({
-              ...item,
-              id: item.indice,
-              posicao: `${item.indice}°`,
-              color: COLORS[index],
-            }))
-        : false,
-    [data, filter.PERIOD],
-  )
+    return data[PERIOD.SALES[filterPeriod!]].map((item, index) => ({
+      ...item,
+      id: item.indice,
+      posicao: `${item.indice}°`,
+      color: COLORS[index],
+    }))
+  }, [data, filterPeriod])
 
-  const { selected, setSelected } = useSelected<SalesByPeriod>()
+  const { selected, setSelected } = useSelected()
 
   const TOTAL = useMemo(() => {
     if (dataByPeriod) {
@@ -86,44 +81,19 @@ export default function SalesDetails() {
   }, [dataByPeriod, setSelected])
 
   useEffect(() => {
-    if (period) setFilter({ PERIOD: period })
-  }, [period, setFilter])
+    if (period) setPeriod(period)
+  }, [period, setPeriod])
 
   const CHART_COMPONENT = useMemo(
     () => ({
       ROSCA: (
-        <Chart.Pie
-          data={dataByPeriod || []}
-          y={VARIANT[filter.VARIANT!]}
-          selected={selected?.id}
-          innerRadius={CHART_SIZE / 2.5}
-        />
+        <Chart.Pie data={dataByPeriod || []} innerRadius={CHART_SIZE / 2.5} />
       ),
-      PIZZA: (
-        <Chart.Pie
-          data={dataByPeriod || []}
-          y={VARIANT[filter.VARIANT!]}
-          selected={selected?.id}
-          innerRadius={0}
-        />
-      ),
-      'B. HORIZONTAL': (
-        <Chart.Bar
-          selected={selected?.id}
-          data={dataByPeriod || []}
-          horizontal
-          y={VARIANT[filter.VARIANT!]}
-        />
-      ),
-      'B. VERTICAL': (
-        <Chart.Bar
-          selected={selected?.id}
-          data={dataByPeriod || []}
-          y={VARIANT[filter.VARIANT!]}
-        />
-      ),
+      PIZZA: <Chart.Pie data={dataByPeriod || []} innerRadius={0} />,
+      'B. HORIZONTAL': <Chart.Bar data={dataByPeriod || []} horizontal />,
+      'B. VERTICAL': <Chart.Bar data={dataByPeriod || []} />,
     }),
-    [dataByPeriod, filter.VARIANT, selected?.id],
+    [dataByPeriod],
   )
 
   return (
@@ -133,17 +103,17 @@ export default function SalesDetails() {
         <Header.Content />
       </Header.Root>
 
-      {filter.EXPAND ? null : (
+      {expand ? null : (
         <>
           <P className="px-6 font-urbanist-semibold text-[24px]">
-            {filter.SHOW ? currency(TOTAL) : '-'}
+            {show ? currency(TOTAL) : '-'}
           </P>
 
-          <Filter.Root className="my-10">
-            <Filter.Show />
-            <Filter.Period />
-            <Filter.Chart />
-          </Filter.Root>
+          <Filter className="my-10">
+            <FilterShow />
+            <FilterPeriod />
+            <FilterChart />
+          </Filter>
         </>
       )}
 
@@ -152,7 +122,7 @@ export default function SalesDetails() {
           <View className="flex-1 flex-row items-center justify-center">
             <ActivityIndicator color="#305a96" />
             <P className="ml-5 font-inter-semibold text-xs uppercase">
-              CARREGANDO FILIAIS...
+              CARREGANDO VENDAS...
             </P>
           </View>
         ) : !dataByPeriod ? (
@@ -161,21 +131,20 @@ export default function SalesDetails() {
           <View
             className="relative flex-1 items-center justify-center"
             style={{
-              marginTop:
-                filter.CHART === 'PIZZA' || filter.CHART === 'ROSCA' ? 56 : 0,
+              marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
             }}>
-            {CHART_COMPONENT[filter.CHART!]}
+            {CHART_COMPONENT[chart!]}
           </View>
         )}
       </View>
 
-      {filter.CHART !== 'B. HORIZONTAL' && filter.CHART !== 'B. VERTICAL' && (
+      {chart !== 'B. HORIZONTAL' && chart !== 'B. VERTICAL' && (
         <View className="flex-1" />
       )}
 
       <Sheet.Root
         ref={sheetRef}
-        index={!dataByPeriod ? 0 : selected || filter.EXPAND ? 1 : 2}>
+        index={!dataByPeriod ? 0 : selected || expand ? 1 : 2}>
         {selected ? (
           <View className="w-full p-10">
             <View className="flex-row items-center justify-between">
@@ -257,7 +226,7 @@ export default function SalesDetails() {
               keyExtractor={(item) => item.posicao}
               renderItem={({ item }) => (
                 <Sheet.ListRow
-                  onPress={() => setSelected((prev) => (!prev ? item : null))}>
+                  onPress={() => setSelected(!selected ? item : null)}>
                   <Sheet.ListColor color={item.color} />
 
                   <Sheet.ListItem className="w-[33%] items-center">

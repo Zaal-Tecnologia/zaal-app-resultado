@@ -16,10 +16,10 @@ import { useUsers } from '~/hooks/use-users'
 
 import { version } from '../package.json'
 import { WIDTH } from '~/utils/chart-size'
-import { useFilter } from '~/hooks/use-filters'
+import { useExpand } from '~/hooks/use-filters'
 
 export default function Profile() {
-  const { setFilter } = useFilter()
+  const { setExpand } = useExpand()
 
   const { removeAll, user, users, removeCurrentUser, change } = useUsers()
 
@@ -35,7 +35,7 @@ export default function Profile() {
   }, [isAddingUser, user]) */
 
   useEffect(() => {
-    setFilter({ EXPAND: false })
+    setExpand(false)
   }, [])
 
   return (

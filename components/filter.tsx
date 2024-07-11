@@ -114,7 +114,6 @@ export function FilterVariant() {
 }
 
 export function FilterChart() {
-  // const { filter, setFilter } = useFilter()
   const { setChart, chart } = useChart()
   const { TEXT_PRIMARY } = useTheme()
 

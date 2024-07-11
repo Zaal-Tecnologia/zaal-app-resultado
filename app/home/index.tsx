@@ -1,79 +1,24 @@
-import { Link, Stack } from 'expo-router'
-import {
-  // RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
-// import { useMemo } from 'react'
+import { Stack } from 'expo-router'
+import { ScrollView, StyleSheet, View } from 'react-native'
+
+import { WIDTH } from '~/utils/chart-size'
 
 import { Container } from '~/components/Container'
-// import { TopThreeProduct } from '~/components/top-three-product'
-import { ProductCard } from '~/components/product-card'
 import { SalesPreview } from '~/components/sales-preview'
 import { P } from '~/components/p'
 import { Icon } from '~/components/icon'
-// import { InitialPageLoading } from '~/components/initial-page-loading'
-
-import { useBranch } from '~/hooks/use-branch'
-// import { useFetch } from '~/hooks/use-fetch'
-
-import { useTheme } from '~/hooks/use-theme'
 import { FilterShow } from '~/components/filter'
-import { Feather } from '@expo/vector-icons'
-import { LinearGradient } from 'expo-linear-gradient'
+import { Button } from '~/components/button'
 
 import { User } from './(components)/user'
-import { BestSellerCard } from './(components)/best-seller-card'
 import { BestSellers } from './(components)/best-sellers'
+import { LinkCard } from './(components)/link-card'
 
-// import { api } from '~/api/api'
+import { useBranch } from '~/hooks/use-branch'
+import { useTheme } from '~/hooks/use-theme'
 
-// import type { RankingProductDTO } from '~/types/ranking-product-dto'
-
-// const COLORS = ['#DAA520', '#C0C0C0', '#CD7F32']
-
-const Opacity = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.background} />
-      <View style={styles.foreground}>
-        <Text style={styles.text}>Componente em primeiro plano</Text>
-      </View>
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    position: 'absolute',
-    top: 50,
-    left: 50,
-    width: 200,
-    height: 200,
-    backgroundColor: 'blue',
-    zIndex: 1,
-  },
-  foreground: {
-    position: 'absolute',
-    top: 100,
-    left: 100,
-    width: 200,
-    height: 200,
-    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Semi-transparente
-    zIndex: 2,
-  },
-  text: {
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 90,
-  },
-})
+import { themes } from '~/styles/themes'
+import { fonts } from '~/styles/fonts'
 
 export default function Home() {
   const { branch } = useBranch()
@@ -106,7 +51,7 @@ export default function Home() {
   ) */
 
   //   const { removeAll } = useUsers()
-  const { BORDER_PRIMARY } = useTheme()
+  const { theme } = useTheme()
 
   return (
     <>
@@ -130,115 +75,46 @@ export default function Home() {
 
           <BestSellers />
 
-          <Link asChild href="/branches">
-            <TouchableOpacity
-              activeOpacity={0.8}
-              className="mx-5 h-14 flex-row items-center justify-between border pl-4 pr-5"
-              style={{
-                marginBottom: 3,
-                borderColor: BORDER_PRIMARY,
-                borderTopLeftRadius: 4,
-                borderTopRightRadius: 16,
-              }}>
-              <View className="flex-row items-center">
-                <Icon name="storefront" size={16} color="#305A96" />
+          <Button
+            style={[{ borderColor: themes[theme].border }, s.branchButton]}>
+            <Icon name="storefront" size={24} color="#305A96" />
+            <P style={s.branchButtonTitle}>
+              {branch.id === 0 ? 'TODAS AS FILIAIS' : `${branch.nomeFantasia}`}
+            </P>
 
-                <P className="ml-2.5 font-inter-semibold text-xs uppercase -tracking-wide">
-                  {branch.id === 0
-                    ? 'TODAS AS FILIAIS'
-                    : `${branch.nomeFantasia}`}
-                </P>
-              </View>
+            <Icon
+              name="arrow-forward"
+              size={16}
+              style={{ marginLeft: 'auto' }}
+            />
+          </Button>
 
-              <Icon name="chevron-forward" size={16} />
-            </TouchableOpacity>
-          </Link>
+          <View style={s.link}>
+            <View style={[s.linkRow, { marginRight: 2 }]}>
+              <LinkCard
+                from="PRODUTOS"
+                style={{ height: 144, marginBottom: 4 }}
+              />
 
-          <View className="h-72 flex-row items-center px-5">
-            <View className="flex-1" style={{ marginRight: 2 }}>
-              <Link asChild href="/ranking-category">
-                <TouchableOpacity activeOpacity={0.8}>
-                  <LinearGradient
-                    colors={['#699DC6', '#699Dd1']}
-                    style={{
-                      height: 72,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                      marginBottom: 2,
-                    }}>
-                    <Text className="mr-1 font-inter-semibold text-[12px] text-white">
-                      CATEGORIAS
-                    </Text>
-
-                    <Feather
-                      name="arrow-up-right"
-                      color="#fff"
-                      style={{ position: 'absolute', top: 15, right: 15 }}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
-              </Link>
-
-              <ProductCard />
+              <LinkCard from="CATEGORIAS" style={{ height: 72 }} />
             </View>
 
-            <View className="ml-[1px] flex-1">
-              <Link asChild href="/ranking-brand">
-                <TouchableOpacity activeOpacity={0.8} style={{ flex: 1 }}>
-                  <LinearGradient
-                    colors={['#A079F8', '#A079C8']}
-                    style={{
-                      height: 96,
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                      marginBottom: 2,
-                    }}>
-                    <Text className="mr-1 font-inter-semibold text-[12px] text-white">
-                      MARCAS
-                    </Text>
+            <View style={[s.linkRow, { marginLeft: 2 }]}>
+              <LinkCard from="FILIAIS" style={{ height: 72 }} />
 
-                    <Feather
-                      name="arrow-up-right"
-                      color="#fff"
-                      style={{ position: 'absolute', top: 15, right: 15 }}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
-              </Link>
-
-              <Link asChild href="/ranking-branch">
-                <TouchableOpacity activeOpacity={0.8}>
-                  <LinearGradient
-                    colors={['#50B72B', '#50B75B']}
-                    style={{
-                      borderBottomRightRadius: 8,
-                      height: 72,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                    }}>
-                    <Text className="mr-1 font-inter-semibold text-[12px] text-white">
-                      FILIAIS
-                    </Text>
-
-                    <Feather
-                      name="arrow-up-right"
-                      color="#fff"
-                      style={{ position: 'absolute', top: 15, right: 15 }}
-                    />
-                  </LinearGradient>
-                </TouchableOpacity>
-              </Link>
+              <LinkCard
+                from="MARCAS"
+                style={{
+                  height: 144,
+                  marginTop: 4,
+                  borderBottomRightRadius: 24,
+                }}
+              />
             </View>
           </View>
 
           {/** <TopThreeProduct topThreeData={topThreeData} /> */}
         </ScrollView>
-
-        <Opacity />
       </Container>
     </>
   )
@@ -250,5 +126,31 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 24,
+  },
+  branchButton: {
+    marginBottom: 4,
+    marginHorizontal: 18,
+    height: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 16,
+  },
+  branchButtonTitle: {
+    marginLeft: 10,
+    fontFamily: fonts['inter-semibold'],
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: -0.025,
+  },
+  link: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+  },
+  linkRow: {
+    width: (WIDTH - 40) / 2,
   },
 })

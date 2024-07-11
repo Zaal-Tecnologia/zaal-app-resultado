@@ -8,7 +8,6 @@ import { P } from './p'
 import { useTheme } from '~/hooks/use-theme'
 
 export function Size() {
-  // const { setFilter, filter } = useFilter()
   const { setSize, size } = useSize()
   const {
     BORDER_PRIMARY,
