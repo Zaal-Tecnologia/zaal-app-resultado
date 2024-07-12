@@ -96,6 +96,7 @@ export default function Branches() {
                   marginRight: 10,
                   height: 32,
                   maxWidth: 32,
+                  width: 32,
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: 9999,
