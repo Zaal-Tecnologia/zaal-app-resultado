@@ -7,11 +7,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ToastProvider } from 'react-native-toast-notifications'
 import { white, zinc } from 'tailwindcss/colors'
 import { StatusBar } from 'expo-status-bar'
+import { useEffect } from 'react'
 
 import { queryClient } from '~/api/client'
 
 import { InitialPageLoading } from '~/components/initial-page-loading'
-import { useEffect } from 'react'
+
 import { useTheme } from '~/hooks/use-theme'
 
 export default function Layout() {
@@ -25,7 +26,7 @@ export default function Layout() {
     'inter-semibold': require('../assets/fonts/inter/Inter-SemiBold.ttf'),
   })
 
-  const { setTheme, theme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     if (!theme) setTheme('light')
@@ -37,7 +38,7 @@ export default function Layout() {
     <GestureHandlerRootView
       style={{
         flex: 1,
-        backgroundColor: theme === 'dark' ? zinc[900] : white,
+        backgroundColor: theme ? (theme === 'dark' ? zinc[900] : white) : white,
       }}>
       <QueryClientProvider client={queryClient}>
         <ToastProvider textStyle={{ fontFamily: 'inter-medium' }}>

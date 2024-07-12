@@ -47,7 +47,7 @@ export default function AuthWithText() {
         </View>
 
         <AddUserForm
-          onSuccess={() => push('/home')}
+          onSuccess={() => push('/home/')}
           defaultValues={
             info ? { dispositivoHash: info[0], empresaId: info[1] } : undefined
           }>

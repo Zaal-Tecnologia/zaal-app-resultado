@@ -95,10 +95,13 @@ export default function Home() {
             <View style={[s.linkRow, { marginRight: 2 }]}>
               <LinkCard
                 from="PRODUTOS"
-                style={{ height: 144, marginBottom: 4 }}
+                style={{ height: 200, marginBottom: 4 }}
               />
 
-              <LinkCard from="CATEGORIAS" style={{ height: 72 }} />
+              <LinkCard
+                from="CATEGORIAS"
+                style={{ height: 72, borderBottomLeftRadius: 24 }}
+              />
             </View>
 
             <View style={[s.linkRow, { marginLeft: 2 }]}>
@@ -107,7 +110,7 @@ export default function Home() {
               <LinkCard
                 from="MARCAS"
                 style={{
-                  height: 144,
+                  height: 200,
                   marginTop: 4,
                   borderBottomRightRadius: 24,
                 }}

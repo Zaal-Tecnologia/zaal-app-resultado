@@ -14,7 +14,7 @@ type Props = ComponentProps<typeof ShimmerPlaceholder>
 export function Shimmer(props: Props) {
   const { theme } = useTheme()
 
-  const shimmerColors = theme ? themes[theme].shimmer : undefined
+  const shimmerColors = themes[theme || 'light'].shimmer
 
   // @ts-ignore
   return <ShimmerPlaceholder shimmerColors={shimmerColors} {...props} />

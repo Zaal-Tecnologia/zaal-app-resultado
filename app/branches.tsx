@@ -1,12 +1,10 @@
-import { FlatList, TouchableOpacity, View, Text } from 'react-native'
+import { FlatList, TouchableOpacity, View } from 'react-native'
 import { useRouter } from 'expo-router'
-import { LinearGradient } from 'expo-linear-gradient'
-import { zinc } from 'tailwindcss/colors'
-import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 
 import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { P } from '~/components/p'
+import { Shimmer } from '~/components/shimmer'
 
 import { api } from '~/api/api'
 
@@ -14,18 +12,16 @@ import { useFetch } from '~/hooks/use-fetch'
 import { FAKE_BRANCH_TO_INITIAL_DATA, useBranch } from '~/hooks/use-branch'
 import { useTheme } from '~/hooks/use-theme'
 
-import type { BranchResponseDTO } from '~/types/branch-response-dto'
+import { themes } from '~/styles/themes'
+import { fonts } from '~/styles/fonts'
 
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
+import type { BranchResponseDTO } from '~/types/branch-response-dto'
 
 export default function Branches() {
   const { back } = useRouter()
   const { setBranch } = useBranch()
 
   const { theme } = useTheme()
-
-  const SHIMMER_COLORS =
-    theme === 'dark' ? [zinc[700], zinc[800]] : [zinc[100], zinc[200]]
 
   const { data, isLoading } = useFetch<BranchResponseDTO[]>(
     ['get-branches-query'],
@@ -42,7 +38,7 @@ export default function Branches() {
   )
 
   return (
-    <Container className="pt-6">
+    <Container style={{ paddingTop: 24 }}>
       <FlatList
         data={
           data
@@ -56,26 +52,24 @@ export default function Branches() {
             </Header.Root>
 
             {isLoading ? (
-              <View className="mb-5 flex-row items-center justify-between px-6">
-                <View className="flex-row items-center">
-                  <ShimmerPlaceholder
+              <View
+                style={{
+                  marginBottom: 20,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 24,
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Shimmer
                     width={30}
                     height={30}
-                    shimmerColors={SHIMMER_COLORS}
                     style={{ borderRadius: 9999, marginRight: 10 }}
                   />
 
-                  <ShimmerPlaceholder
-                    width={80}
-                    height={14}
-                    shimmerColors={SHIMMER_COLORS}
-                  />
+                  <Shimmer width={80} height={14} />
                 </View>
-                <ShimmerPlaceholder
-                  width={80}
-                  height={14}
-                  shimmerColors={SHIMMER_COLORS}
-                />
+                <Shimmer width={80} height={14} />
               </View>
             ) : null}
           </>
@@ -84,23 +78,55 @@ export default function Branches() {
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.8}
-            className="mb-5 flex-row items-center justify-between px-6"
+            style={{
+              marginBottom: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 24,
+            }}
             onPress={() => {
               setBranch(item)
 
               back()
             }}>
-            <View className="flex-row items-center">
-              <View className="mr-2.5 h-8 min-w-8 items-center justify-center rounded-full bg-zinc-800 px-2">
-                <Text className="font-urbanist-medium text-sm -tracking-wide text-white">
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  marginRight: 10,
+                  height: 32,
+                  maxWidth: 32,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 9999,
+                  backgroundColor: themes[theme].foreground,
+                  paddingHorizontal: 8,
+                }}>
+                <P
+                  style={{
+                    fontFamily: fonts['urbanist-medium'],
+                    fontSize: 14,
+                    letterSpacing: -0.025,
+                  }}>
                   {item.localId}
-                </Text>
+                </P>
               </View>
-              <P className="font-inter-medium text-xs uppercase">
+              <P
+                style={{
+                  fontFamily: fonts['inter-medium'],
+                  fontSize: 12,
+                  textTransform: 'uppercase',
+                }}>
                 {item.nomeFantasia}
               </P>
             </View>
-            <P className="font-urbanist-medium text-sm -tracking-wide text-zinc-500">
+            <P
+              style={{
+                fontFamily: fonts['urbanist-medium'],
+                fontSize: 14,
+                letterSpacing: -0.025,
+                color: themes[theme].textForeground,
+              }}>
               {item.cnpj}
             </P>
           </TouchableOpacity>

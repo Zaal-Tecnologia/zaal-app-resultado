@@ -9,6 +9,7 @@ import { P } from './p'
 import { ExpandButton } from './expand-button'
 import { Size } from './size'
 import { FilterShow } from './filter'
+import { fonts } from '~/styles/fonts'
 
 function Root(props: ViewProps) {
   const { expand } = useExpand()
@@ -40,7 +41,13 @@ function Back(props: TextProps & { onBack?: () => void }) {
       onPress={props.onBack || back}
       style={{ flexDirection: 'row', alignItems: 'center' }}>
       <Icon name="chevron-back" size={20} />
-      <P className="ml-5 font-inter-semibold text-xs uppercase">
+      <P
+        style={{
+          marginLeft: 20,
+          fontFamily: fonts['inter-semibold'],
+          fontSize: 12,
+          textTransform: 'uppercase',
+        }}>
         {props.children}
       </P>
     </Pressable>
@@ -51,7 +58,7 @@ function Content() {
   const { chart } = useChart()
 
   return (
-    <View className="flex-row items-center" style={{ gap: 8 }}>
+    <View style={{ gap: 8, flexDirection: 'row', alignItems: 'center' }}>
       <FilterShow />
       {chart === 'B. HORIZONTAL' || chart === 'B. VERTICAL' ? (
         <ExpandButton />

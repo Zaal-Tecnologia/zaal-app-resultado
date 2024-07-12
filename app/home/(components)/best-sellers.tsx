@@ -1,12 +1,14 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { memo, useMemo } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { green } from 'tailwindcss/colors'
+import colors, { green } from 'tailwindcss/colors'
 
 import { api } from '~/api/api'
+import { currency } from '~/utils/currency'
 
 import { PERIOD } from '~/components/filter'
 import { P } from '~/components/p'
+import { Shimmer } from '~/components/shimmer'
 
 import { useBranch } from '~/hooks/use-branch'
 import { useFetch } from '~/hooks/use-fetch'
@@ -90,61 +92,64 @@ function Card(props: { from: BestSeller }) {
     },
   )
 
-  const ITEM_NAME = useMemo(() => {
+  const ITEM = useMemo(() => {
     if (!(data && data[PERIOD[SELECTOR[props.from]].MÊS].length !== 0))
       return ''
 
     if (props.from === 'rankingfilial')
-      return data[PERIOD[SELECTOR[props.from]].MÊS][0].filial.nomeFantasia
+      return data[PERIOD[SELECTOR[props.from]].MÊS][0]
 
-    return data[PERIOD[SELECTOR[props.from]].MÊS][0][NAME[props.from]]
+    return data[PERIOD[SELECTOR[props.from]].MÊS][0]
   }, [data, props.from])
 
   if (isLoading) {
     return (
-      <View
-        style={[s.loading, { backgroundColor: themes[theme].foreground }]}
+      <Shimmer
+        height={80}
+        width={200}
+        style={[s.card, { backgroundColor: themes[theme].foreground }]}
       />
     )
   }
 
   return (
     <View style={[s.card, { backgroundColor: themes[theme].foreground }]}>
-      <View style={s.cardHeader}>
-        <MaterialIcons name="show-chart" size={16} color={green[500]} />
-        <Text style={s.cardTitle}>{TITLE[props.from]} QUE MAIS VENDE</Text>
+      <View style={s.cardPriceWrapper}>
+        <P style={s.cardPrice}>{currency(ITEM.valorTotal)}/mês</P>
       </View>
 
-      <P numberOfLines={1} style={s.cardName}>
-        {ITEM_NAME}
-      </P>
+      <View style={{ gap: 4 }}>
+        <View style={s.cardHeader}>
+          <MaterialIcons name="show-chart" size={16} color={green[500]} />
+          <Text style={s.cardTitle}>TOP {TITLE[props.from]}</Text>
+        </View>
+
+        <P numberOfLines={1} style={s.cardName}>
+          {props.from === 'rankingfilial'
+            ? ITEM.filial.nomeFantasia
+            : ITEM[NAME[props.from]]}
+        </P>
+      </View>
     </View>
   )
 }
 
 const s = StyleSheet.create({
-  loading: {
-    minHeight: 80,
+  card: {
+    minHeight: 120,
+    maxWidth: 200,
     minWidth: 200,
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     borderRadius: 8,
+    paddingHorizontal: 16,
     marginRight: 12,
-    padding: 16,
-  },
-  card: {
-    height: 80,
-    width: 200,
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    borderRadius: 8,
-    marginRight: 12,
-    padding: 16,
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    marginTop: 12,
   },
   cardTitle: {
     color: green[500],
@@ -156,6 +161,20 @@ const s = StyleSheet.create({
     fontFamily: fonts['inter-medium'],
     fontSize: 14,
     textTransform: 'capitalize',
+  },
+  cardPriceWrapper: {
+    height: 32,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    backgroundColor: '#305a96',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardPrice: {
+    fontFamily: fonts['urbanist-bold'],
+    fontSize: 12,
+    letterSpacing: -0.25,
+    color: colors.white,
   },
 })
 

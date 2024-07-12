@@ -6,6 +6,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera/next'
 
 import { P } from '~/components/p'
 import { useToast } from 'react-native-toast-notifications'
+import { fonts } from '~/styles/fonts'
 
 export default function AuthWithQRCode() {
   const [permission, requestPermission] = useCameraPermissions()
@@ -54,7 +55,7 @@ export default function AuthWithQRCode() {
         }
       }
     },
-    [toast],
+    [push, toast],
   )
 
   useEffect(() => {
@@ -71,9 +72,7 @@ export default function AuthWithQRCode() {
         }}
         onBarcodeScanned={({ data }) => onBarcodeScanned({ data })}>
         <View style={styles.buttonContainer}>
-          <P
-            style={{ color: '#FFF' }}
-            className="mb-20 text-center font-inter-medium">
+          <P style={styles.title}>
             Use a câmera para escanear o código de barras
           </P>
 
@@ -207,5 +206,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
+  },
+  title: {
+    color: '#FFF',
+    marginBottom: 80,
+    fontFamily: fonts['inter-medium'],
+    textAlign: 'center',
   },
 })
