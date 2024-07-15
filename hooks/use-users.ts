@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router'
 
 import type { User } from '~/types/user'
 import { FAKE_BRANCH_TO_INITIAL_DATA, useBranch } from './use-branch'
+import { generateToken } from '~/utils/generate-token'
+import { saveToken } from '~/utils/secure-store'
 
 export function useUsers() {
   const toast = useToast()
@@ -54,33 +56,41 @@ export function useUsers() {
   }, [setUsers, push])
 
   const change = useCallback(
-    (userId: string) => {
+    async (userId: string) => {
       if (users) {
-        // const token = generateToken(
-        //   { id: input.login, password: input.senha },
-        //   {
-        //     companyId: company.codigo,
-        //     codigoLiberacao: input.dispositivoHash,
-        //     system: company.sistema,
-        //   },
-        // )
-
         // await saveToken('zaal-result-token', token)
 
         const userToBeActivated = users.find((item) => item.userId === userId)
-        console.log('userToBeActivated', userToBeActivated)
 
-        // setUsers(
-        //   users.map((user) => ({
-        //     ...user,
-        //     active: user.userId === userId,
-        //   })),
-        // )
+        if (userToBeActivated) {
+          const token = generateToken(
+            {
+              id: userToBeActivated.login,
+              password: userToBeActivated.password,
+            },
+            {
+              companyId: userToBeActivated.companyCode,
+              codigoLiberacao: userToBeActivated.deviceHash,
+              system: userToBeActivated.companySystem,
+            },
+          )
 
-        // setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
+          await saveToken('zaal-result-token', token).then(() => {
+            setUsers((prev) =>
+              prev
+                ? prev.map((user) => ({
+                    ...user,
+                    active: user.userId === userId,
+                  }))
+                : [],
+            )
+
+            setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
+          })
+        }
       }
     },
-    [users],
+    [setBranch, setUsers, users],
   )
 
   const user = useMemo(

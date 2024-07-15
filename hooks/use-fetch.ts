@@ -24,7 +24,6 @@ export function useFetch<D>(
   const { variant } = useVariant()
 
   const [token, setToken] = useState<string | null>(null)
-  console.log(token)
 
   const { data, error, isLoading, refetch } = useQuery<unknown, unknown, D>({
     queryKey: [...queryKey, token, branch.id, size, variant],
@@ -41,7 +40,12 @@ export function useFetch<D>(
   })
 
   useEffect(() => {
-    if (user) getToken('zaal-result-token').then(setToken)
+    if (user)
+      getToken('zaal-result-token').then((token) => {
+        console.log('token - ', token)
+
+        setToken(token)
+      })
   }, [user])
 
   return { data, error, isLoading, refetch }

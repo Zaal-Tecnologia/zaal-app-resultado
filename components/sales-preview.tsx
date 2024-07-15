@@ -28,7 +28,7 @@ export function SalesPreview() {
   const { branch } = useBranch()
 
   const { data, isLoading } = useFetch<TotalSalesResponseDTO>(
-    ['get-sales-query', String(branch?.id)],
+    ['get-sales-query'],
     async (authorization) => {
       const response = await api(
         branch.id !== 0
@@ -45,7 +45,6 @@ export function SalesPreview() {
       return await response.json()
     },
   )
-
   const total = useMemo(() => {
     if (data) {
       const { diaCorrente, mesCorrente, semanaCorrente } = data

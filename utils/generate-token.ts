@@ -4,7 +4,7 @@ import { AES, lib } from 'rn-crypto-js'
 import base64 from 'react-native-base64'
 
 export type AuthInfo = {
-  companyId: number
+  companyId: string
   system: string
   codigoLiberacao: string
 }
@@ -38,6 +38,10 @@ export function generateToken(
   { companyId, codigoLiberacao }: AuthInfo,
 ): string {
   const passwordCrypt = encrypt(password)
+
+  // console.log(
+  //   JSON.stringify({ companyId, codigoLiberacao, id, password }, null, 2),
+  // )
 
   const token = base64.encode(
     `${companyId}${AUTH_CONSTS.SALT}${String(codigoLiberacao).trim()}${

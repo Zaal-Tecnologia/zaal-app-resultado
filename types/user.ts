@@ -2,10 +2,11 @@ export type User = {
   userId: string
   userName: string
   userLastName: string
-  // token: string
+  password: string
+  login: string
   deviceHash: string
   companyId: string
   companySystem: string
-  companyCode: number
+  companyCode: string
   active: boolean
 }

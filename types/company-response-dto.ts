@@ -1,1 +1,1 @@
-export type CompanyResponseDTO = { codigo: number; sistema: string }
+export type CompanyResponseDTO = { codigo: string; sistema: string }
