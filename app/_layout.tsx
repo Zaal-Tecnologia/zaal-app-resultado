@@ -2,18 +2,18 @@ import '../global.css'
 
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
-import { QueryClientProvider } from '@tanstack/react-query'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ToastProvider } from 'react-native-toast-notifications'
 import { white, zinc } from 'tailwindcss/colors'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 
-import { queryClient } from '~/api/client'
+import { asyncStoragePersister, queryClient } from '~/api/client'
 
 import { InitialPageLoading } from '~/components/initial-page-loading'
 
 import { useTheme } from '~/hooks/use-theme'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -40,7 +40,9 @@ export default function Layout() {
         flex: 1,
         backgroundColor: theme ? (theme === 'dark' ? zinc[900] : white) : white,
       }}>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: asyncStoragePersister }}>
         <ToastProvider textStyle={{ fontFamily: 'inter-medium' }}>
           <Stack
             screenOptions={{
@@ -51,7 +53,7 @@ export default function Layout() {
             }}
           />
         </ToastProvider>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
 
       <StatusBar backgroundColor="#305a96" style="light" />
     </GestureHandlerRootView>

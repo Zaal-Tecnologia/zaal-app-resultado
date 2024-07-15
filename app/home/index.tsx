@@ -20,7 +20,6 @@ import { useTheme } from '~/hooks/use-theme'
 import { themes } from '~/styles/themes'
 import { fonts } from '~/styles/fonts'
 import colors from 'tailwindcss/colors'
-import { useState } from 'react'
 
 export default function Home() {
   const { branch } = useBranch()

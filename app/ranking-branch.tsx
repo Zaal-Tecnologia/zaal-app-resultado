@@ -48,6 +48,7 @@ import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
 import { RankingBranchDTO } from '~/types/ranking-branch-dto'
+import { queryClient } from '~/api/client'
 
 let updateTimeout: NodeJS.Timeout
 
@@ -78,7 +79,7 @@ export default function Branch() {
     },
   )
 
-  console.log(JSON.stringify(data?.firstOfMonthDTOList, null, 2))
+  // console.log(JSON.stringify(data?.firstOfMonthDTOList, null, 2))
 
   const DATA_BY_PERIOD = useMemo(() => {
     if (!(data && data[PERIOD.BRANCH[period]].length !== 0)) return false
@@ -136,6 +137,12 @@ export default function Branch() {
   useEffect(() => {
     if (!DATA_BY_PERIOD) setSelected(null)
   }, [DATA_BY_PERIOD, setSelected])
+
+  const query = queryClient.getQueriesData({
+    queryKey: ['get-rankingfilial-query'],
+  })
+  // console.log(query[1][1]?.firstOfDayDTOList)
+  // console.log(data?.firstOfDayDTOList)
 
   return (
     <Container>

@@ -49,6 +49,8 @@ import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
+import { QueryCache } from '@tanstack/react-query'
+import { queryClient } from '~/api/client'
 
 let updateTimeout: NodeJS.Timeout
 
