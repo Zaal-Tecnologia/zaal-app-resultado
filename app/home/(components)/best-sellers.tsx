@@ -112,7 +112,7 @@ function Card(props: { from: BestSeller }) {
     )
   }
 
-  return (
+  return ITEM ? (
     <View style={[s.card, { backgroundColor: themes[theme].foreground }]}>
       <View style={s.cardPriceWrapper}>
         <P style={s.cardPrice}>{currency(ITEM.valorTotal)}/mês</P>
@@ -131,7 +131,7 @@ function Card(props: { from: BestSeller }) {
         </P>
       </View>
     </View>
-  )
+  ) : null
 }
 
 const s = StyleSheet.create({

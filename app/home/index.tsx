@@ -1,5 +1,5 @@
-import { Stack, useRouter } from 'expo-router'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Link, Stack, useRouter } from 'expo-router'
+import { Image, Modal, ScrollView, StyleSheet, View } from 'react-native'
 
 import { WIDTH } from '~/utils/chart-size'
 
@@ -19,6 +19,8 @@ import { useTheme } from '~/hooks/use-theme'
 
 import { themes } from '~/styles/themes'
 import { fonts } from '~/styles/fonts'
+import colors from 'tailwindcss/colors'
+import { useState } from 'react'
 
 export default function Home() {
   const { branch } = useBranch()
@@ -69,7 +71,34 @@ export default function Home() {
           <View style={s.header}>
             <User />
 
-            <FilterShow />
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Link asChild href="/news">
+                <Button
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 40,
+                    gap: 4,
+                    borderRadius: 99,
+                    paddingHorizontal: 16,
+                    backgroundColor: '#305a96',
+                  }}>
+                  <Icon name="chevron-down" color={colors.white} />
+                  <P
+                    style={{
+                      color: colors.white,
+                      fontFamily: fonts['urbanist-semibold'],
+                      fontSize: 12,
+                    }}>
+                    Em breve
+                  </P>
+                </Button>
+              </Link>
+
+              <FilterShow />
+            </View>
           </View>
 
           <SalesPreview />

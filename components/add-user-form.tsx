@@ -62,10 +62,16 @@ export function AddUserForm(props: Props) {
     //       : props?.defaultValues?.dispositivoHash || user?.deviceHash,
     //   empresaId: props?.defaultValues?.empresaId || user?.companyId,
     // },
+    // defaultValues: {
+    //   empresaId: 'E6F31DE3',
+    //   dispositivoHash: 'E71CF716',
+    //   login: '543',
+    //   senha: '12750302706',
+    // },
     defaultValues: {
-      empresaId: 'E6F31DE3',
-      dispositivoHash: 'E71CF716',
-      login: '543',
+      empresaId: '739c3f09',
+      dispositivoHash: '5b09e807',
+      login: 'LARISSA',
       senha: '12750302706',
     },
     /** defaultValues: user

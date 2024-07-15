@@ -66,6 +66,7 @@ export default function Branch() {
   const { data, isLoading, refetch } = useFetch<RankingBranchDTO>(
     ['get-branch-ranking-query'],
     async (authorization, branch) => {
+      console.log(`rankingfilial${branch}`)
       const response = await api(`rankingfilial${branch}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -76,6 +77,8 @@ export default function Branch() {
       return await response.json()
     },
   )
+
+  console.log(JSON.stringify(data?.firstOfMonthDTOList, null, 2))
 
   const DATA_BY_PERIOD = useMemo(() => {
     if (!(data && data[PERIOD.BRANCH[period]].length !== 0)) return false
