@@ -5,6 +5,7 @@ import { useBranch } from './use-branch'
 import { useSize, useVariant } from './use-filters'
 
 import { getToken } from '~/utils/secure-store'
+import { useUsers } from './use-users'
 
 type Key = string | undefined
 
@@ -19,9 +20,11 @@ export function useFetch<D>(
 ) {
   const { branch } = useBranch()
   const { size } = useSize()
+  const { user } = useUsers()
   const { variant } = useVariant()
 
   const [token, setToken] = useState<string | null>(null)
+  console.log(token)
 
   const { data, error, isLoading, refetch } = useQuery<unknown, unknown, D>({
     queryKey: [...queryKey, token, branch.id, size, variant],
@@ -38,8 +41,8 @@ export function useFetch<D>(
   })
 
   useEffect(() => {
-    getToken('zaal-result-token').then(setToken)
-  }, [])
+    if (user) getToken('zaal-result-token').then(setToken)
+  }, [user])
 
   return { data, error, isLoading, refetch }
 }

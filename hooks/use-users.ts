@@ -56,17 +56,31 @@ export function useUsers() {
   const change = useCallback(
     (userId: string) => {
       if (users) {
-        setUsers(
-          users.map((user) => ({
-            ...user,
-            active: user.userId === userId,
-          })),
-        )
+        // const token = generateToken(
+        //   { id: input.login, password: input.senha },
+        //   {
+        //     companyId: company.codigo,
+        //     codigoLiberacao: input.dispositivoHash,
+        //     system: company.sistema,
+        //   },
+        // )
 
-        setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
+        // await saveToken('zaal-result-token', token)
+
+        const userToBeActivated = users.find((item) => item.userId === userId)
+        console.log('userToBeActivated', userToBeActivated)
+
+        // setUsers(
+        //   users.map((user) => ({
+        //     ...user,
+        //     active: user.userId === userId,
+        //   })),
+        // )
+
+        // setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
       }
     },
-    [setBranch, setUsers, users],
+    [users],
   )
 
   const user = useMemo(

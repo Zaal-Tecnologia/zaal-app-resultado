@@ -52,9 +52,12 @@ export function SalesPreview() {
 
       const month = mesCorrente.reduce((acc, curr) => acc + curr.valorTotal, 0)
 
-      const week = semanaCorrente[0] ? semanaCorrente[0].valorTotal : 0
+      const week = semanaCorrente.reduce(
+        (acc, curr) => acc + curr.valorTotal,
+        0,
+      )
 
-      const day = diaCorrente[0] ? diaCorrente[0].valorTotal : 0
+      const day = diaCorrente.reduce((acc, curr) => acc + curr.valorTotal, 0)
 
       return { month, week, day }
     }
