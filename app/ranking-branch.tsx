@@ -48,6 +48,7 @@ import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
 import { RankingBranchDTO } from '~/types/ranking-branch-dto'
+import { colors } from '~/styles/colors'
 
 let updateTimeout: NodeJS.Timeout
 
@@ -66,7 +67,6 @@ export default function Branch() {
   const { data, isLoading, refetch } = useFetch<RankingBranchDTO>(
     ['get-branch-ranking-query'],
     async (authorization, branch) => {
-      console.log(`rankingfilial${branch}`)
       const response = await api(`rankingfilial${branch}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,16 @@ export default function Branch() {
     },
   )
 
-  console.log(JSON.stringify(data?.firstOfMonthDTOList, null, 2))
+  const TOTAL = useMemo(
+    () =>
+      data
+        ? data[PERIOD.BRANCH[period!]].reduce(
+            (acc, curr) => acc + curr.valorTotal,
+            0,
+          )
+        : 0,
+    [data, period],
+  )
 
   const DATA_BY_PERIOD = useMemo(() => {
     if (!(data && data[PERIOD.BRANCH[period]].length !== 0)) return false
@@ -88,16 +97,9 @@ export default function Branch() {
       id: item.filial.id,
       posicao: `${item.posicao}°`,
       color: COLORS[index],
+      percentage: ((item.valorTotal / TOTAL) * 100).toFixed(2) + '%',
     }))
-  }, [data, period])
-
-  const TOTAL = useMemo(
-    () =>
-      DATA_BY_PERIOD
-        ? DATA_BY_PERIOD.reduce((acc, curr) => acc + curr.valorTotal, 0)
-        : 0,
-    [DATA_BY_PERIOD],
-  )
+  }, [TOTAL, data, period])
 
   const [chartData, setChartData] = useState<
     {
@@ -113,6 +115,7 @@ export default function Branch() {
       posicao: string
       quantidadeTotal: number
       valorTotal: number
+      percentage: string
     }[]
   >([])
 
@@ -212,7 +215,9 @@ export default function Branch() {
                   style={{
                     marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
                   }}>
-                  <SelectedChart data={DATA_BY_PERIOD} />
+                  {DATA_BY_PERIOD && !isLoading ? (
+                    <SelectedChart data={DATA_BY_PERIOD} />
+                  ) : null}
                 </View>
               </>
             )}
@@ -329,10 +334,14 @@ export default function Branch() {
                   </Sheet.ListItem>
 
                   <Sheet.ListItem>
-                    <Sheet.ListItemTitle>
+                    <Sheet.ListItemTitle style={{ color: colors.green[500] }}>
                       {variant === 'QNT'
                         ? item.quantidadeTotal
-                        : ` ${currency(item.valorTotal)}`}
+                        : `${currency(item.valorTotal)}`}
+                      {'   '}
+                      <P style={{ marginLeft: 4, color: '#71717a' }}>
+                        {item.percentage}
+                      </P>
                     </Sheet.ListItemTitle>
                   </Sheet.ListItem>
                 </Sheet.ListRow>

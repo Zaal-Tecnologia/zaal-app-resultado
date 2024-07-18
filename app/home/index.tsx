@@ -66,7 +66,7 @@ export default function Home() {
           /** refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             } */
-          contentContainerStyle={{ paddingBottom: 80 }}>
+          contentContainerStyle={{ paddingBottom: 80, paddingTop: 24 }}>
           <View style={s.header}>
             <User />
 
@@ -101,8 +101,6 @@ export default function Home() {
           </View>
 
           <SalesPreview />
-
-          <BestSellers />
 
           <Button
             style={[{ borderColor: themes[theme].border }, s.branchButton]}
@@ -145,6 +143,19 @@ export default function Home() {
               />
             </View>
           </View>
+
+          <P
+            style={{
+              fontFamily: 'urbanist-bold',
+              fontSize: 24,
+              marginLeft: 24,
+              marginTop: 32,
+              marginBottom: 18,
+            }}>
+            Mais vendidos
+          </P>
+
+          <BestSellers />
 
           {/** <TopThreeProduct topThreeData={topThreeData} /> */}
         </ScrollView>

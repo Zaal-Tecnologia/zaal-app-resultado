@@ -25,6 +25,15 @@ import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 
+const WEEK = {
+  1: 'SEG',
+  2: 'TER',
+  3: 'QUA',
+  4: 'QUI',
+  5: 'SEX',
+  6: `SÁB`,
+}
+
 export default function SalesDetails() {
   const { period } = useLocalSearchParams() as {
     period: 'MÊS' | 'SEMANA' | 'DIA'
@@ -57,7 +66,14 @@ export default function SalesDetails() {
     return data[PERIOD.SALES[filterPeriod!]].map((item, index) => ({
       ...item,
       id: item.indice,
-      posicao: `${item.indice}°`,
+      posicao:
+        filterPeriod === 'MÊS'
+          ? `${item.indice}°`
+          : filterPeriod === 'SEMANA'
+            ? WEEK[item.indice]
+            : filterPeriod === 'DIA'
+              ? `${item.indice}h`
+              : '',
       color: COLORS[index],
     }))
   }, [data, filterPeriod])

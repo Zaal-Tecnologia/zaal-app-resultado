@@ -58,8 +58,6 @@ export function useUsers() {
   const change = useCallback(
     async (userId: string) => {
       if (users) {
-        // await saveToken('zaal-result-token', token)
-
         const userToBeActivated = users.find((item) => item.userId === userId)
 
         if (userToBeActivated) {

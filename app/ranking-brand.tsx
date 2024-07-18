@@ -49,6 +49,7 @@ import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
 import { RankingBrandDTO } from '~/types/ranking-brand-dto'
+import { colors } from '~/styles/colors'
 
 let updateTimeout: NodeJS.Timeout
 
@@ -78,6 +79,17 @@ export default function Brand() {
     },
   )
 
+  const TOTAL = useMemo(
+    () =>
+      data
+        ? data[PERIOD.BRAND[period!]].reduce(
+            (acc, curr) => acc + curr.valorTotal,
+            0,
+          )
+        : 0,
+    [data, period],
+  )
+
   const DATA_BY_PERIOD = useMemo(() => {
     if (!(data && data[PERIOD.BRAND[period]].length !== 0)) return false
 
@@ -86,16 +98,9 @@ export default function Brand() {
       id: item.marcaId,
       posicao: `${item.posicao}°`,
       color: COLORS[index],
+      percentage: ((item.valorTotal / TOTAL) * 100).toFixed(2) + '%',
     }))
-  }, [data, period])
-
-  const TOTAL = useMemo(
-    () =>
-      DATA_BY_PERIOD
-        ? DATA_BY_PERIOD.reduce((acc, curr) => acc + curr.valorTotal, 0)
-        : 0,
-    [DATA_BY_PERIOD],
-  )
+  }, [TOTAL, data, period])
 
   const [chartData, setChartData] = useState<
     {
@@ -107,6 +112,7 @@ export default function Brand() {
       marcaNome: string
       quantidadeTotal: number
       valorTotal: number
+      percentage: string
     }[]
   >([])
 
@@ -206,7 +212,9 @@ export default function Brand() {
                   style={{
                     marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
                   }}>
-                  <SelectedChart data={DATA_BY_PERIOD} />
+                  {DATA_BY_PERIOD && !isLoading ? (
+                    <SelectedChart data={DATA_BY_PERIOD} />
+                  ) : null}
                 </View>
               </>
             )}
@@ -323,10 +331,14 @@ export default function Brand() {
                   </Sheet.ListItem>
 
                   <Sheet.ListItem>
-                    <Sheet.ListItemTitle>
+                    <Sheet.ListItemTitle style={{ color: colors.green[500] }}>
                       {variant === 'QNT'
                         ? item.quantidadeTotal
-                        : ` ${currency(item.valorTotal)}`}
+                        : `${currency(item.valorTotal)}`}
+                      {'   '}
+                      <P style={{ marginLeft: 4, color: '#71717a' }}>
+                        {item.percentage}
+                      </P>
                     </Sheet.ListItemTitle>
                   </Sheet.ListItem>
                 </Sheet.ListRow>

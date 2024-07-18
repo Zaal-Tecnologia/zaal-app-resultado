@@ -1,6 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons'
 import { memo, useMemo } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import colors, { green } from 'tailwindcss/colors'
 
 import { api } from '~/api/api'
@@ -13,6 +12,7 @@ import { Shimmer } from '~/components/shimmer'
 import { useBranch } from '~/hooks/use-branch'
 import { useFetch } from '~/hooks/use-fetch'
 import { useTheme } from '~/hooks/use-theme'
+import { useShow } from '~/hooks/use-filters'
 
 import { fonts } from '~/styles/fonts'
 import { themes } from '~/styles/themes'
@@ -46,31 +46,30 @@ type BestSeller =
 
 function UnmemoizedBestSellers() {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      overScrollMode="never"
-      contentContainerStyle={{
-        paddingHorizontal: 24,
-        paddingBottom: 32,
-      }}>
-      {(
+    <FlatList
+      data={
         [
           'rankingmarca',
           'rankingproduto',
           'rankingcategoria',
           'rankingfilial',
         ] as BestSeller[]
-      ).map((item) => (
-        <Card key={item} from={item} />
-      ))}
-    </ScrollView>
+      }
+      showsHorizontalScrollIndicator={false}
+      overScrollMode="never"
+      style={{
+        paddingHorizontal: 24,
+        paddingBottom: 32,
+      }}
+      renderItem={({ item }) => <Card key={item} from={item} />}
+    />
   )
 }
 
 function Card(props: { from: BestSeller }) {
   const { theme } = useTheme()
   const { branch } = useBranch()
+  const { show } = useShow()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, isLoading } = useFetch<any>(
@@ -102,34 +101,45 @@ function Card(props: { from: BestSeller }) {
     return data[PERIOD[SELECTOR[props.from]].MÊS][0]
   }, [data, props.from])
 
-  if (isLoading) {
-    return (
-      <Shimmer
-        height={80}
-        width={200}
-        style={[s.card, { backgroundColor: themes[theme].foreground }]}
-      />
-    )
-  }
-
   return ITEM ? (
-    <View style={[s.card, { backgroundColor: themes[theme].foreground }]}>
-      <View style={s.cardPriceWrapper}>
-        <P style={s.cardPrice}>{currency(ITEM.valorTotal)}/mês</P>
-      </View>
-
-      <View style={{ gap: 4 }}>
-        <View style={s.cardHeader}>
-          <MaterialIcons name="show-chart" size={16} color={green[500]} />
-          <Text style={s.cardTitle}>TOP {TITLE[props.from]}</Text>
-        </View>
-
-        <P numberOfLines={1} style={s.cardName}>
-          {props.from === 'rankingfilial'
-            ? ITEM.filial.nomeFantasia
-            : ITEM[NAME[props.from]]}
+    <View
+      style={[
+        s.button,
+        {
+          borderColor: themes[theme].border,
+          borderBottomWidth: 1,
+        },
+      ]}>
+      <View>
+        <P style={[{ color: themes[theme].textForeground }, s.buttonTitle]}>
+          {TITLE[props.from]}
         </P>
+
+        {isLoading ? (
+          <Shimmer width={100} height={24} />
+        ) : (
+          <P
+            style={[
+              {
+                fontSize: 16,
+                lineHeight: 24,
+                textTransform: 'capitalize',
+                fontFamily: fonts['inter-medium'],
+                letterSpacing: -0.025,
+              },
+            ]}>
+            {props.from === 'rankingfilial'
+              ? ITEM.filial.nomeFantasia
+              : ITEM[NAME[props.from]]}
+          </P>
+        )}
       </View>
+
+      {isLoading ? (
+        <Shimmer width={100} height={24} />
+      ) : (
+        <P style={s.buttonPrice}>{show ? currency(ITEM.valorTotal) : '-'}</P>
+      )}
     </View>
   ) : null
 }
@@ -175,6 +185,25 @@ const s = StyleSheet.create({
     fontSize: 12,
     letterSpacing: -0.25,
     color: colors.white,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+  },
+  buttonTitle: {
+    fontSize: 10,
+    lineHeight: 24,
+    fontFamily: fonts['inter-semibold'],
+    letterSpacing: -0.025,
+    marginBottom: 12,
+  },
+  buttonPrice: {
+    fontFamily: fonts['urbanist-semibold'],
+    fontSize: 18,
+    letterSpacing: -0.25,
+    color: colors.green[500],
   },
 })
 

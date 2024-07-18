@@ -26,7 +26,7 @@ export function User() {
 
         <P style={s.name}>
           <Text style={{ color: themes[theme].textForeground }}>Olá, </Text>
-          {user?.userLastName.slice(0, 20)}
+          {user?.userName.split(' ')[0]}
         </P>
       </Button>
     </Link>

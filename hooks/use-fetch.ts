@@ -42,8 +42,6 @@ export function useFetch<D>(
   useEffect(() => {
     if (user)
       getToken('zaal-result-token').then((token) => {
-        console.log('token - ', token)
-
         setToken(token)
       })
   }, [user])

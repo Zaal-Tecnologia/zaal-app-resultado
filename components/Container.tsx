@@ -16,7 +16,7 @@ export function Container({ children, style, ...props }: ViewProps) {
         style,
         {
           backgroundColor: theme === 'dark' ? zinc[900] : white,
-          paddingTop: top + 18,
+          paddingTop: top + 12,
           flex: 1,
         },
       ]}

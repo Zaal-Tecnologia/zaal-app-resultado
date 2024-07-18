@@ -85,5 +85,3 @@ export const COLORS = [
   '#FFD700',
   '#FFDAB9',
 ]
-
-console.log(COLORS.length)

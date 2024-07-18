@@ -6,7 +6,19 @@ import { useChart } from '~/hooks/use-filters'
 
 import { CHART_SIZE } from '~/utils/chart-size'
 
-function UnmemoizedChart(props: { data: any }) {
+type Props =
+  | {
+      id: number
+      posicao: string
+      color: string
+      percentage: string
+      localId: string
+      quantidadeTotal: number
+      valorTotal: number
+    }
+  | { [key: string]: string }
+
+function UnmemoizedChart<Props>(props: { data: Props[] }) {
   const { chart } = useChart()
 
   const CHART_COMPONENT = {

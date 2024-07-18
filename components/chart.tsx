@@ -14,12 +14,11 @@ import { COLORS } from '~/utils/colors'
 
 import { P } from './p'
 
-import { currency } from '~/utils/currency'
 import { useExpand, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
-import { renderTheLabelAboveTheBar } from '~/utils/render-the-label-above-the-bar'
 import { VARIANT } from './filter'
 import { useSelected } from '~/hooks/use-selected'
+import { formatDependentAxisTicks } from '~/utils/format-dependent-axis-ticks'
 
 function Empty() {
   return (
@@ -58,22 +57,30 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
       width={CHART_SIZE}
       innerRadius={props.innerRadius || CHART_SIZE / 2.5}
       colorScale={COLORS}
-      labelComponent={<VictoryLabel angle={30} dx={10} />}
+      labelRadius={({ innerRadius }) =>
+        props.innerRadius
+          ? innerRadius
+            ? innerRadius + 12
+            : undefined
+          : undefined
+      }
       style={{
         ...props.style,
         data: {
           stroke: ({ datum }) =>
-            selected && selected === datum.id ? datum.color : 'none',
+            selected && selected.id === datum.id ? datum.color : 'none',
           fill: ({ datum }) => datum.color,
           strokeWidth: 10,
           strokeOpacity: 0.25,
         },
         labels: {
-          display: ({ datum }) => (selected === datum.id ? 'flex' : 'none'),
           fontFamily: 'urbanist-semibold',
           fontSize: 12,
         },
       }}
+      labels={({ datum, index }) =>
+        index % 2 === 0 ? datum.percentage : index < 3 ? datum.percentage : ''
+      }
       {...props}
     />
   )
@@ -89,13 +96,13 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
     <ScrollView
       contentContainerStyle={{
         paddingRight: 40,
-        paddingLeft: 20,
+        paddingLeft: 40,
         paddingBottom: props.horizontal ? 80 : 0,
       }}
       horizontal={!props.horizontal}
       showsHorizontalScrollIndicator={false}>
       <VictoryChart
-        domainPadding={30}
+        domainPadding={{ x: 80, y: 40 }}
         width={
           !props.horizontal
             ? props.data && props.data.length < 10
@@ -115,31 +122,29 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
             ...props.style,
             data: {
               stroke: ({ datum }) =>
-                selected && selected === datum.id ? datum.color : 'none',
+                selected && selected.id === datum.id ? datum.color : 'none',
               fill: ({ datum }) => datum.color,
               strokeWidth: 10,
-              strokeOpacity: 0.25,
+              strokeOpacity: 0.5,
             },
             labels: {
               textTransform: 'uppercase',
               fontFamily: 'urbanist-bold',
               fontSize: 10,
               fill: TEXT_PRIMARY,
-              letterSpacing: -0.5,
             },
           }}
-          labels={({ datum, index }) =>
+          labelComponent={<VictoryLabel dy={5} dx={25} angle={-90} />}
+          labels={({ datum }) =>
             props.data && props.data.length > 10
               ? !props.horizontal
                 ? variant === 'VLR'
-                  ? index % 2 === 0
-                    ? renderTheLabelAboveTheBar(datum._y)
-                    : null
-                  : datum._y.toFixed(2).replace('.00', '')
-                : renderTheLabelAboveTheBar(datum._y)
-              : renderTheLabelAboveTheBar(datum._y)
+                  ? datum.percentage
+                  : null
+                : datum.percentage
+              : datum.percentage
           }
-          barWidth={18}
+          barWidth={props.data && props.data.length <= 20 ? 18 : 4}
           colorScale={COLORS}
           data={props.data}
           x="posicao"
@@ -157,9 +162,7 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
               fill: TEXT_PRIMARY,
             },
             ticks: { stroke: 'grey', size: 5 },
-            axis: {
-              stroke: 'grey',
-            },
+            axis: { stroke: 'grey' },
           }}
         />
 
@@ -168,18 +171,12 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
           dependentAxis
           label={({ datum }) => datum}
           tickFormat={(tick) =>
-            variant === 'VLR'
-              ? tick >= 1000
-                ? `${currency(tick / 1000)} K`
-                    .replace(',', '.')
-                    .replace('.00', '')
-                : `${currency(tick).replace('.00', '')}`
-              : tick.toFixed(2).replace('.00', '')
+            variant === 'VLR' ? formatDependentAxisTicks(tick) : tick
           }
           style={{
             tickLabels: {
               textTransform: 'uppercase',
-              fontFamily: 'urbanist-semibold',
+              fontFamily: 'urbanist-bold',
               fontSize: 10,
               fill: TEXT_PRIMARY,
             },

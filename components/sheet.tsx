@@ -14,6 +14,7 @@ import {
 import {
   Pressable,
   PressableProps,
+  Text,
   TextProps,
   View,
   ViewProps,
@@ -24,6 +25,7 @@ import { useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
 
 import { P } from './p'
+import { fonts } from '~/styles/fonts'
 
 const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
   (props, ref) => {
@@ -89,7 +91,6 @@ function List<T>(props: ComponentProps<typeof BottomSheetFlatList<T>>) {
         paddingBottom: 80,
       }}
       showsVerticalScrollIndicator={false}
-      ItemSeparatorComponent={() => <View className="my-1.5" />}
       {...props}
     />
   )
@@ -98,7 +99,7 @@ function List<T>(props: ComponentProps<typeof BottomSheetFlatList<T>>) {
 function ListRow(props: PressableProps) {
   return (
     <Pressable
-      className="relative h-12 w-full flex-row items-center"
+      className="relative h-16 w-full flex-row items-center border-b border-zinc-200 dark:border-b-zinc-800"
       {...props}>
       {props.children}
     </Pressable>
@@ -112,7 +113,7 @@ type ListColorProps = {
 function ListColor(props: ListColorProps) {
   return (
     <View
-      className="absolute left-0 h-12 w-1"
+      className="absolute left-2.5 h-5 w-2 rounded-full"
       style={{ backgroundColor: props.color }}
     />
   )
@@ -122,7 +123,7 @@ function ListItem(props: ViewProps) {
   return (
     <View
       className={clsx(
-        'h-full w-[20%] items-start justify-center',
+        'h-full w-[30%] items-center justify-center',
         props.className,
       )}
       {...props}>
@@ -133,12 +134,18 @@ function ListItem(props: ViewProps) {
 
 function ListItemTitle(props: TextProps) {
   return (
-    <P
+    <Text
       {...props}
-      className={clsx('font-urbanist-semibold text-sm', props.className)}
-      numberOfLines={1}>
+      style={[
+        {
+          fontFamily: fonts['urbanist-bold'],
+          fontSize: 13,
+          textTransform: 'capitalize',
+        },
+        props.style,
+      ]}>
       {props.children}
-    </P>
+    </Text>
   )
 }
 
