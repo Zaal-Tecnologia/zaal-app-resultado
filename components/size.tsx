@@ -33,7 +33,7 @@ export function Size() {
               borderWidth: 1,
               borderColor: BORDER_PRIMARY,
             }}>
-            {['5', '20', '30', '40', '50+'].map((item) => (
+            {['5', '10', '20', '30'].map((item) => (
               <Pressable
                 key={item}
                 onPress={() => {

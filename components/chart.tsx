@@ -49,40 +49,47 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
   const { selected } = useSelected()
 
   return (
-    <VictoryPie
-      data={props.data}
-      x="posicao"
-      y={VARIANT[variant!]}
-      height={CHART_SIZE}
-      width={CHART_SIZE}
-      innerRadius={props.innerRadius || CHART_SIZE / 2.5}
-      colorScale={COLORS}
-      labelRadius={({ innerRadius }) =>
-        props.innerRadius
-          ? innerRadius
-            ? innerRadius + 12
-            : undefined
-          : undefined
-      }
+    <View
       style={{
-        ...props.style,
-        data: {
-          stroke: ({ datum }) =>
-            selected && selected.id === datum.id ? datum.color : 'none',
-          fill: ({ datum }) => datum.color,
-          strokeWidth: 10,
-          strokeOpacity: 0.25,
-        },
-        labels: {
-          fontFamily: 'urbanist-semibold',
-          fontSize: 12,
-        },
-      }}
-      labels={({ datum, index }) =>
-        index % 2 === 0 ? datum.percentage : index < 3 ? datum.percentage : ''
-      }
-      {...props}
-    />
+        flex: 1,
+        width: WIDTH,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <VictoryPie
+        data={props.data}
+        x="posicao"
+        y={VARIANT[variant!]}
+        height={WIDTH * 0.9}
+        width={WIDTH * 0.9}
+        colorScale={COLORS}
+        // labelRadius={({ innerRadius }) =>
+        //   props.innerRadius
+        //     ? innerRadius
+        //       ? innerRadius + 12
+        //       : undefined
+        //     : undefined
+        // }
+        style={{
+          ...props.style,
+          data: {
+            stroke: ({ datum }) =>
+              selected && selected.id === datum.id ? datum.color : 'none',
+            fill: ({ datum }) => datum.color,
+            strokeWidth: 10,
+            strokeOpacity: 0.25,
+          },
+          labels: {
+            fontFamily: 'urbanist-bold',
+            fontSize: 12,
+          },
+        }}
+        labels={({ datum, index }) =>
+          index % 2 === 0 ? datum.percentage : index < 3 ? datum.percentage : ''
+        }
+        {...props}
+      />
+    </View>
   )
 }
 
@@ -97,10 +104,11 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
       contentContainerStyle={{
         paddingRight: 40,
         paddingLeft: 40,
-        paddingBottom: props.horizontal ? 80 : 0,
+        paddingBottom: props.horizontal ? HEIGHT - 600 : 0,
       }}
       horizontal={!props.horizontal}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
       <VictoryChart
         domainPadding={{ x: 80, y: 40 }}
         width={
@@ -134,7 +142,13 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
               fill: TEXT_PRIMARY,
             },
           }}
-          labelComponent={<VictoryLabel dy={5} dx={25} angle={-90} />}
+          labelComponent={
+            <VictoryLabel
+              dy={!props.horizontal ? 5 : 0}
+              dx={!props.horizontal ? 25 : 10}
+              angle={!props.horizontal ? -90 : 0}
+            />
+          }
           labels={({ datum }) =>
             props.data && props.data.length > 10
               ? !props.horizontal
@@ -153,11 +167,11 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
         />
 
         <VictoryAxis
-          fixLabelOverlap
+          invertAxis={props.horizontal}
           style={{
             tickLabels: {
               textTransform: 'uppercase',
-              fontFamily: 'urbanist-semibold',
+              fontFamily: 'urbanist-bold',
               fontSize: 10,
               fill: TEXT_PRIMARY,
             },
@@ -167,9 +181,7 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
         />
 
         <VictoryAxis
-          fixLabelOverlap
           dependentAxis
-          label={({ datum }) => datum}
           tickFormat={(tick) =>
             variant === 'VLR' ? formatDependentAxisTicks(tick) : tick
           }

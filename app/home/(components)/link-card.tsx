@@ -44,13 +44,18 @@ export function LinkCard({ from, style }: Props) {
 
 const s = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    height: 72,
     flex: 1,
+    marginBottom: 4,
   },
   gradient: {
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    flex: 1,
     position: 'relative',
-    borderRadius: 2,
+    borderRadius: 12,
   },
   title: {
     fontFamily: fonts['inter-semibold'],

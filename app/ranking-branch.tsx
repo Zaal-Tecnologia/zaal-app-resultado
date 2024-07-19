@@ -323,11 +323,13 @@ export default function Branch() {
                   onPress={() => setSelected(!selected ? item : null)}>
                   <Sheet.ListColor color={item.color} />
 
-                  <Sheet.ListItem className="w-[20%] items-center">
+                  <Sheet.ListItem
+                    style={{ width: '20%', justifyContent: 'flex-start' }}>
                     <Sheet.ListItemTitle>{item.posicao}</Sheet.ListItemTitle>
                   </Sheet.ListItem>
 
-                  <Sheet.ListItem className="w-[50%]">
+                  <Sheet.ListItem
+                    style={{ width: '50%', justifyContent: 'flex-start' }}>
                     <Sheet.ListItemTitle className="font-inter-medium">
                       {item.filial.nomeFantasia}
                     </Sheet.ListItemTitle>

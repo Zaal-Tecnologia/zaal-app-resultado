@@ -1,5 +1,6 @@
 import { Link, Stack, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import colors from 'tailwindcss/colors'
 
 import { WIDTH } from '~/utils/chart-size'
 
@@ -17,9 +18,7 @@ import { LinkCard } from './(components)/link-card'
 import { useBranch } from '~/hooks/use-branch'
 import { useTheme } from '~/hooks/use-theme'
 
-import { themes } from '~/styles/themes'
 import { fonts } from '~/styles/fonts'
-import colors from 'tailwindcss/colors'
 
 export default function Home() {
   const { branch } = useBranch()
@@ -102,45 +101,81 @@ export default function Home() {
 
           <SalesPreview />
 
-          <Button
-            style={[{ borderColor: themes[theme].border }, s.branchButton]}
-            onPress={() => push('/branches')}>
-            <Icon name="storefront" size={24} color="#305A96" />
-            <P style={s.branchButtonTitle}>
-              {branch.id === 0 ? 'TODAS AS FILIAIS' : `${branch.nomeFantasia}`}
-            </P>
+          <View style={{ paddingHorizontal: 16 }}>
+            <View
+              style={{
+                paddingHorizontal: 8,
+                paddingVertical: 16,
+                backgroundColor:
+                  theme === 'dark' ? colors.zinc[800] : colors.zinc[100],
+                borderRadius: 40,
+              }}>
+              <Button style={s.branchButton} onPress={() => push('/branches')}>
+                <View
+                  style={{
+                    borderRadius: 99,
+                    height: 44,
+                    width: 44,
+                    backgroundColor:
+                      theme === 'dark' ? colors.zinc[700] : colors.zinc[200],
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <P style={{ fontFamily: fonts['inter-medium'] }}>
+                    {branch.nomeFantasia.slice(0, 2)}
+                  </P>
+                </View>
 
-            <Icon
-              name="arrow-forward"
-              size={16}
-              style={{ marginLeft: 'auto' }}
-            />
-          </Button>
+                <P style={s.branchButtonTitle}>
+                  {branch.id === 0
+                    ? 'TODAS AS FILIAIS'
+                    : `${branch.nomeFantasia}`}
+                </P>
 
-          <View style={s.link}>
-            <View style={[s.linkRow, { marginRight: 2 }]}>
-              <LinkCard
-                from="PRODUTOS"
-                style={{ height: 200, marginBottom: 4 }}
-              />
+                <Icon
+                  name="arrow-forward"
+                  size={16}
+                  style={{ marginLeft: 'auto' }}
+                />
+              </Button>
 
-              <LinkCard
-                from="CATEGORIAS"
-                style={{ height: 72, borderBottomLeftRadius: 24 }}
-              />
-            </View>
+              <View style={s.link}>
+                <View style={[s.linkRow, { marginRight: 2 }]}>
+                  <LinkCard
+                    from="PRODUTOS"
+                    style={{
+                      borderTopLeftRadius: 24,
+                      borderBottomRightRadius: 6,
+                    }}
+                  />
 
-            <View style={[s.linkRow, { marginLeft: 2 }]}>
-              <LinkCard from="FILIAIS" style={{ height: 72 }} />
+                  <LinkCard
+                    from="CATEGORIAS"
+                    style={{
+                      borderBottomLeftRadius: 24,
+                      borderTopRightRadius: 6,
+                    }}
+                  />
+                </View>
 
-              <LinkCard
-                from="MARCAS"
-                style={{
-                  height: 200,
-                  marginTop: 4,
-                  borderBottomRightRadius: 24,
-                }}
-              />
+                <View style={[s.linkRow, { marginLeft: 2 }]}>
+                  <LinkCard
+                    from="FILIAIS"
+                    style={{
+                      borderTopRightRadius: 24,
+                      borderBottomLeftRadius: 6,
+                    }}
+                  />
+
+                  <LinkCard
+                    from="MARCAS"
+                    style={{
+                      borderBottomRightRadius: 24,
+                      borderTopLeftRadius: 6,
+                    }}
+                  />
+                </View>
+              </View>
             </View>
           </View>
 
@@ -174,13 +209,9 @@ const s = StyleSheet.create({
   branchButton: {
     marginBottom: 4,
     marginHorizontal: 18,
-    height: 44,
+    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 16,
   },
   branchButtonTitle: {
     marginLeft: 10,
@@ -190,11 +221,12 @@ const s = StyleSheet.create({
     letterSpacing: -0.025,
   },
   link: {
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 18,
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
+
   linkRow: {
-    width: (WIDTH - 40) / 2,
+    width: (WIDTH - 84) / 2,
   },
 })

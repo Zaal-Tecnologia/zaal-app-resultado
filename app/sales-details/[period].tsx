@@ -24,6 +24,7 @@ import type { TotalSalesDTO } from '~/types/total-sales-dto'
 import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
+import { SelectedChart } from '~/components/selected-chart'
 
 const WEEK = {
   1: 'SEG',
@@ -60,6 +61,17 @@ export default function SalesDetails() {
     },
   )
 
+  const TOTAL = useMemo(
+    () =>
+      data
+        ? data[PERIOD.SALES[period!]].reduce(
+            (acc, curr) => acc + curr.valorTotal,
+            0,
+          )
+        : 0,
+    [data, period],
+  )
+
   const dataByPeriod = useMemo(() => {
     if (!(data && data[PERIOD.SALES[filterPeriod]].length !== 0)) return false
 
@@ -68,23 +80,18 @@ export default function SalesDetails() {
       id: item.indice,
       posicao:
         filterPeriod === 'MÊS'
-          ? `${item.indice}°`
+          ? `SEM. ${item.indice}`
           : filterPeriod === 'SEMANA'
             ? WEEK[item.indice]
             : filterPeriod === 'DIA'
               ? `${item.indice}h`
               : '',
       color: COLORS[index],
+      percentage: ((item.valorTotal / TOTAL) * 100).toFixed(2) + '%',
     }))
-  }, [data, filterPeriod])
+  }, [TOTAL, data, filterPeriod])
 
   const { selected, setSelected } = useSelected()
-
-  const TOTAL = useMemo(() => {
-    if (dataByPeriod) {
-      return dataByPeriod.reduce((acc, curr) => acc + curr.valorTotal, 0)
-    }
-  }, [dataByPeriod])
 
   useEffect(() => {
     if (!dataByPeriod) setSelected(null)
@@ -93,18 +100,6 @@ export default function SalesDetails() {
   useEffect(() => {
     if (period) setPeriod(period)
   }, [period, setPeriod])
-
-  const CHART_COMPONENT = useMemo(
-    () => ({
-      ROSCA: (
-        <Chart.Pie data={dataByPeriod || []} innerRadius={CHART_SIZE / 2.5} />
-      ),
-      PIZZA: <Chart.Pie data={dataByPeriod || []} innerRadius={0} />,
-      'B. HORIZONTAL': <Chart.Bar data={dataByPeriod || []} horizontal />,
-      'B. VERTICAL': <Chart.Bar data={dataByPeriod || []} />,
-    }),
-    [dataByPeriod],
-  )
 
   return (
     <Container>
@@ -142,7 +137,9 @@ export default function SalesDetails() {
             style={{
               marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
             }}>
-            {CHART_COMPONENT[chart!]}
+            {dataByPeriod && !isLoading ? (
+              <SelectedChart data={dataByPeriod || []} />
+            ) : null}
           </View>
         )}
       </View>

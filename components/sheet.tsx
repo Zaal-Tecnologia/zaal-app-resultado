@@ -19,7 +19,6 @@ import {
   View,
   ViewProps,
 } from 'react-native'
-import clsx from 'clsx'
 
 import { useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
@@ -56,11 +55,9 @@ function Header(props: ViewProps) {
   return (
     <View
       className="h-16 w-full flex-row items-center"
-      style={{
-        backgroundColor: '#305a9620',
-      }}
+      style={{ backgroundColor: '#305a9620' }}
       {...props}>
-      <View className="h-full w-[20%] items-center justify-center">
+      <View className="h-full w-[20%] items-center justify-center ">
         <P className="font-inter-semibold text-xs">POS.</P>
       </View>
 
@@ -97,9 +94,21 @@ function List<T>(props: ComponentProps<typeof BottomSheetFlatList<T>>) {
 }
 
 function ListRow(props: PressableProps) {
+  const { BORDER_PRIMARY } = useTheme()
+
   return (
     <Pressable
-      className="relative h-16 w-full flex-row items-center border-b border-zinc-200 dark:border-b-zinc-800"
+      style={[
+        {
+          position: 'relative',
+          height: 64,
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderBottomWidth: 1,
+          borderBottomColor: BORDER_PRIMARY,
+        },
+        props.style,
+      ]}
       {...props}>
       {props.children}
     </Pressable>
@@ -122,11 +131,17 @@ function ListColor(props: ListColorProps) {
 function ListItem(props: ViewProps) {
   return (
     <View
-      className={clsx(
-        'h-full w-[30%] items-center justify-center',
-        props.className,
-      )}
-      {...props}>
+      {...props}
+      style={[
+        {
+          height: '100%',
+          width: '30%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        props.style,
+      ]}>
       {props.children}
     </View>
   )

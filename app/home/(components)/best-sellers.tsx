@@ -110,7 +110,7 @@ function Card(props: { from: BestSeller }) {
           borderBottomWidth: 1,
         },
       ]}>
-      <View>
+      <View style={{ width: '70%' }}>
         <P style={[{ color: themes[theme].textForeground }, s.buttonTitle]}>
           {TITLE[props.from]}
         </P>
@@ -118,27 +118,29 @@ function Card(props: { from: BestSeller }) {
         {isLoading ? (
           <Shimmer width={100} height={24} />
         ) : (
-          <P
-            style={[
-              {
+          <View>
+            <P
+              style={{
                 fontSize: 16,
                 lineHeight: 24,
                 textTransform: 'capitalize',
-                fontFamily: fonts['inter-medium'],
+                fontFamily: fonts['urbanist-semibold'],
                 letterSpacing: -0.025,
-              },
-            ]}>
-            {props.from === 'rankingfilial'
-              ? ITEM.filial.nomeFantasia
-              : ITEM[NAME[props.from]]}
-          </P>
+              }}>
+              {props.from === 'rankingfilial'
+                ? ITEM.filial.nomeFantasia
+                : ITEM[NAME[props.from]]}
+            </P>
+          </View>
         )}
       </View>
 
       {isLoading ? (
         <Shimmer width={100} height={24} />
       ) : (
-        <P style={s.buttonPrice}>{show ? currency(ITEM.valorTotal) : '-'}</P>
+        <View style={{ minWidth: '30%', alignItems: 'flex-end' }}>
+          <P style={s.buttonPrice}>{show ? currency(ITEM.valorTotal) : '-'}</P>
+        </View>
       )}
     </View>
   ) : null
@@ -188,7 +190,7 @@ const s = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
     paddingVertical: 16,
   },

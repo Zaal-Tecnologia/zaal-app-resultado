@@ -254,10 +254,7 @@ export default function Product() {
             <View className="flex-row items-center">
               <View
                 className="mr-1.5 flex-1 rounded-md p-5"
-                style={{
-                  height: 80,
-                  backgroundColor: BACKGROUND_SECONDARY,
-                }}>
+                style={{ height: 80, backgroundColor: BACKGROUND_SECONDARY }}>
                 <P className="mb-2.5 font-inter-semibold text-xs text-zinc-500">
                   VALOR
                 </P>
@@ -320,12 +317,13 @@ export default function Product() {
                   onPress={() => setSelected(!selected ? item : null)}>
                   <Sheet.ListColor color={item.color} />
 
-                  <Sheet.ListItem className="w-[20%] items-center">
+                  <Sheet.ListItem style={{ width: '20%' }}>
                     <Sheet.ListItemTitle>{item.posicao}</Sheet.ListItemTitle>
                   </Sheet.ListItem>
 
-                  <Sheet.ListItem className="w-[50%]">
-                    <Sheet.ListItemTitle className="font-inter-medium">
+                  <Sheet.ListItem
+                    style={{ width: '50%', justifyContent: 'flex-start' }}>
+                    <Sheet.ListItemTitle>
                       {item.produtoNome}
                     </Sheet.ListItemTitle>
                   </Sheet.ListItem>
