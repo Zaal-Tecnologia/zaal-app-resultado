@@ -23,7 +23,7 @@ export function User() {
         s.container,
         { backgroundColor: colors.zinc[theme === 'light' ? 100 : 800] },
       ]}
-      onPress={() => push('/profile')}>
+      onPress={() => push('/profile/')}>
       <Image
         alt=""
         source={require('../../../assets/logo-fundo-preto.png')}

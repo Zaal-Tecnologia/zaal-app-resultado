@@ -19,6 +19,11 @@ export function useUsers() {
     undefined,
   )
 
+  const user = useMemo(
+    () => (users ? users.find((user) => user.active) : null),
+    [users],
+  )
+
   const add = useCallback(
     (user: User, onSuccess: () => void) => {
       if (!users) {
@@ -49,13 +54,13 @@ export function useUsers() {
     [setUsers, toast, users],
   )
 
-  const removeAll = useCallback(() => {
+  const onRemoveAllUsers = useCallback(() => {
     setUsers(undefined)
 
     push('/')
   }, [setUsers, push])
 
-  const change = useCallback(
+  const onChangeUser = useCallback(
     async (userId: string) => {
       if (users) {
         const userToBeActivated = users.find((item) => item.userId === userId)
@@ -84,36 +89,55 @@ export function useUsers() {
             )
 
             setBranch(FAKE_BRANCH_TO_INITIAL_DATA)
+
+            toast.show(`Usuário alterado para ${userToBeActivated.login}`)
           })
         }
       }
     },
-    [setBranch, setUsers, users],
+    [setBranch, setUsers, toast, users],
   )
 
-  const user = useMemo(
-    () => (users ? users.find((user) => user.active) : null),
-    [users],
-  )
-
-  const removeCurrentUser = useCallback(() => {
+  const onRemoveActiveUser = useCallback(() => {
     if (users && user) {
       const userThatNeedsToBeRemoved = users.filter(
         (item) => item.userId !== user.userId,
       )
 
-      // userThatNeedsToBeRemoved[0].active = true
+      if (userThatNeedsToBeRemoved.length > 0) {
+        const user = userThatNeedsToBeRemoved[0]
+
+        onChangeUser(user.userId)
+      } else {
+        push('/')
+      }
 
       setUsers([...userThatNeedsToBeRemoved])
     }
-  }, [setUsers, user, users])
+  }, [onChangeUser, push, setUsers, user, users])
+
+  const addPhoto = useCallback(
+    (photo: string) => {
+      if (users) {
+        const userWithPhoto = { ...user!, photo }
+
+        const userThatNeedsToBeRemoved = users.filter(
+          (item) => item.userId !== user!.userId,
+        )
+
+        setUsers([userWithPhoto, ...userThatNeedsToBeRemoved])
+      }
+    },
+    [setUsers, user, users],
+  )
 
   return {
     add,
     user,
     users,
-    removeAll,
-    removeCurrentUser,
-    change,
+    onRemoveAllUsers,
+    onRemoveActiveUser,
+    onChangeUser,
+    addPhoto,
   }
 }

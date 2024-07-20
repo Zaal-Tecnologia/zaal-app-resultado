@@ -14,7 +14,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Ionicons } from '@expo/vector-icons'
 import { useMutation } from '@tanstack/react-query'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 
 import { Container } from './Container'
 import { P } from './p'
@@ -40,8 +40,7 @@ const Schema = z.object({
 type FormInput = z.input<typeof Schema>
 
 type Props = {
-  onSuccess(): void
-  children: ReactNode
+  onSuccess?(): void
 
   defaultValues?: {
     dispositivoHash: string
@@ -63,18 +62,18 @@ export function AddUserForm(props: Props) {
     //       : props?.defaultValues?.dispositivoHash || user?.deviceHash,
     //   empresaId: props?.defaultValues?.empresaId || user?.companyId,
     // },
-    defaultValues: {
-      empresaId: 'E6F31DE3',
-      dispositivoHash: 'E71CF716',
-      login: '543',
-      senha: '12750302706',
-    },
     // defaultValues: {
-    //   empresaId: '59E6FEFD',
-    //   dispositivoHash: '5962AE39',
-    //   login: 'MATHEUS',
-    //   senha: '0112A',
+    //   empresaId: 'E6F31DE3',
+    //   dispositivoHash: 'E71CF716',
+    //   login: '543',
+    //   senha: '12750302706',
     // },
+    defaultValues: {
+      empresaId: '59E6FEFD',
+      dispositivoHash: '5962AE39',
+      login: 'MATHEUS',
+      senha: '0112A',
+    },
     // defaultValues: {
     //   empresaId: '739c3f09',
     //   dispositivoHash: '5b09e807',
@@ -121,13 +120,6 @@ export function AddUserForm(props: Props) {
             await saveToken('zaal-result-token', token)
 
             if (user) {
-              // { id: input.login, password: input.senha },
-              // {
-              //   companyId: company.codigo,
-              //   codigoLiberacao: input.dispositivoHash,
-              //   system: company.sistema,
-              // },
-
               add(
                 {
                   userId: user.id,
@@ -141,7 +133,10 @@ export function AddUserForm(props: Props) {
                   password: input.senha,
                   active: true,
                 },
-                () => errors.length === 0 && props.onSuccess(),
+                () =>
+                  errors.length === 0 && typeof props.onSuccess !== 'undefined'
+                    ? props.onSuccess()
+                    : null,
               )
             }
           }
@@ -225,17 +220,10 @@ export function AddUserForm(props: Props) {
 
   return (
     <ScrollView
-      // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
       contentContainerStyle={{ paddingBottom: 80 }}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Container style={{ paddingHorizontal: 40 }}>
-          {props.children}
-
-          <View
-            className="my-10 h-[1px] w-full"
-            style={{ backgroundColor: BORDER_PRIMARY }}></View>
-
           <View>
             <View>
               <P className="mb-1.5 ml-1.5 font-inter-medium text-xs -tracking-wide">

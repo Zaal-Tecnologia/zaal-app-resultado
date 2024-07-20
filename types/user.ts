@@ -4,6 +4,7 @@ export type User = {
   userLastName: string
   password: string
   login: string
+  photo?: string
   deviceHash: string
   companyId: string
   companySystem: string

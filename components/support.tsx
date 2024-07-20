@@ -1,11 +1,16 @@
 import { Linking, Pressable, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
-import { Icon } from './icon'
 import { P } from './p'
+
+import { fonts } from '~/styles/fonts'
+import { colors } from '~/styles/colors'
 import { useTheme } from '~/hooks/use-theme'
 
 export function Support() {
-  function onContactSupport() {
+  const { theme } = useTheme()
+
+  function handleOpenWhatsApp() {
     const phoneNumber = '24992913840'
     const message = 'Olá, preciso de suporte para o aplicativo do Resultado'
 
@@ -14,27 +19,55 @@ export function Support() {
     Linking.openURL(whatsappUrl)
   }
 
-  const { BACKGROUND_SECONDARY } = useTheme()
-
   return (
     <Pressable
-      className="h-14 flex-row items-center"
-      onPress={onContactSupport}>
+      style={{
+        height: 56,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      onPress={handleOpenWhatsApp}>
       <View
         style={{
           alignItems: 'center',
-          backgroundColor: BACKGROUND_SECONDARY,
           justifyContent: 'center',
           height: 40,
           width: 40,
-          borderRadius: 99,
         }}>
-        <Icon name="help-circle" size={20} />
+        <Feather
+          name="phone-call"
+          color={theme === 'dark' ? colors.white : colors.black}
+          size={18}
+        />
       </View>
 
-      <P className="ml-3 font-inter-medium text-sm -tracking-wide">
-        Contato com o suporte
-      </P>
+      <View>
+        <P
+          style={{
+            marginLeft: 12,
+            fontFamily: fonts['inter-semibold'],
+            fontSize: 12,
+            letterSpacing: -0.35,
+          }}>
+          Contato com o suporte
+        </P>
+        <P
+          style={{
+            marginLeft: 12,
+            fontFamily: fonts['inter-medium'],
+            fontSize: 9,
+            color: colors.zinc[500],
+          }}>
+          Isso vai te direcionar para o Whatsapp
+        </P>
+      </View>
+
+      <Feather
+        name="arrow-up-right"
+        style={{ marginLeft: 'auto' }}
+        color={theme === 'dark' ? colors.white : colors.black}
+        size={14}
+      />
     </Pressable>
   )
 }

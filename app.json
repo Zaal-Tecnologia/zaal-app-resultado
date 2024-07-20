@@ -5,17 +5,16 @@
     "version": "2.0.1",
     "scheme": "zaal-resultado-app",
     "plugins": [
+      "expo-image-picker",
       "expo-router",
       "expo-font",
+      "expo-secure-store",
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
-      ],
-      "expo-secure-store"
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -12,8 +12,11 @@ import { useEffect } from 'react'
 import { queryClient } from '~/api/client'
 
 import { InitialPageLoading } from '~/components/initial-page-loading'
+import { CustomHeaderBackButton } from '~/components/custom-header-back-button'
 
 import { useTheme } from '~/hooks/use-theme'
+
+import { fonts } from '~/styles/fonts'
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -41,15 +44,36 @@ export default function Layout() {
         backgroundColor: theme ? (theme === 'dark' ? zinc[900] : white) : white,
       }}>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider textStyle={{ fontFamily: 'inter-medium' }}>
+        <ToastProvider textStyle={{ fontFamily: 'inter-medium', fontSize: 11 }}>
           <Stack
             screenOptions={{
-              headerShown: false,
+              animation: 'ios',
+              headerTitleStyle: {
+                fontFamily: fonts['urbanist-bold'],
+                fontSize: 12,
+                color: '#007AFF',
+              },
+              headerStyle: {
+                backgroundColor: theme
+                  ? theme === 'dark'
+                    ? zinc[900]
+                    : white
+                  : white,
+              },
+              headerLeft() {
+                return <CustomHeaderBackButton />
+              },
+              headerShadowVisible: false,
               contentStyle: {
                 backgroundColor: theme === 'dark' ? zinc[900] : white,
               },
-            }}
-          />
+            }}>
+            <Stack.Screen name="profile" options={{ headerTitle: 'Perfil' }} />
+            <Stack.Screen
+              name="add-users-via-profile"
+              options={{ headerTitle: 'Adicione um novo usuário' }}
+            />
+          </Stack>
         </ToastProvider>
       </QueryClientProvider>
 

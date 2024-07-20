@@ -116,9 +116,7 @@ export default function Home() {
               </TouchableOpacity>
             </View> */}
 
-            <AddUserForm onSuccess={() => console.log('success')}>
-              <></>
-            </AddUserForm>
+            <AddUserForm />
           </View>
         </ScrollView>
       ) : (

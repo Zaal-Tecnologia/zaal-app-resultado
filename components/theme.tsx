@@ -1,36 +1,61 @@
 import { Pressable, View } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
 import { useTheme } from '~/hooks/use-theme'
 
-import { Icon } from './icon'
 import { P } from './p'
+import { fonts } from '~/styles/fonts'
+import { colors } from '~/styles/colors'
 
 export function Theme() {
-  const { theme, setTheme, BACKGROUND_SECONDARY } = useTheme()
+  const { theme, setTheme } = useTheme()
 
-  async function onChangeTheme() {
+  async function handleChangeTheme() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
-
-    // await setTheme(colorScheme === 'dark' ? 'light' : 'dark')
   }
 
   return (
-    <Pressable className="h-14 flex-row items-center" onPress={onChangeTheme}>
+    <Pressable
+      style={{
+        height: 56,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      onPress={handleChangeTheme}>
       <View
         style={{
           alignItems: 'center',
-          backgroundColor: BACKGROUND_SECONDARY,
           justifyContent: 'center',
           height: 40,
           width: 40,
-          borderRadius: 99,
         }}>
-        <Icon name={theme === 'dark' ? 'sunny' : 'moon'} size={18} />
+        <Feather
+          name={theme === 'dark' ? 'sun' : 'moon'}
+          color={theme === 'dark' ? colors.white : colors.black}
+          size={18}
+        />
       </View>
 
-      <P className="ml-3 font-inter-medium text-sm -tracking-wide">
-        Trocar tema
-      </P>
+      <View>
+        <P
+          style={{
+            marginLeft: 12,
+            fontFamily: fonts['inter-semibold'],
+            fontSize: 12,
+            letterSpacing: -0.35,
+          }}>
+          Trocar tema
+        </P>
+        <P
+          style={{
+            marginLeft: 12,
+            fontFamily: fonts['inter-medium'],
+            fontSize: 9,
+            color: colors.zinc[500],
+          }}>
+          Não vai afetar as cores do gráfico.
+        </P>
+      </View>
     </Pressable>
   )
 }

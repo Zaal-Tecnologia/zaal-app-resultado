@@ -9,12 +9,13 @@ export function Greeting() {
   const { theme } = useTheme()
 
   const hour = new Date().getHours()
+  console.log(hour)
 
   let message = ''
 
   if (hour >= 3 && hour <= 12) message = 'Bom dia'
   if (hour > 12 && hour <= 18) message = 'Boa tarde'
-  if (hour > 18 && hour < 3) message = 'Boa noite'
+  if (hour > 18) message = 'Boa noite'
 
   return (
     <Text
