@@ -9,7 +9,6 @@ export function Greeting() {
   const { theme } = useTheme()
 
   const hour = new Date().getHours()
-  console.log(hour)
 
   let message = ''
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import {
   BottomSheetFlatList,
   BottomSheetModal,
@@ -5,12 +6,11 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { useRouter } from 'expo-router'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { forwardRef, useContext, useMemo } from 'react'
 import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Animated, {
+  SharedValue,
   useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated'
 
 import { Icon } from '~/components/icon'
@@ -26,40 +26,31 @@ import { capitalize } from '~/utils/capitalize'
 import { LogoutOfAllAccounts } from './log-out-of-all-accounts'
 import { Avatar } from './avatar'
 
-export function UserManagement() {
-  const { onChangeUser, user, users } = useUsers()
-  const { theme } = useTheme()
-  const { push } = useRouter()
-  const rotation = useSharedValue(0)
+import { UserManagementContext } from '..'
 
-  const ref = useRef<BottomSheetModal>(null)
+type Props = {
+  rotation: SharedValue<number>
+}
 
-  const snapPoints = useMemo(() => ['50%', '55%'], [])
+export const UserManagement = forwardRef<BottomSheetModal, Props>(
+  ({ rotation }, ref) => {
+    const { isUp, setIsUp } = useContext(UserManagementContext)
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotate: `${rotation.value}deg` }],
-    }
-  })
+    const { onChangeUser, user, users } = useUsers()
+    const { theme } = useTheme()
+    const { push } = useRouter()
 
-  const [isUp, setIsUp] = useState(false)
+    const snapPoints = useMemo(() => ['50%', '55%'], [])
 
-  const handleOpenUserManagementBottomSheet = useCallback(
-    (value: boolean) => {
-      if (value) ref.current?.present()
-      if (!value) ref.current?.close()
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ rotate: `${rotation.value}deg` }],
+      }
+    })
 
-      rotation.value = withTiming(value ? 180 : 0, { duration: 300 })
+    const arrayOfUsersRemovingTheAsset = users?.filter((item) => !item.active)
 
-      setIsUp(value)
-    },
-    [rotation],
-  )
-
-  const arrayOfUsersRemovingTheAsset = users?.filter((item) => !item.active)
-
-  return user ? (
-    <>
+    return user ? (
       <BottomSheetModalProvider>
         <View style={s.header}>
           <Avatar name={user.userName} photo={user.photo} variant="xl" />
@@ -67,7 +58,7 @@ export function UserManagement() {
           <Pressable
             hitSlop={16}
             style={s.headerContent}
-            onPress={() => handleOpenUserManagementBottomSheet(!isUp)}>
+            onPress={() => setIsUp(!isUp)}>
             <View>
               <P style={s.headerContentTitle}>{capitalize(user.userName)}</P>
               <P style={s.headerContentDescription}>
@@ -83,9 +74,7 @@ export function UserManagement() {
         </View>
 
         <BottomSheetModal
-          onChange={(value) =>
-            handleOpenUserManagementBottomSheet(value !== -1)
-          }
+          onChange={(value) => setIsUp(value !== -1)}
           snapPoints={snapPoints}
           ref={ref}
           handleStyle={{ display: 'none' }}
@@ -169,9 +158,9 @@ export function UserManagement() {
           </BottomSheetView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
-    </>
-  ) : null
-}
+    ) : null
+  },
+)
 
 const s = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', marginTop: 16 },
@@ -181,7 +170,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-    paddingRight: 32,
+    paddingRight: 24,
   },
   headerContentTitle: {
     fontFamily: fonts['urbanist-bold'],
