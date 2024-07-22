@@ -6,4 +6,5 @@ export const fonts = {
   'inter-regular': 'inter-regular',
   'inter-medium': 'inter-medium',
   'inter-semibold': 'inter-semibold',
+  'martian-semibold': 'martian-semibold',
 } as const

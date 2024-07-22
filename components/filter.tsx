@@ -149,10 +149,19 @@ export function FilterChart() {
 
 export function FilterPeriod() {
   const { period, setPeriod } = usePeriod()
-  const { TEXT_PRIMARY } = useTheme()
+  const { TEXT_PRIMARY, theme } = useTheme()
 
   return (
-    <View className="flex-row justify-center rounded-full bg-[#305a96]/10 p-2 dark:bg-[#305a96]/20">
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 999,
+        paddingHorizontal: 8,
+        height: 40,
+        backgroundColor: theme === 'dark' ? '#305a9610' : '#305a9620',
+      }}>
       {(['MÊS', 'SEMANA', 'DIA'] as ['MÊS', 'SEMANA', 'DIA']).map((item) => (
         <Pressable
           key={item}

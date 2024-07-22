@@ -27,6 +27,7 @@ export default function Layout() {
     'inter-regular': require('../assets/fonts/inter/Inter-Regular.ttf'),
     'inter-medium': require('../assets/fonts/inter/Inter-Medium.ttf'),
     'inter-semibold': require('../assets/fonts/inter/Inter-SemiBold.ttf'),
+    'martian-semibold': require('../assets/fonts/martian/MartianMono-SemiBold.ttf'),
   })
 
   const { theme, setTheme } = useTheme()
@@ -72,6 +73,10 @@ export default function Layout() {
             <Stack.Screen
               name="add-users-via-profile"
               options={{ headerTitle: 'Adicione um novo usuário' }}
+            />
+            <Stack.Screen
+              name="ranking-product"
+              options={{ headerShown: false }}
             />
           </Stack>
         </ToastProvider>
