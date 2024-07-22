@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { red, white } from 'tailwindcss/colors'
-import { Link } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 
 import { api } from '~/api/api'
 
@@ -139,6 +139,8 @@ export default function Product() {
 
   return (
     <Container>
+      <Stack.Screen options={{ headerShown: false }} />
+
       <Header.Root style={{ paddingHorizontal: 20 }}>
         <Header.Back>PRODUTOS</Header.Back>
         <Header.Content />
