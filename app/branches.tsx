@@ -1,5 +1,5 @@
 import { FlatList, TouchableOpacity, View } from 'react-native'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 
 import { Container } from '~/components/Container'
 import { Header } from '~/components/header'
@@ -39,6 +39,8 @@ export default function Branches() {
 
   return (
     <Container style={{ paddingTop: 24 }}>
+      <Stack.Screen options={{ headerTitle: 'Selecione uma filial' }} />
+
       <FlatList
         data={
           data
@@ -47,10 +49,6 @@ export default function Branches() {
         }
         ListHeaderComponent={() => (
           <>
-            <Header.Root style={{ paddingHorizontal: 24, marginBottom: 40 }}>
-              <Header.Back>SELECIONE UMA FILIAL</Header.Back>
-            </Header.Root>
-
             {isLoading ? (
               <View
                 style={{

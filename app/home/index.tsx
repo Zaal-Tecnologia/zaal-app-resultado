@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Home' }} />
+      <Stack.Screen options={{ headerShown: false }} />
 
       <Container>
         <ScrollView

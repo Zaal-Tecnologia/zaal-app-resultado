@@ -73,6 +73,10 @@ export default function Layout() {
               name="add-users-via-profile"
               options={{ headerTitle: 'Adicione um novo usuário' }}
             />
+            <Stack.Screen
+              name="branches"
+              options={{ headerTitle: 'Selecione uma filial' }}
+            />
           </Stack>
         </ToastProvider>
       </QueryClientProvider>
