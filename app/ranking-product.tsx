@@ -440,8 +440,6 @@ export default function MyPager() {
   }, [data, period, TOTAL])
 
   const font = useFont(urbanist, 10)
-  const state = useChartPressState({ x: 's', y: { y1: 0, y2: 0 } })
-  console.log('state', state)
 
   return (
     <>
