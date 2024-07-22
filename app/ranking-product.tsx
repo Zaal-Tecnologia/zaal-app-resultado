@@ -50,6 +50,8 @@ import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
 import { colors } from '~/styles/colors'
+import { fonts } from '~/styles/fonts'
+import { themes } from '~/styles/themes'
 
 let updateTimeout: NodeJS.Timeout
 
@@ -137,14 +139,45 @@ export default function Product() {
     if (!DATA_BY_PERIOD) setSelected(null)
   }, [DATA_BY_PERIOD, setSelected])
 
+  const { theme } = useTheme()
+
   return (
     <Container>
       <Stack.Screen options={{ headerShown: false }} />
 
-      <Header.Root style={{ paddingHorizontal: 20 }}>
-        <Header.Back>PRODUTOS</Header.Back>
-        <Header.Content />
+      <Header.Root style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+        <P style={{ fontSize: 18, fontFamily: fonts['urbanist-bold'] }}>
+          Produtos
+        </P>
+        {/** <Header.Content /> */}
       </Header.Root>
+
+      {expand ? null : (
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: themes[theme].border,
+            marginHorizontal: 20,
+            paddingTop: 12,
+          }}>
+          <View>
+            <P
+              className="mb-2.5 font-urbanist-bold text-[10px]"
+              style={{ color: themes[theme].textForeground }}>
+              Faturamento Mensal
+            </P>
+            <P className="font-urbanist-bold text-[24px]">
+              {show ? currency(TOTAL) : '-'}
+            </P>
+          </View>
+
+          {/** <Filter>
+            <FilterPeriod />
+             <FilterVariant />
+              <FilterChart />
+          </Filter> */}
+        </View>
+      )}
 
       <ScrollView
         contentContainerStyle={{ height: HEIGHT, width: WIDTH }}
@@ -154,20 +187,6 @@ export default function Product() {
             <RefreshControl refreshing={isLoading} onRefresh={refetch} />
           ) : undefined
         }>
-        {expand ? null : (
-          <>
-            <P className="px-6 font-urbanist-semibold text-[24px]">
-              {show ? currency(TOTAL) : '-'}
-            </P>
-
-            <Filter>
-              <FilterPeriod />
-              <FilterVariant />
-              <FilterChart />
-            </Filter>
-          </>
-        )}
-
         {isLoading ? (
           <View className="flex-1 flex-row items-center justify-center">
             <ActivityIndicator color="#305a96" />
@@ -181,7 +200,7 @@ export default function Product() {
               <Chart.Empty />
             ) : (
               <>
-                <Average
+                {/** <Average
                   bigger={
                     DATA_BY_PERIOD
                       ? currency(
@@ -207,7 +226,7 @@ export default function Product() {
                     maximumValue={DATA_BY_PERIOD.length}
                     onValueChange={onSlideValueChange}
                   />
-                </View>
+                </View> */}
 
                 <View
                   className="relative flex-1 items-center justify-center"

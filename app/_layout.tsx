@@ -77,6 +77,7 @@ export default function Layout() {
               name="branches"
               options={{ headerTitle: 'Selecione uma filial' }}
             />
+            <Stack.Screen name="filters" options={{ headerShown: false }} />
           </Stack>
         </ToastProvider>
       </QueryClientProvider>
