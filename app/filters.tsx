@@ -1,12 +1,12 @@
 import { useRouter } from 'expo-router'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
 
 import { Container } from '~/components/Container'
-import { VARIANT } from '~/components/filter'
 import { Icon } from '~/components/icon'
 import { P } from '~/components/p'
+import { VARIANT } from '~/constants/variant'
 
-import { useChart, usePeriod, useVariant } from '~/hooks/use-filters'
+import { useChart, usePeriod, useSize, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
 
 import { fonts } from '~/styles/fonts'
@@ -25,140 +25,189 @@ export default function Filters() {
   const { period, setPeriod } = usePeriod()
   const { variant, setVariant } = useVariant()
   const { chart, setChart } = useChart()
+  const { setSize, size } = useSize()
 
   return (
     <Container>
-      <Pressable onPress={back} style={s.filterGoBack}>
-        <Icon name="chevron-back" size={14} />
-        <P style={s.filterGoBackTitle}>Filtros</P>
-      </Pressable>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 80 }}
+        showsVerticalScrollIndicator={false}>
+        <Pressable onPress={back} style={s.filterGoBack}>
+          <Icon name="chevron-back" size={14} />
+          <P style={s.filterGoBackTitle}>Filtros</P>
+        </Pressable>
 
-      <View style={s.container}>
-        <P style={s.title}>Período</P>
-        <P
-          style={[
-            s.description,
-            {
-              color: themes[theme].textForeground,
-            },
-          ]}>
-          Selecione um período no qual você deseja ver o gráfico.
-        </P>
+        <View style={s.container}>
+          <P style={s.title}>Período</P>
+          <P
+            style={[
+              s.description,
+              {
+                color: themes[theme].textForeground,
+              },
+            ]}>
+            Selecione um período no qual você deseja ver o gráfico.
+          </P>
 
-        <View style={s.list}>
-          {(['MÊS', 'SEMANA', 'DIA'] as ['MÊS', 'SEMANA', 'DIA']).map(
-            (item) => (
+          <View style={s.list}>
+            {(['MÊS', 'SEMANA', 'DIA'] as ['MÊS', 'SEMANA', 'DIA']).map(
+              (item) => (
+                <Pressable
+                  key={item}
+                  onPress={() => setPeriod(item)}
+                  style={s.button}>
+                  <View
+                    style={[
+                      s.ball,
+                      {
+                        borderColor:
+                          period === item ? '#305a96' : themes[theme].border,
+                      },
+                    ]}
+                  />
+
+                  <P className="font-inter-semibold text-xs capitalize">
+                    {item}
+                  </P>
+                </Pressable>
+              ),
+            )}
+          </View>
+
+          <View
+            style={[
+              s.separator,
+              {
+                backgroundColor: themes[theme].border,
+              },
+            ]}
+          />
+
+          <P style={s.title}>Quantidade de items</P>
+          <P
+            style={[
+              s.description,
+              {
+                color: themes[theme].textForeground,
+              },
+            ]}>
+            Selecione a quantidade de items na tabela e no gráfico.
+          </P>
+
+          <View style={s.list}>
+            {['5', '10', '15', '20', '25', '30'].map((item) => (
               <Pressable
                 key={item}
-                onPress={() => setPeriod(item)}
+                onPress={() => setSize(item)}
                 style={s.button}>
                 <View
                   style={[
                     s.ball,
                     {
                       borderColor:
-                        period === item ? '#305a96' : themes[theme].border,
+                        size === item ? '#305a96' : themes[theme].border,
                     },
                   ]}
                 />
 
                 <P className="font-inter-semibold text-xs capitalize">{item}</P>
               </Pressable>
-            ),
-          )}
+            ))}
+          </View>
+
+          <View
+            style={[
+              s.separator,
+              {
+                backgroundColor: themes[theme].border,
+              },
+            ]}
+          />
+
+          <P style={s.title}>Valor ou quantidade</P>
+          <P
+            style={[
+              s.description,
+              {
+                color: themes[theme].textForeground,
+              },
+            ]}>
+            Selecione entre valor ou quantidade no qual você deseja ver o
+            gráfico.
+          </P>
+
+          <View style={s.list}>
+            {(['VLR', 'QNT'] as (keyof typeof VARIANT)[]).map((item) => (
+              <Pressable
+                key={item}
+                onPress={() => setVariant(item)}
+                style={s.button}>
+                <View
+                  style={[
+                    s.ball,
+                    {
+                      borderColor:
+                        variant === item ? '#305a96' : themes[theme].border,
+                    },
+                  ]}
+                />
+
+                <P className="font-inter-semibold text-xs capitalize">
+                  {item === 'QNT' ? 'QUANTIDADE' : 'VALOR'}
+                </P>
+              </Pressable>
+            ))}
+          </View>
+
+          <View
+            style={[
+              s.separator,
+              {
+                backgroundColor: themes[theme].border,
+              },
+            ]}
+          />
+
+          <P style={s.title}>Gráfico</P>
+          <P
+            style={[
+              s.description,
+              {
+                color: themes[theme].textForeground,
+              },
+            ]}>
+            Selecione o gráfico que você quer
+          </P>
+
+          <View style={s.list}>
+            {(
+              [
+                'B. VERTICAL',
+                'B. HORIZONTAL',
+                'ROSCA',
+                'PIZZA',
+              ] as (keyof typeof CHART)[]
+            ).map((item) => (
+              <Pressable
+                key={item}
+                onPress={() => setChart(item)}
+                style={s.button}>
+                <View
+                  style={[
+                    s.ball,
+                    {
+                      borderColor:
+                        chart === item ? '#305a96' : themes[theme].border,
+                    },
+                  ]}
+                />
+
+                <P className="font-inter-semibold text-xs capitalize">{item}</P>
+              </Pressable>
+            ))}
+          </View>
         </View>
-
-        <View
-          style={[
-            s.separator,
-            {
-              backgroundColor: themes[theme].border,
-            },
-          ]}
-        />
-
-        <P style={s.title}>Valor ou quantidade</P>
-        <P
-          style={[
-            s.description,
-            {
-              color: themes[theme].textForeground,
-            },
-          ]}>
-          Selecione entre valor ou quantidade no qual você deseja ver o gráfico.
-        </P>
-
-        <View style={s.list}>
-          {(['VLR', 'QNT'] as (keyof typeof VARIANT)[]).map((item) => (
-            <Pressable
-              key={item}
-              onPress={() => setVariant(item)}
-              style={s.button}>
-              <View
-                style={[
-                  s.ball,
-                  {
-                    borderColor:
-                      variant === item ? '#305a96' : themes[theme].border,
-                  },
-                ]}
-              />
-
-              <P className="font-inter-semibold text-xs capitalize">
-                {item === 'QNT' ? 'QUANTIDADE' : 'VALOR'}
-              </P>
-            </Pressable>
-          ))}
-        </View>
-
-        <View
-          style={[
-            s.separator,
-            {
-              backgroundColor: themes[theme].border,
-            },
-          ]}
-        />
-
-        <P style={s.title}>Gráfico</P>
-        <P
-          style={[
-            s.description,
-            {
-              color: themes[theme].textForeground,
-            },
-          ]}>
-          Selecione o gráfico que você quer
-        </P>
-
-        <View style={s.list}>
-          {(
-            [
-              'B. VERTICAL',
-              'B. HORIZONTAL',
-              'ROSCA',
-              'PIZZA',
-            ] as (keyof typeof CHART)[]
-          ).map((item) => (
-            <Pressable
-              key={item}
-              onPress={() => setChart(item)}
-              style={s.button}>
-              <View
-                style={[
-                  s.ball,
-                  {
-                    borderColor:
-                      chart === item ? '#305a96' : themes[theme].border,
-                  },
-                ]}
-              />
-
-              <P className="font-inter-semibold text-xs capitalize">{item}</P>
-            </Pressable>
-          ))}
-        </View>
-      </View>
+      </ScrollView>
     </Container>
   )
 }
