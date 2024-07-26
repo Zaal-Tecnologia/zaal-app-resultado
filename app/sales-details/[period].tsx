@@ -1,30 +1,49 @@
-import { useLocalSearchParams } from 'expo-router'
-import { useEffect, useMemo } from 'react'
-import { View, TouchableOpacity, Text, ActivityIndicator } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { red } from 'tailwindcss/colors'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { Stack, useLocalSearchParams } from 'expo-router'
+import { useEffect } from 'react'
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  RefreshControl,
+} from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
 import { api } from '~/api/api'
 
 import { Chart } from '~/components/chart'
 import { P } from '~/components/p'
-import { Sheet } from '~/components/sheet'
-import { Filter, FilterChart, FilterPeriod, PERIOD } from '~/components/filter'
+import {
+  Sheet,
+  SheetListColor,
+  SheetListItem,
+  SheetListItemTitle,
+  SheetListRow,
+  SheetList,
+} from '~/components/sheet'
+import { VARIANT } from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
-import { useChart, useExpand, usePeriod, useShow } from '~/hooks/use-filters'
+import { useChart, useExpand, usePeriod, useVariant } from '~/hooks/use-filters'
 import { useSelected } from '~/hooks/use-selected'
 import { useSheet } from '~/hooks/use-sheet'
 
-import { CHART_SIZE } from '~/utils/chart-size'
+import { HEIGHT, WIDTH } from '~/utils/chart-size'
 import { COLORS } from '~/utils/colors'
 import { currency } from '~/utils/currency'
 
 import type { TotalSalesDTO } from '~/types/total-sales-dto'
 import { Container } from '~/components/Container'
-import { Header } from '~/components/header'
 import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
+import { fonts } from '~/styles/fonts'
+
+import { FilterPageOptions } from '~/components/filter-page-options'
+import { Shimmer } from '~/components/shimmer'
+import { MemoizedSalesPreviewByPage } from '~/components/sales-preview-by-page'
+import { ISale } from '~/types/total-sales-response-dto'
+import { colors } from '~/styles/colors'
 
 const WEEK = {
   1: 'SEG',
@@ -33,6 +52,14 @@ const WEEK = {
   4: 'QUI',
   5: 'SEX',
   6: `SÁB`,
+} as const
+
+type SaleKey = 'semanaCorrente' | 'mesCorrente' | 'diaCorrente'
+
+export type Data = {
+  DIA: { TOTAL: number; CHART: ISale[] }
+  SEMANA: { TOTAL: number; CHART: ISale[] }
+  MÊS: { TOTAL: number; CHART: ISale[] }
 }
 
 export default function SalesDetails() {
@@ -43,11 +70,12 @@ export default function SalesDetails() {
   const sheetRef = useSheet()
   const { period: filterPeriod, setPeriod } = usePeriod()
   const { expand } = useExpand()
-  const { show } = useShow()
+  const { variant } = useVariant()
   const { chart } = useChart()
-  const { BACKGROUND_SECONDARY } = useTheme()
+  const { selected, setSelected } = useSelected()
+  const { theme } = useTheme()
 
-  const { data, isLoading } = useFetch<TotalSalesDTO>(
+  const { data, isLoading, refetch } = useFetch<Data>(
     ['get-total-sales-query'],
     async (authorization, branch) => {
       const response = await api(`vendatotal${branch}`, {
@@ -57,205 +85,219 @@ export default function SalesDetails() {
         },
       })
 
-      return await response.json()
+      const json = (await response.json()) as TotalSalesDTO
+
+      const { diaCorrente, mesCorrente, semanaCorrente } = json
+
+      const TOTAL = {
+        MÊS: mesCorrente.reduce((acc, curr) => acc + curr[VARIANT[variant]], 0),
+        SEMANA: semanaCorrente.reduce(
+          (acc, curr) => acc + curr[VARIANT[variant]],
+          0,
+        ),
+        DIA: diaCorrente.reduce((acc, curr) => acc + curr[VARIANT[variant]], 0),
+      }
+
+      const CHART = Object.keys(json).map((item) =>
+        json[item as SaleKey].map((i, idx) => ({
+          ...i,
+          id: i.indice,
+          posicao:
+            period === 'SEMANA'
+              ? // @ts-ignore
+                `${WEEK[i.indice]}`
+              : period === 'MÊS'
+                ? `S${i.indice}`
+                : period === 'DIA'
+                  ? `${i.indice}H`
+                  : '',
+          color: COLORS[idx],
+          quantidadeTotal: i.quantidadeTotal.toFixed(2),
+          percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
+        })),
+      )
+
+      return {
+        DIA: { TOTAL: TOTAL.DIA, CHART: CHART[0] },
+        SEMANA: { TOTAL: TOTAL.SEMANA, CHART: CHART[1] },
+        MÊS: { TOTAL: TOTAL.MÊS, CHART: CHART[2] },
+      }
     },
   )
 
-  const TOTAL = useMemo(
-    () =>
-      data
-        ? data[PERIOD.SALES[period!]].reduce(
-            (acc, curr) => acc + curr.valorTotal,
-            0,
-          )
-        : 0,
-    [data, period],
-  )
-
-  const dataByPeriod = useMemo(() => {
-    if (!(data && data[PERIOD.SALES[filterPeriod]].length !== 0)) return false
-
-    return data[PERIOD.SALES[filterPeriod!]].map((item, index) => ({
-      ...item,
-      id: item.indice,
-      posicao:
-        filterPeriod === 'MÊS'
-          ? `SEM. ${item.indice}`
-          : filterPeriod === 'SEMANA'
-            ? WEEK[item.indice]
-            : filterPeriod === 'DIA'
-              ? `${item.indice}h`
-              : '',
-      color: COLORS[index],
-      percentage: ((item.valorTotal / TOTAL) * 100).toFixed(2) + '%',
-    }))
-  }, [TOTAL, data, filterPeriod])
-
-  const { selected, setSelected } = useSelected()
+  const DATA = data ? data[period] : null
 
   useEffect(() => {
-    if (!dataByPeriod) setSelected(null)
-  }, [dataByPeriod, setSelected])
-
-  useEffect(() => {
-    if (period) setPeriod(period)
-  }, [period, setPeriod])
+    setPeriod(filterPeriod)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Container>
-      <Header.Root style={{ paddingHorizontal: 24 }}>
-        <Header.Back>VENDAS</Header.Back>
-        <Header.Content />
-      </Header.Root>
+      <ScrollView
+        scrollEnabled={false}
+        contentContainerStyle={{ flex: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }>
+        <Stack.Screen options={{ headerShown: false }} />
 
-      {expand ? null : (
-        <>
-          <P className="px-6 font-urbanist-semibold text-[24px]">
-            {show ? currency(TOTAL) : '-'}
-          </P>
+        <View style={s.header}>
+          <P style={s.title}>Vendas</P>
+        </View>
 
-          <Filter className="my-10">
-            <FilterPeriod />
-            <FilterChart />
-          </Filter>
-        </>
-      )}
+        <MemoizedSalesPreviewByPage
+          bestSellerName={undefined}
+          isLoading={isLoading}
+          total={
+            data ? [data.MÊS.TOTAL, data.SEMANA.TOTAL, data.DIA.TOTAL] : []
+          }
+        />
 
-      <View className="relative flex-1 items-center justify-center">
-        {isLoading ? (
-          <View className="flex-1 flex-row items-center justify-center">
-            <ActivityIndicator color="#305a96" />
-            <P className="ml-5 font-inter-semibold text-xs uppercase">
-              CARREGANDO VENDAS...
-            </P>
-          </View>
-        ) : !dataByPeriod ? (
-          <Chart.Empty />
-        ) : (
-          <View
-            className="relative flex-1 items-center justify-center"
-            style={{
-              marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
-            }}>
-            {dataByPeriod && !isLoading ? (
-              <SelectedChart data={dataByPeriod || []} />
-            ) : null}
-          </View>
+        <FilterPageOptions />
+
+        {isLoading && (
+          <Shimmer
+            width={WIDTH - 40}
+            height={HEIGHT - 600}
+            style={s.chartLoading}
+          />
         )}
-      </View>
 
-      {chart !== 'B. HORIZONTAL' && chart !== 'B. VERTICAL' && (
-        <View className="flex-1" />
-      )}
-
-      <Sheet.Root
-        ref={sheetRef}
-        index={!dataByPeriod ? 0 : selected || expand ? 1 : 2}>
-        {selected ? (
-          <View className="w-full p-10">
-            <View className="flex-row items-center justify-between">
-              <P className="mr-2.5 font-urbanist-semibold text-2xl">
-                {selected.posicao}
-              </P>
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => setSelected(null)}
-                className="h-10 flex-row items-center justify-center rounded-full border border-red-500 px-5">
-                <Text className="mr-2 font-inter-semibold text-xs text-red-500">
-                  FECHAR
-                </Text>
-                <Ionicons name="chevron-down" size={16} color={red[500]} />
-              </TouchableOpacity>
-            </View>
-
-            <View className="mt-10 flex-row items-center">
-              <View
-                className="mr-1.5 flex-1 rounded-md p-5"
-                style={{
-                  height: 80,
-                  backgroundColor: BACKGROUND_SECONDARY,
-                }}>
-                <P className="mb-2.5 font-inter-semibold text-xs text-zinc-500">
-                  VALOR
-                </P>
-                <View className="flex-row items-center">
-                  <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
-                    {currency(selected.valorTotal)}
-                  </P>
-
-                  {TOTAL && (
-                    <P
-                      className="rounded-full px-4 py-2 font-urbanist-semibold text-xs text-white"
-                      style={{ backgroundColor: '#305a96' }}>
-                      {((selected.valorTotal / TOTAL) * 100).toFixed(2)}%
-                    </P>
-                  )}
-                </View>
-              </View>
-
-              <View
-                className="ml-1.5 flex-1 rounded-md bg-zinc-100 p-5"
-                style={{
-                  height: 80,
-                  backgroundColor: BACKGROUND_SECONDARY,
-                }}>
-                <P className="mb-2.5 font-inter-semibold text-xs text-zinc-500">
-                  QUANTIDADE
-                </P>
-                <View className="flex-row items-center">
-                  <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
-                    {selected.quantidadeTotal}
-                  </P>
-                </View>
-              </View>
-            </View>
-          </View>
-        ) : (
+        {DATA && (
           <>
-            <View className="h-16 w-full flex-row items-center bg-[#305a96]/20">
-              <View className="h-full w-[33%] items-center justify-center">
-                <P className="font-inter-medium text-xs">SEMANA</P>
+            {DATA.CHART.length === 0 ? (
+              <Chart.Empty />
+            ) : (
+              <View
+                style={{
+                  marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 64 : 0,
+                }}>
+                {DATA.CHART ? <SelectedChart data={DATA.CHART} /> : null}
               </View>
-
-              <View className="h-full w-[33%] items-start justify-center">
-                <P className="font-inter-medium text-xs">VALOR</P>
-              </View>
-
-              <View className="h-full w-[33%] items-start justify-center">
-                <P className="font-inter-medium text-xs">QUANTIDADE</P>
-              </View>
-            </View>
-
-            <Sheet.List
-              data={!dataByPeriod ? [] : dataByPeriod}
-              keyExtractor={(item) => item.posicao}
-              renderItem={({ item }) => (
-                <Sheet.ListRow
-                  onPress={() => setSelected(!selected ? item : null)}>
-                  <Sheet.ListColor color={item.color} />
-
-                  <Sheet.ListItem className="w-[33%] items-center">
-                    <Sheet.ListItemTitle>{item.posicao}</Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-
-                  <Sheet.ListItem className="w-[33%]">
-                    <Sheet.ListItemTitle>
-                      {currency(item.valorTotal)}
-                    </Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-
-                  <Sheet.ListItem className="w-[33%]">
-                    <Sheet.ListItemTitle>
-                      {item.quantidadeTotal.toFixed(2)}
-                    </Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-                </Sheet.ListRow>
-              )}
-            />
+            )}
           </>
         )}
-      </Sheet.Root>
+
+        <Sheet ref={sheetRef} index={!DATA ? 0 : selected || expand ? 4 : 1}>
+          <View
+            className="h-8 w-full flex-row items-center"
+            style={{
+              backgroundColor: '#305a9620',
+            }}>
+            <View className="h-full w-[20%] items-center justify-center">
+              <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
+                Pos.
+              </P>
+            </View>
+
+            <View className="h-full w-[30%] items-start justify-center">
+              <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
+                Quantidade
+              </P>
+            </View>
+
+            <View className="h-full w-[50%] items-start justify-center">
+              <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
+                Valor
+              </P>
+            </View>
+
+            {/** <View className="h-full w-[20%] items-start justify-center">
+        <P className="font-inter-medium text-xs">QUANTIDADE</P>
+      </View> */}
+          </View>
+          <SheetList
+            data={!DATA ? [] : DATA.CHART}
+            keyExtractor={(item) => item.posicao}
+            ListFooterComponent={() =>
+              DATA
+                ? DATA.CHART.length === 20 && (
+                    <Pressable
+                      style={[
+                        s.loadMoreButton,
+                        {
+                          backgroundColor:
+                            theme === 'light' ? '#305a9620' : '#305a9680',
+                        },
+                      ]}>
+                      <Feather
+                        name="arrow-up-right"
+                        color="#305a96"
+                        size={18}
+                      />
+                      <P style={s.loadMoreButtonTitle}>Carregar + 10 items</P>
+                    </Pressable>
+                  )
+                : null
+            }
+            renderItem={({ item }) => (
+              <SheetListRow
+                onPress={() => setSelected(!selected ? item : null)}>
+                <SheetListColor color={item.color} />
+
+                <SheetListItem
+                  style={{ width: '20%', justifyContent: 'center' }}>
+                  <SheetListItemTitle>{item.posicao}</SheetListItemTitle>
+                </SheetListItem>
+
+                <SheetListItem style={{ width: '30%' }}>
+                  <SheetListItemTitle className="font-inter-medium">
+                    {item.quantidadeTotal}
+                  </SheetListItemTitle>
+                </SheetListItem>
+
+                <SheetListItem style={{ width: '50%' }}>
+                  <SheetListItemTitle style={{ color: colors.green[500] }}>
+                    {variant === 'QNT'
+                      ? item.quantidadeTotal
+                      : `${currency(item.valorTotal)}`}
+                    {'   '}
+                    <P style={{ marginLeft: 4, color: '#71717a' }}>
+                      {item.percentage}
+                    </P>
+                  </SheetListItemTitle>
+                </SheetListItem>
+              </SheetListRow>
+            )}
+          />
+        </Sheet>
+      </ScrollView>
     </Container>
   )
 }
+
+const s = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+  },
+  title: { fontSize: 18, fontFamily: fonts['urbanist-bold'] },
+  goPageButton: {
+    height: 32,
+    borderRadius: 999,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  goPageButtonText: {
+    fontFamily: fonts['inter-semibold'],
+    letterSpacing: -0.25,
+    fontSize: 11,
+  },
+  chartLoading: { marginHorizontal: 20, marginTop: 40 },
+  loadMoreButton: {
+    position: 'relative',
+    height: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadMoreButtonTitle: {
+    fontFamily: fonts['urbanist-bold'],
+    fontSize: 13,
+  },
+})

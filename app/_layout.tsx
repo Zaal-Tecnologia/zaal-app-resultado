@@ -74,10 +74,18 @@ export default function Layout() {
               options={{ headerTitle: 'Adicione um novo usuário' }}
             />
             <Stack.Screen
+              name="ranking-product"
+              options={{ headerShown: false, animation: 'ios' }}
+            />
+            <Stack.Screen
               name="branches"
               options={{ headerTitle: 'Selecione uma filial' }}
             />
             <Stack.Screen name="filters" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="details/[...to]"
+              options={{ headerShown: false }}
+            />
           </Stack>
         </ToastProvider>
       </QueryClientProvider>

@@ -24,6 +24,7 @@ import { useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
 
 import { P } from './p'
+
 import { fonts } from '~/styles/fonts'
 
 const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
@@ -37,7 +38,6 @@ const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
         handleStyle={{ display: 'none' }}
         backgroundStyle={{
           borderRadius: 0,
-          borderTopWidth: 1,
           borderTopColor: BORDER_PRIMARY,
           backgroundColor: BACKGROUND_PRIMARY,
         }}
@@ -49,25 +49,29 @@ const Root = forwardRef<ElementRef<typeof BottomSheet>, BottomSheetProps>(
   },
 )
 
-function Header(props: ViewProps) {
+export const Sheet = memo(Root)
+
+export function SheetHeader(props: ViewProps) {
   const { variant } = useVariant()
 
   return (
     <View
-      className="h-16 w-full flex-row items-center"
-      style={{ backgroundColor: '#305a9620' }}
+      className="h-8 w-full flex-row items-center"
+      style={{
+        backgroundColor: '#305a9620',
+      }}
       {...props}>
-      <View className="h-full w-[20%] items-center justify-center ">
-        <P className="font-inter-semibold text-xs">POS.</P>
+      <View className="h-full w-[20%] items-center justify-center">
+        <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>Pos.</P>
       </View>
 
       <View className="h-full w-[50%] items-start justify-center">
-        <P className="font-inter-semibold text-xs">NOME</P>
+        <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>Nome</P>
       </View>
 
       <View className="h-full w-[30%] items-start justify-center">
-        <P className="font-inter-semibold text-xs">
-          {variant === 'QNT' ? 'QUANTIDADE' : 'VALOR'}
+        <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
+          {variant === 'QNT' ? 'Quant.' : 'Valor'}
         </P>
       </View>
 
@@ -78,14 +82,15 @@ function Header(props: ViewProps) {
   )
 }
 
-function List<T>(props: ComponentProps<typeof BottomSheetFlatList<T>>) {
+export function SheetList<T>(
+  props: ComponentProps<typeof BottomSheetFlatList<T>>,
+) {
   const { BACKGROUND_PRIMARY } = useTheme()
 
   return (
     <BottomSheetFlatList
       contentContainerStyle={{
         backgroundColor: BACKGROUND_PRIMARY,
-        paddingBottom: 80,
       }}
       showsVerticalScrollIndicator={false}
       {...props}
@@ -93,7 +98,7 @@ function List<T>(props: ComponentProps<typeof BottomSheetFlatList<T>>) {
   )
 }
 
-function ListRow(props: PressableProps) {
+export function SheetListRow({ ...props }: PressableProps) {
   const { BORDER_PRIMARY } = useTheme()
 
   return (
@@ -107,7 +112,6 @@ function ListRow(props: PressableProps) {
           borderBottomWidth: 1,
           borderBottomColor: BORDER_PRIMARY,
         },
-        props.style,
       ]}
       {...props}>
       {props.children}
@@ -119,7 +123,7 @@ type ListColorProps = {
   color: string
 }
 
-function ListColor(props: ListColorProps) {
+export function SheetListColor(props: ListColorProps) {
   return (
     <View
       className="absolute left-2.5 h-5 w-2 rounded-full"
@@ -128,7 +132,7 @@ function ListColor(props: ListColorProps) {
   )
 }
 
-function ListItem(props: ViewProps) {
+export function SheetListItem(props: ViewProps) {
   return (
     <View
       {...props}
@@ -138,7 +142,7 @@ function ListItem(props: ViewProps) {
           width: '30%',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
         },
         props.style,
       ]}>
@@ -147,7 +151,7 @@ function ListItem(props: ViewProps) {
   )
 }
 
-function ListItemTitle(props: TextProps) {
+export function SheetListItemTitle(props: TextProps) {
   return (
     <Text
       {...props}
@@ -162,14 +166,4 @@ function ListItemTitle(props: TextProps) {
       {props.children}
     </Text>
   )
-}
-
-export const Sheet = {
-  Root: memo(Root),
-  Header: memo(Header),
-  List,
-  ListRow: memo(ListRow),
-  ListColor: memo(ListColor),
-  ListItem: memo(ListItem),
-  ListItemTitle: memo(ListItemTitle),
 }

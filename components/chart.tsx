@@ -9,7 +9,7 @@ import {
 import { ScrollView, View } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 
-import { CHART_SIZE, HEIGHT, WIDTH } from '~/utils/chart-size'
+import { HEIGHT, WIDTH } from '~/utils/chart-size'
 import { COLORS } from '~/utils/colors'
 
 import { P } from './p'
@@ -85,7 +85,7 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
           },
         }}
         labels={({ datum, index }) =>
-          index % 2 === 0 ? datum.percentage : index < 3 ? datum.percentage : ''
+          index % 2 === 0 ? datum.percentage : index < 4 ? datum.percentage : ''
         }
         {...props}
       />
@@ -96,7 +96,7 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
 function Bar(props: ComponentProps<typeof VictoryBar>) {
   const { expand } = useExpand()
   const { variant } = useVariant()
-  const { selected } = useSelected()
+  const { selected, setSelected } = useSelected()
   const { TEXT_PRIMARY } = useTheme()
 
   return (
@@ -126,6 +126,16 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
         <VictoryBar
           horizontal={props.horizontal}
           alignment="middle"
+          events={[
+            {
+              target: 'data',
+              eventHandlers: {
+                onPressIn: (_, props) => {
+                  setSelected(props.datum)
+                },
+              },
+            },
+          ]}
           style={{
             ...props.style,
             data: {
@@ -152,9 +162,7 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
           labels={({ datum }) =>
             props.data && props.data.length > 10
               ? !props.horizontal
-                ? variant === 'VLR'
-                  ? datum.percentage
-                  : null
+                ? datum.percentage
                 : datum.percentage
               : datum.percentage
           }

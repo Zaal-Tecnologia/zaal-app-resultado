@@ -45,6 +45,7 @@ export function SalesPreview() {
       return await response.json()
     },
   )
+
   const total = useMemo(() => {
     if (data) {
       const { diaCorrente, mesCorrente, semanaCorrente } = data

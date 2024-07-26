@@ -8,13 +8,12 @@ import { P } from '~/components/p'
 import { AddUserForm } from '~/components/add-user-form'
 
 export default function Home() {
-  // const { user } = useSession()
   const { user } = useUsers()
   const { top } = useSafeAreaInsets()
 
   return (
     <SafeAreaView style={{ paddingTop: top, flex: 1 }}>
-      <Stack.Screen options={{ title: 'Home' }} />
+      <Stack.Screen options={{ headerShown: false }} />
 
       {!user ? (
         <ScrollView

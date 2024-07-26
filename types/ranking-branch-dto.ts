@@ -1,4 +1,4 @@
-type Common = {
+export interface IBranch {
   filial: {
     cnpj: string
     id: number
@@ -9,10 +9,12 @@ type Common = {
   posicao: number
   quantidadeTotal: number
   valorTotal: number
+  color: string
+  percentage: number
 }
 
 export type RankingBranchDTO = {
-  firstOfDayDTOList: Common[]
-  firstOfMonthDTOList: Common[]
-  firstOfWeekDTOList: Common[]
+  firstOfDayDTOList: IBranch[]
+  firstOfMonthDTOList: IBranch[]
+  firstOfWeekDTOList: IBranch[]
 }

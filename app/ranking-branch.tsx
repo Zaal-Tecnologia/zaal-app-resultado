@@ -1,56 +1,68 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-  TouchableOpacity,
   View,
-  Text,
-  ActivityIndicator,
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Pressable,
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { red } from 'tailwindcss/colors'
+import { Feather } from '@expo/vector-icons'
+import { Stack } from 'expo-router'
 
 import { api } from '~/api/api'
 
-import {
-  Filter,
-  FilterChart,
-  FilterPeriod,
-  FilterVariant,
-  PERIOD,
-} from '~/components/filter'
-
+import { VARIANT } from '~/components/filter'
 import { Chart } from '~/components/chart'
-import { Sheet } from '~/components/sheet'
+import {
+  Sheet,
+  SheetHeader,
+  SheetListColor,
+  SheetListItem,
+  SheetListItemTitle,
+  SheetListRow,
+  SheetList,
+} from '~/components/sheet'
 import { P } from '~/components/p'
+import { Container } from '~/components/Container'
+import { SelectedChart } from '~/components/selected-chart'
+import { MemoizedSalesPreviewByPage } from '~/components/sales-preview-by-page'
+import {
+  Selected,
+  SelectedClose,
+  SelectedPrice,
+  SelectedQuantity,
+  SelectedTitle,
+} from '~/components/selected'
+import { Shimmer } from '~/components/shimmer'
+import { FilterPageOptions } from '~/components/filter-page-options'
 
 import { currency } from '~/utils/currency'
 import { COLORS } from '~/utils/colors'
 
-import {
-  useChart,
-  useExpand,
-  usePeriod,
-  useShow,
-  useVariant,
-} from '~/hooks/use-filters'
+import { useChart, useExpand, usePeriod, useVariant } from '~/hooks/use-filters'
 import { useFetch } from '~/hooks/use-fetch'
 import { useSelected } from '~/hooks/use-selected'
 import { useSheet } from '~/hooks/use-sheet'
+import { useTheme } from '~/hooks/use-theme'
 
 import { HEIGHT, WIDTH } from '~/utils/chart-size'
 
-import { Average } from '~/components/average'
-import { CustomSlider } from '~/components/custom-slider'
-import { Container } from '~/components/Container'
-import { Header } from '~/components/header'
-import { useTheme } from '~/hooks/use-theme'
-import { SelectedChart } from '~/components/selected-chart'
-import { RankingBranchDTO } from '~/types/ranking-branch-dto'
 import { colors } from '~/styles/colors'
+import { fonts } from '~/styles/fonts'
 
-let updateTimeout: NodeJS.Timeout
+import type { IBranch, RankingBranchDTO } from '~/types/ranking-branch-dto'
+
+type BranchKeys =
+  | 'firstOfDayDTOList'
+  | 'firstOfMonthDTOList'
+  | 'firstOfWeekDTOList'
+
+export type Data = {
+  DIA: { TOTAL: number; CHART: IBranch[] }
+  SEMANA: { TOTAL: number; CHART: IBranch[] }
+  MÊS: { TOTAL: number; CHART: IBranch[] }
+}
+
+const MonthPosition = 0
 
 export default function Branch() {
   const sheetRef = useSheet()
@@ -58,13 +70,10 @@ export default function Branch() {
   const { period } = usePeriod()
   const { selected, setSelected } = useSelected()
   const { chart } = useChart()
-  const { show } = useShow()
   const { expand } = useExpand()
   const { variant } = useVariant()
 
-  const { BACKGROUND_SECONDARY } = useTheme()
-
-  const { data, isLoading, refetch } = useFetch<RankingBranchDTO>(
+  const { data, isLoading, refetch } = useFetch<Data>(
     ['get-branch-ranking-query'],
     async (authorization, branch) => {
       const response = await api(`rankingfilial${branch}`, {
@@ -74,294 +83,237 @@ export default function Branch() {
         },
       })
 
-      return await response.json()
-    },
-  )
+      const json = (await response.json()) as RankingBranchDTO
 
-  const TOTAL = useMemo(
-    () =>
-      data
-        ? data[PERIOD.BRANCH[period!]].reduce(
-            (acc, curr) => acc + curr.valorTotal,
-            0,
-          )
-        : 0,
-    [data, period],
-  )
+      const { firstOfDayDTOList, firstOfMonthDTOList, firstOfWeekDTOList } =
+        json
 
-  const DATA_BY_PERIOD = useMemo(() => {
-    if (!(data && data[PERIOD.BRANCH[period]].length !== 0)) return false
-
-    return data[PERIOD.BRANCH[period!]].map((item, index) => ({
-      ...item,
-      id: item.filial.id,
-      posicao: `${item.posicao}°`,
-      color: COLORS[index],
-      percentage: ((item.valorTotal / TOTAL) * 100).toFixed(2) + '%',
-    }))
-  }, [TOTAL, data, period])
-
-  const [chartData, setChartData] = useState<
-    {
-      color: string
-      id: number
-      filial: {
-        cnpj: string
-        id: number
-        localId: string
-        nomeFantasia: string
-        razaoSocial: string
+      const TOTAL = {
+        MÊS: firstOfMonthDTOList.reduce(
+          (acc, curr) => acc + curr[VARIANT[variant]],
+          0,
+        ),
+        SEMANA: firstOfWeekDTOList.reduce(
+          (acc, curr) => acc + curr[VARIANT[variant]],
+          0,
+        ),
+        DIA: firstOfDayDTOList.reduce(
+          (acc, curr) => acc + curr[VARIANT[variant]],
+          0,
+        ),
       }
-      posicao: string
-      quantidadeTotal: number
-      valorTotal: number
-      percentage: string
-    }[]
-  >([])
 
-  const onSlideValueChange = useCallback(
-    (value: [number, number]) => {
-      if (DATA_BY_PERIOD) {
-        clearTimeout(updateTimeout)
+      const CHART = Object.keys(json).map((item) =>
+        json[item as BranchKeys].map((i, idx) => ({
+          ...i,
+          id: i.filial.id,
+          posicao: `${i.posicao}°`,
+          color: COLORS[idx],
+          quantidadeTotal: i.quantidadeTotal.toFixed(2),
+          percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
+        })),
+      )
 
-        updateTimeout = setTimeout(() => {
-          setChartData(DATA_BY_PERIOD.slice(value[0], value[1]))
-        }, 500)
+      return {
+        DIA: { TOTAL: TOTAL.DIA, CHART: CHART[0] },
+        SEMANA: { TOTAL: TOTAL.SEMANA, CHART: CHART[1] },
+        MÊS: { TOTAL: TOTAL.MÊS, CHART: CHART[2] },
       }
     },
-    [DATA_BY_PERIOD],
   )
 
-  useEffect(() => {
-    if (DATA_BY_PERIOD) setChartData(DATA_BY_PERIOD)
-  }, [DATA_BY_PERIOD])
+  const DATA = data ? data[period] : null
 
-  useEffect(() => {
-    if (!DATA_BY_PERIOD) setSelected(null)
-  }, [DATA_BY_PERIOD, setSelected])
+  const { theme } = useTheme()
 
   return (
     <Container>
-      <Header.Root style={{ paddingHorizontal: 20 }}>
-        <Header.Back>FILIAIS</Header.Back>
-        <Header.Content />
-      </Header.Root>
-
       <ScrollView
-        contentContainerStyle={{ height: HEIGHT, width: WIDTH }}
         scrollEnabled={false}
+        contentContainerStyle={{ flex: 1 }}
         refreshControl={
-          chart !== 'B. HORIZONTAL' ? (
-            <RefreshControl refreshing={isLoading} onRefresh={refetch} />
-          ) : undefined
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }>
-        {expand ? null : (
-          <>
-            <P className="px-6 font-urbanist-semibold text-[24px]">
-              {show ? currency(TOTAL) : '-'}
-            </P>
+        <Stack.Screen options={{ headerShown: false }} />
 
-            <Filter>
-              <FilterPeriod />
-              <FilterVariant />
-              <FilterChart />
-            </Filter>
-          </>
+        <View style={s.header}>
+          <P style={s.title}>Filiais</P>
+        </View>
+
+        <MemoizedSalesPreviewByPage
+          bestSellerName={
+            DATA ? DATA.CHART[MonthPosition].filial.nomeFantasia : ''
+          }
+          isLoading={isLoading}
+          total={
+            data ? [data.MÊS.TOTAL, data.SEMANA.TOTAL, data.DIA.TOTAL] : []
+          }
+        />
+
+        <FilterPageOptions />
+
+        {isLoading && (
+          <Shimmer
+            width={WIDTH - 40}
+            height={HEIGHT - 600}
+            style={s.chartLoading}
+          />
         )}
 
-        {isLoading ? (
-          <View className="flex-1 flex-row items-center justify-center">
-            <ActivityIndicator color="#305a96" />
-            <P className="ml-5 font-inter-semibold text-xs uppercase">
-              CARREGANDO FILIAIS...
-            </P>
-          </View>
-        ) : (
+        {DATA && (
           <>
-            {!DATA_BY_PERIOD ? (
+            {DATA.CHART.length === 0 ? (
               <Chart.Empty />
             ) : (
-              <>
-                <Average
-                  bigger={
-                    DATA_BY_PERIOD
-                      ? currency(
-                          DATA_BY_PERIOD[DATA_BY_PERIOD.length - 1].valorTotal,
-                        )
-                      : ' 0'
-                  }
-                  average={
-                    DATA_BY_PERIOD && TOTAL
-                      ? currency(TOTAL / DATA_BY_PERIOD.length)
-                      : ' 0'
-                  }
-                  smaller={
-                    DATA_BY_PERIOD
-                      ? currency(DATA_BY_PERIOD[0].valorTotal)
-                      : ' 0'
-                  }
-                />
-
-                <View style={styles.sliderContainer}>
-                  <CustomSlider
-                    range={[0, DATA_BY_PERIOD.length]}
-                    maximumValue={DATA_BY_PERIOD.length}
-                    onValueChange={onSlideValueChange}
-                  />
-                </View>
-
-                <View
-                  className="relative flex-1 items-center justify-center"
-                  style={{
-                    marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 56 : 0,
-                  }}>
-                  {DATA_BY_PERIOD && !isLoading ? (
-                    <SelectedChart data={DATA_BY_PERIOD} />
-                  ) : null}
-                </View>
-              </>
+              <View
+                style={{
+                  marginTop: chart === 'PIZZA' || chart === 'ROSCA' ? 64 : 0,
+                }}>
+                {DATA.CHART ? <SelectedChart data={DATA.CHART} /> : null}
+              </View>
             )}
-
-            {chart === 'PIZZA' || chart === 'ROSCA' ? (
-              <View className="flex-1" />
-            ) : null}
           </>
         )}
+
+        <Sheet ref={sheetRef} index={!DATA ? 0 : selected || expand ? 4 : 1}>
+          {selected ? (
+            <Selected>
+              <SelectedClose />
+
+              <SelectedTitle>
+                Em {selected?.posicao} lugar{' '}
+                {selected?.filial.nomeFantasia?.toLowerCase()}
+              </SelectedTitle>
+
+              <SelectedPrice
+                TOTAL={DATA ? DATA.TOTAL : 0}
+                totalValue={selected?.valorTotal}
+              />
+
+              <SelectedQuantity
+                TOTAL={DATA ? DATA.TOTAL : 0}
+                totalQuantity={selected?.quantidadeTotal}
+              />
+
+              {/* <SelectedDetails
+                href={`/details/vendamarca/codigoMarca=${selected?.id}/${selected?.filial.nomeFantasia}`}
+              /> */}
+            </Selected>
+          ) : (
+            <>
+              <SheetHeader />
+
+              <SheetList
+                data={!DATA ? [] : DATA.CHART}
+                keyExtractor={(item) => item.filial.nomeFantasia}
+                ListFooterComponent={() =>
+                  DATA
+                    ? DATA.CHART.length === 20 && (
+                        <Pressable
+                          style={[
+                            s.loadMoreButton,
+                            {
+                              backgroundColor:
+                                theme === 'light' ? '#305a9620' : '#305a9680',
+                            },
+                          ]}>
+                          <Feather
+                            name="arrow-up-right"
+                            color="#305a96"
+                            size={18}
+                          />
+                          <P style={s.loadMoreButtonTitle}>
+                            Carregar + 10 items
+                          </P>
+                        </Pressable>
+                      )
+                    : null
+                }
+                renderItem={({ item }) => (
+                  <SheetListRow
+                    onPress={() => setSelected(!selected ? item : null)}>
+                    <SheetListItem
+                      style={{ width: '20%', justifyContent: 'center' }}>
+                      <SheetListColor color={item.color} />
+
+                      <SheetListItemTitle>{item.posicao}</SheetListItemTitle>
+                    </SheetListItem>
+
+                    <SheetListItem style={{ width: '50%' }}>
+                      <SheetListItemTitle>
+                        {item.filial.nomeFantasia}
+                      </SheetListItemTitle>
+                    </SheetListItem>
+
+                    <SheetListItem style={{ width: '30%' }}>
+                      <SheetListItemTitle style={{ color: colors.green[500] }}>
+                        {variant === 'QNT'
+                          ? item.quantidadeTotal
+                          : `${currency(item.valorTotal)}`}
+                        {'   '}
+                        <P style={{ marginLeft: 4, color: '#71717a' }}>
+                          {item.percentage}
+                        </P>
+                      </SheetListItemTitle>
+                    </SheetListItem>
+                  </SheetListRow>
+                )}
+              />
+            </>
+          )}
+        </Sheet>
       </ScrollView>
-
-      <Sheet.Root
-        ref={sheetRef}
-        index={!DATA_BY_PERIOD ? 0 : selected || expand ? 3 : 1}>
-        {selected ? (
-          <View className="w-full p-10">
-            <View className="flex-row items-center justify-between">
-              <P className="mr-2.5 font-urbanist-semibold text-2xl">
-                {selected.posicao}
-              </P>
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => setSelected(null)}
-                className="h-10 flex-row items-center justify-center rounded-full border border-red-500 px-5">
-                <Text className="mr-2 font-inter-semibold text-xs text-red-500">
-                  FECHAR
-                </Text>
-                <Ionicons name="chevron-down" size={16} color={red[500]} />
-              </TouchableOpacity>
-            </View>
-
-            <P className="my-10 font-urbanist-semibold text-2xl capitalize">
-              {selected.filial.nomeFantasia}
-            </P>
-
-            <View className="flex-row items-center">
-              <View
-                className="mr-1.5 flex-1 rounded-md p-5"
-                style={{
-                  height: 80,
-                  backgroundColor: BACKGROUND_SECONDARY,
-                }}>
-                <P className="mb-2.5 font-inter-semibold text-xs text-zinc-500">
-                  VALOR
-                </P>
-                <View className="flex-row items-center">
-                  <P className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider">
-                    {currency(selected.valorTotal)}
-                  </P>
-
-                  {TOTAL && (
-                    <P
-                      className="rounded-full px-4 py-2 font-urbanist-semibold text-xs text-white"
-                      style={{ backgroundColor: '#305a96' }}>
-                      {((selected.valorTotal / TOTAL) * 100).toFixed(2)}%
-                    </P>
-                  )}
-                </View>
-              </View>
-
-              <View
-                className="ml-1.5 flex-1 rounded-md bg-zinc-100 p-5"
-                style={{
-                  height: 80,
-                  backgroundColor: BACKGROUND_SECONDARY,
-                }}>
-                <P className="mb-2.5 font-inter-semibold text-xs text-zinc-500">
-                  QUANTIDADE
-                </P>
-                <View className="flex-row items-center">
-                  <P
-                    className="mr-1.5 font-urbanist-semibold text-lg -tracking-wider"
-                    numberOfLines={1}>
-                    {selected.quantidadeTotal}
-                  </P>
-                </View>
-              </View>
-            </View>
-
-            {/* <Link
-              asChild
-              href={`/details/vendacategoria/codigoCategoria=${selected.id}/${selected.categoriaNome}`}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                className="mt-10 h-14 flex-row items-center justify-center rounded-lg border-4 border-[#305a96]/20 bg-[#305a96] px-2.5">
-                <Text className="mr-2.5 font-inter-semibold text-xs text-white">
-                  VER MAIS DETALHES
-                </Text>
-                <Ionicons name="arrow-forward" size={16} color={white} />
-              </TouchableOpacity>
-            </Link> */}
-          </View>
-        ) : (
-          <>
-            <Sheet.Header />
-
-            <Sheet.List
-              data={!chartData ? [] : chartData}
-              keyExtractor={(item) => `${item.filial.id}`}
-              renderItem={({ item }) => (
-                <Sheet.ListRow
-                  onPress={() => setSelected(!selected ? item : null)}>
-                  <Sheet.ListColor color={item.color} />
-
-                  <Sheet.ListItem
-                    style={{ width: '20%', justifyContent: 'flex-start' }}>
-                    <Sheet.ListItemTitle>{item.posicao}</Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-
-                  <Sheet.ListItem
-                    style={{ width: '50%', justifyContent: 'flex-start' }}>
-                    <Sheet.ListItemTitle className="font-inter-medium">
-                      {item.filial.nomeFantasia}
-                    </Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-
-                  <Sheet.ListItem>
-                    <Sheet.ListItemTitle style={{ color: colors.green[500] }}>
-                      {variant === 'QNT'
-                        ? item.quantidadeTotal
-                        : `${currency(item.valorTotal)}`}
-                      {'   '}
-                      <P style={{ marginLeft: 4, color: '#71717a' }}>
-                        {item.percentage}
-                      </P>
-                    </Sheet.ListItemTitle>
-                  </Sheet.ListItem>
-                </Sheet.ListRow>
-              )}
-            />
-          </>
-        )}
-      </Sheet.Root>
     </Container>
   )
 }
 
-const styles = StyleSheet.create({
-  sliderContainer: {
-    height: 40,
-    marginTop: 10,
-    width: '100%',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 50,
+const s = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: fonts['urbanist-bold'],
+  },
+  goPageButton: {
+    height: 32,
+    borderRadius: 999,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  goPageButtonText: {
+    fontFamily: fonts['inter-semibold'],
+    letterSpacing: -0.25,
+    fontSize: 11,
+  },
+  button: {
+    paddingVertical: 12,
+  },
+  buttonTitle: {
+    fontSize: 10,
+    lineHeight: 20,
+    fontFamily: fonts['urbanist-bold'],
+  },
+  buttonPrice: {
+    fontFamily: fonts['urbanist-bold'],
+    fontSize: 14,
+    letterSpacing: -0.25,
+  },
+  chartLoading: { marginHorizontal: 20, marginTop: 40 },
+  loadMoreButton: {
+    position: 'relative',
+    height: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadMoreButtonTitle: {
+    fontFamily: fonts['urbanist-bold'],
+    fontSize: 13,
   },
 })
