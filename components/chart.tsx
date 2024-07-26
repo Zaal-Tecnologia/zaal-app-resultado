@@ -16,9 +16,9 @@ import { P } from './p'
 
 import { useExpand, useVariant } from '~/hooks/use-filters'
 import { useTheme } from '~/hooks/use-theme'
-import { VARIANT } from './filter'
 import { useSelected } from '~/hooks/use-selected'
 import { formatDependentAxisTicks } from '~/utils/format-dependent-axis-ticks'
+import { VARIANT } from '~/constants/variant'
 
 function Empty() {
   return (

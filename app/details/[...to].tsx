@@ -21,7 +21,6 @@ import {
   SheetListRow,
   SheetList,
 } from '~/components/sheet'
-import { VARIANT } from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
 import { useChart, useExpand, usePeriod, useVariant } from '~/hooks/use-filters'
@@ -43,6 +42,7 @@ import { ISale, TotalSalesResponseDTO } from '~/types/total-sales-response-dto'
 import { FilterPageOptions } from '~/components/filter-page-options'
 import { Feather } from '@expo/vector-icons'
 import { colors } from '~/styles/colors'
+import { VARIANT } from '~/constants/variant'
 
 const WEEK = {
   1: 'DOM.',

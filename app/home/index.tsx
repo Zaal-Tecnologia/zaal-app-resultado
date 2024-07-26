@@ -8,7 +8,6 @@ import { Container } from '~/components/Container'
 import { SalesPreview } from '~/components/sales-preview'
 import { P } from '~/components/p'
 import { Icon } from '~/components/icon'
-import { FilterShow } from '~/components/filter'
 import { Button } from '~/components/button'
 
 import { User } from './(components)/user'
@@ -19,6 +18,7 @@ import { useBranch } from '~/hooks/use-branch'
 import { useTheme } from '~/hooks/use-theme'
 
 import { fonts } from '~/styles/fonts'
+import { FilterShow } from '~/components/filter-show'
 
 export default function Home() {
   const { branch } = useBranch()

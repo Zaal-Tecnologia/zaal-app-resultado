@@ -9,7 +9,6 @@ import { Link, Stack } from 'expo-router'
 
 import { api } from '~/api/api'
 
-import { VARIANT } from '~/components/filter'
 import { Chart } from '~/components/chart'
 import {
   Sheet,
@@ -50,6 +49,7 @@ import { colors } from '~/styles/colors'
 import { fonts } from '~/styles/fonts'
 
 import type { IBranch, RankingBranchDTO } from '~/types/ranking-branch-dto'
+import { VARIANT } from '~/constants/variant'
 
 type BranchKeys =
   | 'firstOfDayDTOList'

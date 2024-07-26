@@ -5,7 +5,6 @@ import colors, { green } from 'tailwindcss/colors'
 import { api } from '~/api/api'
 import { currency } from '~/utils/currency'
 
-import { PERIOD } from '~/components/filter'
 import { P } from '~/components/p'
 import { Shimmer } from '~/components/shimmer'
 
@@ -16,6 +15,7 @@ import { useShow } from '~/hooks/use-filters'
 
 import { fonts } from '~/styles/fonts'
 import { themes } from '~/styles/themes'
+import { PERIOD } from '~/constants/period'
 
 const TITLE = {
   rankingmarca: 'MARCA',

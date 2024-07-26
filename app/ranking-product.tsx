@@ -11,7 +11,6 @@ import { useEffect } from 'react'
 
 import { api } from '~/api/api'
 
-import { VARIANT } from '~/components/filter'
 import { Chart } from '~/components/chart'
 import {
   Sheet,
@@ -57,6 +56,7 @@ import type {
   Product as IProduct,
   RankingProductDTO,
 } from '~/types/ranking-product-dto'
+import { VARIANT } from '~/constants/variant'
 
 type ProductKeys =
   | 'firstOfDayDTOList'

@@ -11,7 +11,6 @@ import { useEffect } from 'react'
 
 import { api } from '~/api/api'
 
-import { VARIANT } from '~/components/filter'
 import { Chart } from '~/components/chart'
 import {
   Sheet,
@@ -57,6 +56,7 @@ import type {
 } from '~/types/ranking-category-dto'
 import { Icon } from '~/components/icon'
 import { LoadMoreButton } from '~/components/load-more-button'
+import { VARIANT } from '~/constants/variant'
 
 type CategoryKeys =
   | 'firstOfDayToList'

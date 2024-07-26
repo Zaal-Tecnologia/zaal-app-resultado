@@ -22,7 +22,6 @@ import {
   SheetListRow,
   SheetList,
 } from '~/components/sheet'
-import { VARIANT } from '~/components/filter'
 
 import { useFetch } from '~/hooks/use-fetch'
 import { useChart, useExpand, usePeriod, useVariant } from '~/hooks/use-filters'
@@ -44,6 +43,7 @@ import { Shimmer } from '~/components/shimmer'
 import { MemoizedSalesPreviewByPage } from '~/components/sales-preview-by-page'
 import { ISale } from '~/types/total-sales-response-dto'
 import { colors } from '~/styles/colors'
+import { VARIANT } from '~/constants/variant'
 
 const WEEK = {
   1: 'SEG',
