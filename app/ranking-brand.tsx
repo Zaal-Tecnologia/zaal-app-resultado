@@ -35,6 +35,8 @@ import {
 } from '~/components/selected'
 import { Shimmer } from '~/components/shimmer'
 import { FilterPageOptions } from '~/components/filter-page-options'
+import { Icon } from '~/components/icon'
+import { LoadMoreButton } from '~/components/load-more-button'
 
 import { currency } from '~/utils/currency'
 import { COLORS } from '~/utils/colors'
@@ -51,7 +53,6 @@ import { colors } from '~/styles/colors'
 import { fonts } from '~/styles/fonts'
 
 import type { IBrand, RankingBrandDTO } from '~/types/ranking-brand-dto'
-import { Icon } from '~/components/icon'
 
 type BrandKeys = 'firstOfDayToList' | 'firstOfMonthToList' | 'firstOfWeekToList'
 
@@ -231,23 +232,7 @@ export default function Brand() {
                 ListFooterComponent={() =>
                   DATA
                     ? DATA.CHART.length === 20 && (
-                        <Pressable
-                          style={[
-                            s.loadMoreButton,
-                            {
-                              backgroundColor:
-                                theme === 'light' ? '#305a9620' : '#305a9680',
-                            },
-                          ]}>
-                          <Feather
-                            name="arrow-up-right"
-                            color="#305a96"
-                            size={18}
-                          />
-                          <P style={s.loadMoreButtonTitle}>
-                            Carregar + 10 items
-                          </P>
-                        </Pressable>
+                        <LoadMoreButton isLoading={isLoading} />
                       )
                     : null
                 }
@@ -322,16 +307,5 @@ const s = StyleSheet.create({
     letterSpacing: -0.25,
   },
   chartLoading: { marginHorizontal: 20, marginTop: 40 },
-  loadMoreButton: {
-    position: 'relative',
-    height: 64,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loadMoreButtonTitle: {
-    fontFamily: fonts['urbanist-bold'],
-    fontSize: 13,
-  },
   headerLeftContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 })

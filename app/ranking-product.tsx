@@ -36,6 +36,8 @@ import {
 } from '~/components/selected'
 import { Shimmer } from '~/components/shimmer'
 import { FilterPageOptions } from '~/components/filter-page-options'
+import { Icon } from '~/components/icon'
+import { LoadMoreButton } from '~/components/load-more-button'
 
 import { currency } from '~/utils/currency'
 import { COLORS } from '~/utils/colors'
@@ -55,7 +57,6 @@ import type {
   Product as IProduct,
   RankingProductDTO,
 } from '~/types/ranking-product-dto'
-import { Icon } from '~/components/icon'
 
 type ProductKeys =
   | 'firstOfDayDTOList'
@@ -245,23 +246,7 @@ export default function Product() {
                 ListFooterComponent={() =>
                   DATA
                     ? DATA.CHART.length === 20 && (
-                        <Pressable
-                          style={[
-                            s.loadMoreButton,
-                            {
-                              backgroundColor:
-                                theme === 'light' ? '#305a9620' : '#305a9680',
-                            },
-                          ]}>
-                          <Feather
-                            name="arrow-up-right"
-                            color="#305a96"
-                            size={18}
-                          />
-                          <P style={s.loadMoreButtonTitle}>
-                            Carregar + 10 items
-                          </P>
-                        </Pressable>
+                        <LoadMoreButton isLoading={isLoading} />
                       )
                     : null
                 }
@@ -339,15 +324,4 @@ const s = StyleSheet.create({
     letterSpacing: -0.25,
   },
   chartLoading: { marginHorizontal: 20, marginTop: 40 },
-  loadMoreButton: {
-    position: 'relative',
-    height: 64,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loadMoreButtonTitle: {
-    fontFamily: fonts['urbanist-bold'],
-    fontSize: 13,
-  },
 })
