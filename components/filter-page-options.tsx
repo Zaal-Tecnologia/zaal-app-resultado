@@ -11,6 +11,7 @@ import { usePeriod } from '~/hooks/use-filters'
 
 import { fonts } from '~/styles/fonts'
 import { themes } from '~/styles/themes'
+import { LastUpdateMessage } from './last-update-message'
 
 const PERIOD = {
   DIA: 'day',
@@ -44,7 +45,11 @@ export function FilterPageOptions() {
         </Pressable>
       </View>
 
-      <ListSizeMessage />
+      <View style={s.lastUpdateAndQuantityContainer}>
+        <LastUpdateMessage />
+
+        <ListSizeMessage />
+      </View>
     </View>
   )
 }
@@ -82,5 +87,9 @@ const s = StyleSheet.create({
     fontFamily: fonts['inter-semibold'],
     fontSize: 11,
     letterSpacing: -0.25,
+  },
+  lastUpdateAndQuantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })
