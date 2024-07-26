@@ -55,6 +55,7 @@ import type {
   Product as IProduct,
   RankingProductDTO,
 } from '~/types/ranking-product-dto'
+import { Icon } from '~/components/icon'
 
 type ProductKeys =
   | 'firstOfDayDTOList'
@@ -147,7 +148,12 @@ export default function Product() {
         <Stack.Screen options={{ headerShown: false }} />
 
         <View style={s.header}>
-          <P style={s.title}>Produtos</P>
+          <Link href="/home/" asChild>
+            <Pressable style={s.headerLeftContent}>
+              <Icon name="arrow-back" size={16} />
+              <P style={s.title}>Produtos</P>
+            </Pressable>
+          </Link>
 
           <Link href="/ranking-category" asChild>
             <Pressable style={s.goPageButton} hitSlop={40}>
@@ -316,6 +322,7 @@ const s = StyleSheet.create({
   button: {
     paddingVertical: 12,
   },
+  headerLeftContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   buttonTitle: {
     fontSize: 10,
     lineHeight: 20,

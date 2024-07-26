@@ -68,6 +68,7 @@ export default function Layout() {
                 backgroundColor: theme === 'dark' ? zinc[900] : white,
               },
             }}>
+            <Stack.Screen name="home" options={{ headerShown: false }} />
             <Stack.Screen name="profile" options={{ headerTitle: 'Perfil' }} />
             <Stack.Screen
               name="add-users-via-profile"

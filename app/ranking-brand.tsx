@@ -51,6 +51,7 @@ import { colors } from '~/styles/colors'
 import { fonts } from '~/styles/fonts'
 
 import type { IBrand, RankingBrandDTO } from '~/types/ranking-brand-dto'
+import { Icon } from '~/components/icon'
 
 type BrandKeys = 'firstOfDayToList' | 'firstOfMonthToList' | 'firstOfWeekToList'
 
@@ -134,7 +135,12 @@ export default function Brand() {
         <Stack.Screen options={{ headerShown: false }} />
 
         <View style={s.header}>
-          <P style={s.title}>Marcas</P>
+          <Link href="/home/" asChild>
+            <Pressable style={s.headerLeftContent}>
+              <Icon name="arrow-back" size={16} />
+              <P style={s.title}>Marcas</P>
+            </Pressable>
+          </Link>
 
           <Link href="/ranking-branch" asChild>
             <Pressable style={s.goPageButton} hitSlop={40}>
@@ -323,4 +329,5 @@ const s = StyleSheet.create({
     fontFamily: fonts['urbanist-bold'],
     fontSize: 13,
   },
+  headerLeftContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 })

@@ -55,6 +55,7 @@ import type {
   ICategory,
   RankingCategoryDTO,
 } from '~/types/ranking-category-dto'
+import { Icon } from '~/components/icon'
 
 type CategoryKeys =
   | 'firstOfDayToList'
@@ -146,7 +147,12 @@ export default function Category() {
         <Stack.Screen options={{ headerShown: false }} />
 
         <View style={s.header}>
-          <P style={s.title}>Categorias</P>
+          <Link href="/home/" asChild>
+            <Pressable style={s.headerLeftContent}>
+              <Icon name="arrow-back" size={16} />
+              <P style={s.title}>Categorias</P>
+            </Pressable>
+          </Link>
 
           <Link href="/ranking-brand" asChild>
             <Pressable style={s.goPageButton} hitSlop={40}>
@@ -337,4 +343,5 @@ const s = StyleSheet.create({
     fontFamily: fonts['urbanist-bold'],
     fontSize: 13,
   },
+  headerLeftContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 })

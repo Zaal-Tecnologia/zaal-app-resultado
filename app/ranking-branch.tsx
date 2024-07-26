@@ -6,7 +6,7 @@ import {
   Pressable,
 } from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import { Stack } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 
 import { api } from '~/api/api'
 
@@ -50,6 +50,7 @@ import { colors } from '~/styles/colors'
 import { fonts } from '~/styles/fonts'
 
 import type { IBranch, RankingBranchDTO } from '~/types/ranking-branch-dto'
+import { Icon } from '~/components/icon'
 
 type BranchKeys =
   | 'firstOfDayDTOList'
@@ -137,7 +138,12 @@ export default function Branch() {
         <Stack.Screen options={{ headerShown: false }} />
 
         <View style={s.header}>
-          <P style={s.title}>Filiais</P>
+          <Link href="/home/" asChild>
+            <Pressable style={s.headerLeftContent}>
+              <Icon name="arrow-back" size={16} />
+              <P style={s.title}>Filiais</P>
+            </Pressable>
+          </Link>
         </View>
 
         <MemoizedSalesPreviewByPage
@@ -312,6 +318,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerLeftContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   loadMoreButtonTitle: {
     fontFamily: fonts['urbanist-bold'],
     fontSize: 13,
