@@ -254,7 +254,7 @@ export default function Branch() {
                     <SheetListItem style={{ width: '30%' }}>
                       <SheetListItemTitle style={{ color: colors.green[500] }}>
                         {variant === 'QNT'
-                          ? item.quantidadeTotal
+                          ? item.quantity
                           : `${currency(item.valorTotal)}`}
                         {'   '}
                         <P style={{ marginLeft: 4, color: '#71717a' }}>

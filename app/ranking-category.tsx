@@ -173,7 +173,7 @@ export default function Category() {
         </View>
 
         <MemoizedSalesPreviewByPage
-          bestSellerName={DATA ? DATA.CHART[MonthPosition].categoriaNome : ''}
+          bestSellerName={DATA ? DATA.CHART[MonthPosition]?.categoriaNome : ''}
           isLoading={isLoading}
           total={
             data ? [data.MÊS.TOTAL, data.SEMANA.TOTAL, data.DIA.TOTAL] : []
@@ -235,7 +235,7 @@ export default function Category() {
 
               <SheetList
                 data={!DATA ? [] : DATA.CHART}
-                keyExtractor={(item) => item.categoriaNome}
+                keyExtractor={(item) => item?.categoriaNome}
                 ListFooterComponent={() =>
                   DATA
                     ? DATA.CHART.length === 20 && (
@@ -271,14 +271,14 @@ export default function Category() {
 
                     <SheetListItem style={{ width: '50%' }}>
                       <SheetListItemTitle>
-                        {item.categoriaNome}
+                        {item?.categoriaNome}
                       </SheetListItemTitle>
                     </SheetListItem>
 
                     <SheetListItem style={{ width: '30%' }}>
                       <SheetListItemTitle style={{ color: colors.green[500] }}>
                         {variant === 'QNT'
-                          ? item.quantidadeTotal
+                          ? item.quantity
                           : `${currency(item.valorTotal)}`}
                         {'   '}
                         <P style={{ marginLeft: 4, color: '#71717a' }}>

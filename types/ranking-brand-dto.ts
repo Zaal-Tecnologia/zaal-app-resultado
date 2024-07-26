@@ -4,6 +4,7 @@ export interface IBrand {
   localId: string
   posicao: number
   quantidadeTotal: number
+  quantity: number
   valorTotal: number
   color: string
   percentage: number

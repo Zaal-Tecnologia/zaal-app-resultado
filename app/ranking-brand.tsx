@@ -161,7 +161,7 @@ export default function Brand() {
         </View>
 
         <MemoizedSalesPreviewByPage
-          bestSellerName={DATA ? DATA.CHART[MonthPosition].marcaNome : ''}
+          bestSellerName={DATA ? DATA.CHART[MonthPosition]?.marcaNome : ''}
           isLoading={isLoading}
           total={
             data ? [data.MÊS.TOTAL, data.SEMANA.TOTAL, data.DIA.TOTAL] : []
@@ -223,7 +223,7 @@ export default function Brand() {
 
               <SheetList
                 data={!DATA ? [] : DATA.CHART}
-                keyExtractor={(item) => item.marcaNome}
+                keyExtractor={(item) => item?.marcaNome}
                 ListFooterComponent={() =>
                   DATA
                     ? DATA.CHART.length === 20 && (
@@ -258,13 +258,13 @@ export default function Brand() {
                     </SheetListItem>
 
                     <SheetListItem style={{ width: '50%' }}>
-                      <SheetListItemTitle>{item.marcaNome}</SheetListItemTitle>
+                      <SheetListItemTitle>{item?.marcaNome}</SheetListItemTitle>
                     </SheetListItem>
 
                     <SheetListItem style={{ width: '30%' }}>
                       <SheetListItemTitle style={{ color: colors.green[500] }}>
                         {variant === 'QNT'
-                          ? item.quantidadeTotal
+                          ? item.quantity
                           : `${currency(item.valorTotal)}`}
                         {'   '}
                         <P style={{ marginLeft: 4, color: '#71717a' }}>

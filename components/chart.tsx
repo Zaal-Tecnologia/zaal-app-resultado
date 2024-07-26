@@ -104,13 +104,13 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
       contentContainerStyle={{
         paddingRight: 40,
         paddingLeft: 40,
-        paddingBottom: props.horizontal ? HEIGHT - 600 : 0,
+        paddingBottom: props.horizontal ? HEIGHT - 550 : 0,
       }}
       horizontal={!props.horizontal}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
       <VictoryChart
-        domainPadding={{ x: 80, y: 40 }}
+        domainPadding={{ x: props.horizontal ? 40 : 80, y: 40 }}
         width={
           !props.horizontal
             ? props.data && props.data.length < 10
@@ -190,6 +190,7 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
 
         <VictoryAxis
           dependentAxis
+          // invertAxis={props.horizontal}
           tickFormat={(tick) =>
             variant === 'VLR' ? formatDependentAxisTicks(tick) : tick
           }

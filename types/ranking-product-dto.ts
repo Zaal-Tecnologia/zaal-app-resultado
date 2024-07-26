@@ -7,6 +7,7 @@ export interface Product {
   valorTotal: number
   color: string
   percentage: number
+  quantity: number
 }
 
 export type RankingProductDTO = {

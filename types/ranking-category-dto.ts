@@ -6,6 +6,7 @@ export interface ICategory {
   quantidadeTotal: number
   valorTotal: number
   color: string
+  quantity: number
   percentage: number
 }
 

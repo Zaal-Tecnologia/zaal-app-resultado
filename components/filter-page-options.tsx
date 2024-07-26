@@ -61,7 +61,7 @@ const s = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 20,
     justifyContent: 'space-between',
-    marginTop: 12,
+    marginVertical: 12,
   },
   leftContent: {
     alignItems: 'center',

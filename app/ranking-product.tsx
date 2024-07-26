@@ -115,7 +115,7 @@ export default function Product() {
           id: i.produtoId,
           posicao: `${i.posicao}°`,
           color: COLORS[idx],
-          quantidadeTotal: i.quantidadeTotal.toFixed(2),
+          quantity: i.quantidadeTotal.toFixed(2),
           percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
         })),
       )
@@ -129,6 +129,7 @@ export default function Product() {
   )
 
   const DATA = data ? data[period] : null
+  // console.log(DATA)
 
   const { theme } = useTheme()
 
@@ -143,7 +144,11 @@ export default function Product() {
         scrollEnabled={false}
         contentContainerStyle={{ flex: 1 }}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            enabled={chart !== 'B. HORIZONTAL'}
+          />
         }>
         <Stack.Screen options={{ headerShown: false }} />
 
@@ -236,7 +241,7 @@ export default function Product() {
 
               <SheetList
                 data={!DATA ? [] : DATA.CHART}
-                keyExtractor={(item) => item.produtoNome}
+                keyExtractor={(item) => item?.produtoNome}
                 ListFooterComponent={() =>
                   DATA
                     ? DATA.CHART.length === 20 && (
@@ -272,14 +277,14 @@ export default function Product() {
 
                     <SheetListItem style={{ width: '50%' }}>
                       <SheetListItemTitle>
-                        {item.produtoNome}
+                        {item?.produtoNome}
                       </SheetListItemTitle>
                     </SheetListItem>
 
                     <SheetListItem style={{ width: '30%' }}>
                       <SheetListItemTitle style={{ color: colors.green[500] }}>
                         {variant === 'QNT'
-                          ? item.quantidadeTotal
+                          ? item.quantity
                           : `${currency(item.valorTotal)}`}
                         {'   '}
                         <P style={{ marginLeft: 4, color: '#71717a' }}>

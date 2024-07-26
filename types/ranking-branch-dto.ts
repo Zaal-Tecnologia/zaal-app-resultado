@@ -10,6 +10,7 @@ export interface IBranch {
   quantidadeTotal: number
   valorTotal: number
   color: string
+  quantity: number
   percentage: number
 }
 
