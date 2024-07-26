@@ -110,7 +110,7 @@ export default function Branch() {
           id: i.filial.id,
           posicao: `${i.posicao}°`,
           color: COLORS[idx],
-          quantidadeTotal: i.quantidadeTotal.toFixed(2),
+          quantity: i.quantidadeTotal.toFixed(0),
           percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
         })),
       )
@@ -133,7 +133,11 @@ export default function Branch() {
         scrollEnabled={false}
         contentContainerStyle={{ flex: 1 }}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            enabled={chart !== 'B. HORIZONTAL'}
+          />
         }>
         <Stack.Screen options={{ headerShown: false }} />
 

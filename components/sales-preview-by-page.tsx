@@ -48,7 +48,7 @@ const SalesPreviewByPage = ({ total, isLoading, bestSellerName }: Props) => {
               {show
                 ? variant === 'VLR'
                   ? currency(month)
-                  : month.toFixed(2)
+                  : month.toFixed(0)
                 : '-'}
             </P>
           )}
@@ -95,7 +95,7 @@ const SalesPreviewByPage = ({ total, isLoading, bestSellerName }: Props) => {
                 {show
                   ? variant === 'VLR'
                     ? currency(week)
-                    : week.toFixed(2)
+                    : week.toFixed(0)
                   : '-'}
               </P>
             )}
@@ -119,7 +119,7 @@ const SalesPreviewByPage = ({ total, isLoading, bestSellerName }: Props) => {
                 {show
                   ? variant === 'VLR'
                     ? currency(day)
-                    : day.toFixed(2)
+                    : day.toFixed(0)
                   : '-'}
               </P>
             )}

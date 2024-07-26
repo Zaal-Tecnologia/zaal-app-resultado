@@ -115,7 +115,7 @@ export default function Product() {
           id: i.produtoId,
           posicao: `${i.posicao}°`,
           color: COLORS[idx],
-          quantity: i.quantidadeTotal.toFixed(2),
+          quantity: i.quantidadeTotal.toFixed(0),
           percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
         })),
       )
