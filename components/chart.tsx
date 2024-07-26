@@ -6,7 +6,7 @@ import {
   VictoryLabel,
   VictoryPie,
 } from 'victory-native'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 
 import { HEIGHT, WIDTH } from '~/utils/chart-size'
@@ -49,13 +49,7 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
   const { selected } = useSelected()
 
   return (
-    <View
-      style={{
-        flex: 1,
-        width: WIDTH,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+    <View style={s.container}>
       <VictoryPie
         data={props.data}
         x="posicao"
@@ -63,13 +57,6 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
         height={WIDTH * 0.9}
         width={WIDTH * 0.9}
         colorScale={COLORS}
-        // labelRadius={({ innerRadius }) =>
-        //   props.innerRadius
-        //     ? innerRadius
-        //       ? innerRadius + 12
-        //       : undefined
-        //     : undefined
-        // }
         style={{
           ...props.style,
           data: {
@@ -84,9 +71,27 @@ function Pie(props: ComponentProps<typeof VictoryPie>) {
             fontSize: 12,
           },
         }}
-        labels={({ datum, index }) =>
-          index % 2 === 0 ? datum.percentage : index < 4 ? datum.percentage : ''
-        }
+        labels={({ datum, index, data }) => {
+          const value = +data[0].percentage.replace('%', '')
+
+          if (value <= 99) {
+            if (value <= 60) {
+              if (value <= 45) {
+                if (value <= 15) {
+                  return index % 2 === 0 ? datum.percentage : ''
+                }
+
+                return index < 5 ? datum.percentage : ''
+              }
+
+              return index < 3 ? datum.percentage : ''
+            }
+
+            return index < 2 ? datum.percentage : ''
+          } else {
+            return datum.percentage
+          }
+        }}
         {...props}
       />
     </View>
@@ -210,6 +215,15 @@ function Bar(props: ComponentProps<typeof VictoryBar>) {
     </ScrollView>
   )
 }
+
+const s = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: WIDTH,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 export const Chart = {
   Pie,
