@@ -130,7 +130,6 @@ export default function Product() {
   )
 
   const DATA = data ? data[period] : null
-  // console.log(DATA)
 
   const { theme } = useTheme()
 

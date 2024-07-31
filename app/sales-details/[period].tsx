@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Stack, useLocalSearchParams } from 'expo-router'
-import { useEffect } from 'react'
+import { Link, Stack, useLocalSearchParams } from 'expo-router'
+import { useEffect, useMemo } from 'react'
 import {
   View,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native'
-import { Feather } from '@expo/vector-icons'
+// import { Feather } from '@expo/vector-icons'
 
 import { api } from '~/api/api'
 
@@ -34,7 +34,7 @@ import { currency } from '~/utils/currency'
 
 import type { TotalSalesDTO } from '~/types/total-sales-dto'
 import { Container } from '~/components/Container'
-import { useTheme } from '~/hooks/use-theme'
+// import { useTheme } from '~/hooks/use-theme'
 import { SelectedChart } from '~/components/selected-chart'
 import { fonts } from '~/styles/fonts'
 
@@ -44,14 +44,15 @@ import { MemoizedSalesPreviewByPage } from '~/components/sales-preview-by-page'
 import { ISale } from '~/types/total-sales-response-dto'
 import { colors } from '~/styles/colors'
 import { VARIANT } from '~/constants/variant'
+import { Icon } from '~/components/icon'
 
 const WEEK = {
-  1: 'SEG',
-  2: 'TER',
-  3: 'QUA',
-  4: 'QUI',
-  5: 'SEX',
-  6: `SÁB`,
+  2: 'SEG',
+  3: 'TER',
+  4: 'QUA',
+  5: 'QUI',
+  6: 'SEX',
+  7: 'SÁB',
 } as const
 
 type SaleKey = 'semanaCorrente' | 'mesCorrente' | 'diaCorrente'
@@ -73,10 +74,10 @@ export default function SalesDetails() {
   const { variant } = useVariant()
   const { chart } = useChart()
   const { selected, setSelected } = useSelected()
-  const { theme } = useTheme()
+  // const { theme } = useTheme()
 
   const { data, isLoading, refetch } = useFetch<Data>(
-    ['get-total-sales-query'],
+    ['get-total-sales-query', filterPeriod],
     async (authorization, branch) => {
       const response = await api(`vendatotal${branch}`, {
         headers: {
@@ -103,17 +104,17 @@ export default function SalesDetails() {
           ...i,
           id: i.indice,
           posicao:
-            period === 'SEMANA'
+            filterPeriod === 'SEMANA'
               ? // @ts-ignore
                 `${WEEK[i.indice]}`
-              : period === 'MÊS'
+              : filterPeriod === 'MÊS'
                 ? `S${i.indice}`
-                : period === 'DIA'
+                : filterPeriod === 'DIA'
                   ? `${i.indice}H`
                   : '',
           color: COLORS[idx],
           quantidadeTotal: i.quantidadeTotal.toFixed(2),
-          percentage: `${((i[VARIANT[variant]] / TOTAL[period]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
+          percentage: `${((i[VARIANT[variant]] / TOTAL[filterPeriod]) * 100).toFixed(1)}%`, // acho que dá para tirar period daqui
         })),
       )
 
@@ -125,10 +126,13 @@ export default function SalesDetails() {
     },
   )
 
-  const DATA = data ? data[period] : null
+  const DATA = useMemo(
+    () => (data ? data[filterPeriod] : null),
+    [data, filterPeriod],
+  )
 
   useEffect(() => {
-    setPeriod(filterPeriod)
+    setPeriod(period)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -142,9 +146,12 @@ export default function SalesDetails() {
         }>
         <Stack.Screen options={{ headerShown: false }} />
 
-        <View style={s.header}>
-          <P style={s.title}>Vendas</P>
-        </View>
+        <Link href="/home/" asChild>
+          <Pressable style={s.headerLeftContent}>
+            <Icon name="arrow-back" size={16} />
+            <P style={s.title}>Vendas</P>
+          </Pressable>
+        </Link>
 
         <MemoizedSalesPreviewByPage
           bestSellerName={undefined}
@@ -210,27 +217,27 @@ export default function SalesDetails() {
           <SheetList
             data={!DATA ? [] : DATA.CHART}
             keyExtractor={(item) => item.posicao}
-            ListFooterComponent={() =>
-              DATA
-                ? DATA.CHART.length === 20 && (
-                    <Pressable
-                      style={[
-                        s.loadMoreButton,
-                        {
-                          backgroundColor:
-                            theme === 'light' ? '#305a9620' : '#305a9680',
-                        },
-                      ]}>
-                      <Feather
-                        name="arrow-up-right"
-                        color="#305a96"
-                        size={18}
-                      />
-                      <P style={s.loadMoreButtonTitle}>Carregar + 10 items</P>
-                    </Pressable>
-                  )
-                : null
-            }
+            // ListFooterComponent={() =>
+            //   DATA
+            //     ? DATA.CHART.length === 20 && (
+            //         <Pressable
+            //           style={[
+            //             s.loadMoreButton,
+            //             {
+            //               backgroundColor:
+            //                 theme === 'light' ? '#305a9620' : '#305a9680',
+            //             },
+            //           ]}>
+            //           <Feather
+            //             name="arrow-up-right"
+            //             color="#305a96"
+            //             size={18}
+            //           />
+            //           <P style={s.loadMoreButtonTitle}>Carregar + 10 items</P>
+            //         </Pressable>
+            //       )
+            //     : null
+            // }
             renderItem={({ item }) => (
               <SheetListRow
                 onPress={() => setSelected(!selected ? item : null)}>
@@ -282,6 +289,12 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  headerLeftContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    margin: 16,
   },
   goPageButtonText: {
     fontFamily: fonts['inter-semibold'],

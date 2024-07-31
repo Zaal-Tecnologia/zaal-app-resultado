@@ -45,7 +45,7 @@ export function LastUpdateMessage() {
       return `${hours} dias`
     }
 
-    return minutes
+    return `${minutes} minutos`
   }, [data?.timeStamp])
 
   return isLoading ? (
