@@ -14,7 +14,6 @@ import {
 import {
   Pressable,
   PressableProps,
-  Text,
   TextProps,
   View,
   ViewProps,
@@ -153,7 +152,7 @@ export function SheetListItem(props: ViewProps) {
 
 export function SheetListItemTitle(props: TextProps) {
   return (
-    <Text
+    <P
       {...props}
       style={[
         {
@@ -164,6 +163,6 @@ export function SheetListItemTitle(props: TextProps) {
         props.style,
       ]}>
       {props.children}
-    </Text>
+    </P>
   )
 }

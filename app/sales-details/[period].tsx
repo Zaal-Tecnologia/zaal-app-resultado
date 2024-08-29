@@ -249,17 +249,14 @@ export default function SalesDetails() {
                 </SheetListItem>
 
                 <SheetListItem style={{ width: '30%' }}>
-                  <SheetListItemTitle className="font-inter-medium">
+                  <SheetListItemTitle>
                     {item.quantidadeTotal}
                   </SheetListItemTitle>
                 </SheetListItem>
 
                 <SheetListItem style={{ width: '50%' }}>
                   <SheetListItemTitle style={{ color: colors.green[500] }}>
-                    {variant === 'QNT'
-                      ? item.quantidadeTotal
-                      : `${currency(item.valorTotal)}`}
-                    {'   '}
+                    {currency(item.valorTotal)}
                     <P style={{ marginLeft: 4, color: '#71717a' }}>
                       {item.percentage}
                     </P>
