@@ -33,7 +33,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.zaal.resultado"
+      "bundleIdentifier": "com.zaal.resultado",
+      "buildNumber": "9"
     },
     "android": {
       "adaptiveIcon": {
