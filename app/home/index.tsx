@@ -71,7 +71,7 @@ export default function Home() {
 
             <View
               style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <Link asChild href="/news">
+              <Link href="/news">
                 <Button
                   style={{
                     flexDirection: 'row',
