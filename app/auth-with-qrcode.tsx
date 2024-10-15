@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { white } from 'tailwindcss/colors'
 import { useRouter } from 'expo-router'
-import { CameraView, useCameraPermissions } from 'expo-camera/next'
+import { CameraView, useCameraPermissions } from 'expo-camera'
 
 import { P } from '~/components/p'
 import { useToast } from 'react-native-toast-notifications'

@@ -1,6 +1,6 @@
-import { StyleSheet } from 'nativewind'
+//import { StyleSheet } from 'nativewind'
 import { useState } from 'react'
-import { Modal, Pressable, TouchableOpacity, View } from 'react-native'
+import { Modal, Pressable, TouchableOpacity, StyleSheet, View } from 'react-native'
 
 import { Icon } from '~/components/icon'
 import { P } from '~/components/p'
