@@ -1,12 +1,12 @@
 import { useColorScheme } from 'nativewind'
 import { useCallback, useMemo } from 'react'
-import { useMMKVString } from 'react-native-mmkv'
 import { white, zinc } from 'tailwindcss/colors'
+import { useStorageTheme } from './use-storage-theme'
 
 export function useTheme() {
   const { setColorScheme } = useColorScheme()
 
-  const [theme, setItem] = useMMKVString('zaal-result-theme', undefined)
+  const { setTheme: setItem, theme } = useStorageTheme()
 
   const setTheme = useCallback(
     async (theme: 'light' | 'dark') => {
