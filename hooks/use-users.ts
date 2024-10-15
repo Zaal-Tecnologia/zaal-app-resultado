@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
 import { useToast } from 'react-native-toast-notifications'
-import { useMMKVObject } from 'react-native-mmkv'
 import { useRouter } from 'expo-router'
 
 import type { User } from '~/types/user'
 import { FAKE_BRANCH_TO_INITIAL_DATA, useBranch } from './use-branch'
 import { generateToken } from '~/utils/generate-token'
 import { saveToken } from '~/utils/secure-store'
+import { useStorageUsers } from './use-storage-users'
 
 export function useUsers() {
   const toast = useToast()
@@ -14,10 +14,7 @@ export function useUsers() {
   const { push } = useRouter()
   const { setBranch } = useBranch()
 
-  const [users, setUsers] = useMMKVObject<User[] | undefined>(
-    'zaal-result-app:users',
-    undefined,
-  )
+  const { setUsers, users } = useStorageUsers()
 
   const user = useMemo(
     () => (users ? users.find((user) => user.active) : null),
@@ -55,7 +52,7 @@ export function useUsers() {
   )
 
   const onRemoveAllUsers = useCallback(() => {
-    setUsers(undefined)
+    setUsers([])
 
     push('/')
   }, [setUsers, push])
@@ -79,9 +76,9 @@ export function useUsers() {
           )
 
           await saveToken('zaal-result-token', token).then(() => {
-            setUsers((prev) =>
-              prev
-                ? prev.map((user) => ({
+            setUsers(
+              users
+                ? users.map((user) => ({
                     ...user,
                     active: user.userId === userId,
                   }))
