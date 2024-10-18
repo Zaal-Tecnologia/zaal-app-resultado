@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { AddUserForm } from '~/components/add-user-form'
 import { P } from '~/components/p'
+import { fonts } from '~/styles/fonts'
 
 export default function AuthWithText() {
   const { push, back } = useRouter()
@@ -18,7 +19,7 @@ export default function AuthWithText() {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 40 }}>
-      <View className="flex-1 justify-center">
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <TouchableOpacity
           activeOpacity={0.8}
           hitSlop={40}
@@ -27,7 +28,7 @@ export default function AuthWithText() {
           <MaterialCommunityIcons name="arrow-left" size={16} color="black" />
         </TouchableOpacity>
 
-        <View className="justify-center">
+        <View style={{ justifyContent: 'center' }}>
           <Image
             source={require('../../assets/logo-fundo-preto.png')}
             style={{
@@ -40,8 +41,12 @@ export default function AuthWithText() {
           />
 
           <P
-            style={{ marginHorizontal: 32 }}
-            className="mt-10 font-urbanist-regular text-[32px] -tracking-wide">
+            style={{
+              marginHorizontal: 32,
+              marginTop: 40,
+              fontSize: 32,
+              fontFamily: fonts['urbanist-regular'],
+            }}>
             Seja bem-vindo ao Zaal Resultado
           </P>
         </View>

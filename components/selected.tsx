@@ -38,10 +38,23 @@ export function SelectedClose() {
   return (
     <Button
       onPress={() => setSelected(null)}
-      className="flex-row items-center justify-start px-6 pt-5">
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        paddingHorizontal: 24,
+        paddingTop: 20,
+      }}>
       <Icon name="chevron-back" size={16} color={colors.red[500]} />
 
-      <Text className="mr-2 mt-[1px] font-inter-semibold text-xs text-red-500">
+      <Text
+        style={{
+          marginRight: 8,
+          marginTop: 1,
+          fontFamily: fonts['inter-medium'],
+          fontSize: 12,
+          color: '#f87171',
+        }}>
         FECHAR
       </Text>
     </Button>
@@ -64,22 +77,51 @@ export function SelectedTitle(props: { children: ReactNode }) {
 export function SelectedPrice(props: { totalValue: number; TOTAL: number }) {
   return (
     <View
-      className="mr-1.5 flex-row items-center justify-between rounded-t-[44px] px-10 py-8"
-      style={{ backgroundColor: '#ffbb87' }}>
+      style={{
+        backgroundColor: '#ffbb87',
+        marginRight: 6,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderTopLeftRadius: 44,
+        borderTopRightRadius: 44,
+        paddingHorizontal: 40,
+        paddingVertical: 32,
+      }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <P className="font-inter-semibold text-xs capitalize leading-5 text-zinc-500">
+        <P
+          style={{
+            fontFamily: fonts['inter-semibold'],
+            fontSize: 12,
+            textTransform: 'capitalize',
+            lineHeight: 20,
+            color: '#4B5563',
+          }}>
           VALOR TOTAL {'\n'}DE VENDAS
         </P>
       </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <P className="mr-1.5 font-urbanist-bold text-2xl -tracking-wider">
+        <P
+          style={{
+            marginRight: 6,
+            fontFamily: fonts['urbanist-bold'],
+            fontSize: 24,
+            letterSpacing: -0.5,
+          }}>
           {currency(props.totalValue)}
         </P>
 
         <P
-          className="rounded-full px-4 py-2 font-urbanist-bold text-sm text-white"
-          style={{ backgroundColor: '#faba80' }}>
+          style={{
+            backgroundColor: '#faba80',
+            borderRadius: 999,
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            fontFamily: 'Urbanist-Bold',
+            fontSize: 14,
+            color: '#FFFFFF',
+          }}>
           {((props.totalValue / props.TOTAL) * 100).toFixed(2)}%
         </P>
       </View>
@@ -93,20 +135,50 @@ export function SelectedQuantity(props: {
 }) {
   return (
     <View
-      className="mr-1.5 flex-row items-center justify-between rounded-b-[44px] px-10 py-8"
-      style={{ backgroundColor: '#9B8AFB95' }}>
+      style={{
+        backgroundColor: '#9B8AFB95',
+        marginRight: 6,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomLeftRadius: 44,
+        borderBottomRightRadius: 44,
+        paddingHorizontal: 40,
+        paddingVertical: 32,
+      }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <P className="font-inter-semibold text-xs capitalize leading-5 text-zinc-500">
+        <P
+          style={{
+            fontFamily: fonts['inter-semibold'],
+            fontSize: 12,
+            textTransform: 'capitalize',
+            lineHeight: 20,
+            color: '#4B5563',
+          }}>
           QUANTIDADE TOTAL {'\n'}VENDIDA
         </P>
       </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <P className="mr-1.5 font-urbanist-bold text-2xl -tracking-wider">
+        <P
+          style={{
+            marginRight: 6,
+            fontFamily: fonts['urbanist-bold'],
+            fontSize: 24,
+            letterSpacing: -0.5,
+          }}>
           {props.totalQuantity}
         </P>
 
-        <P className="rounded-full px-4 py-2 font-urbanist-bold text-sm text-white">
+        <P
+          style={{
+            borderRadius: 999, // Para um botão totalmente redondo
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            fontFamily: fonts['urbanist-bold'],
+            fontSize: 14,
+            color: '#FFFFFF',
+          }}>
           {((props.totalQuantity / props.TOTAL) * 100).toFixed(2)}%
         </P>
       </View>
@@ -116,10 +188,24 @@ export function SelectedQuantity(props: {
 
 export function SelectedDetails(props: { href: any }) {
   return (
-    <Link asChild href={props.href}>
-      <Button className="mt-8 flex-row items-center justify-start rounded-lg px-6">
+    <Link href={props.href}>
+      <Button
+        style={{
+          marginTop: 32,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          borderRadius: 8,
+          paddingHorizontal: 24,
+        }}>
         <Feather name="arrow-up-right" size={20} color="#305a96" />
-        <Text className="font-urbanist-bold text-sm text-[#305a96] underline">
+        <Text
+          style={{
+            fontFamily: fonts['urbanist-bold'],
+            fontSize: 14,
+            color: '#305a96',
+            textDecorationLine: 'underline',
+          }}>
           Ver Mais Detalhes
         </Text>
       </Button>

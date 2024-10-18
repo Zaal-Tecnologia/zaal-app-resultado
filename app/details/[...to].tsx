@@ -178,31 +178,48 @@ export default function SalesDetails() {
 
         <Sheet ref={sheetRef} index={!DATA ? 0 : selected || expand ? 4 : 1}>
           <View
-            className="h-8 w-full flex-row items-center"
             style={{
+              height: 32,
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
               backgroundColor: '#305a9620',
             }}>
-            <View className="h-full w-[20%] items-center justify-center">
+            <View
+              style={{
+                height: '100%',
+                width: '20%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
                 Pos.
               </P>
             </View>
 
-            <View className="h-full w-[30%] items-start justify-center">
+            <View
+              style={{
+                height: '100%',
+                width: '30%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}>
               <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
                 Quantidade
               </P>
             </View>
 
-            <View className="h-full w-[50%] items-start justify-center">
+            <View
+              style={{
+                height: '100%',
+                width: '50%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}>
               <P style={{ fontFamily: fonts['urbanist-bold'], fontSize: 13 }}>
                 Valor
               </P>
             </View>
-
-            {/** <View className="h-full w-[20%] items-start justify-center">
-        <P className="font-inter-medium text-xs">QUANTIDADE</P>
-      </View> */}
           </View>
 
           <SheetList
@@ -240,7 +257,8 @@ export default function SalesDetails() {
                 </SheetListItem>
 
                 <SheetListItem style={{ width: '30%' }}>
-                  <SheetListItemTitle className="font-inter-medium">
+                  <SheetListItemTitle
+                    style={{ fontFamily: fonts['inter-medium'] }}>
                     {item.quantidadeTotal}
                   </SheetListItemTitle>
                 </SheetListItem>

@@ -19,23 +19,61 @@ import { useTheme } from '~/hooks/use-theme'
 import { useSelected } from '~/hooks/use-selected'
 import { formatDependentAxisTicks } from '~/utils/format-dependent-axis-ticks'
 import { VARIANT } from '~/constants/variant'
+import { fonts } from '~/styles/fonts'
 
 function Empty() {
   return (
     <View
-      className="flex-1 items-center justify-center"
-      style={{ paddingBottom: 200 }}>
-      <P className="font-inter-medium text-2xl -tracking-wide">Vazio!</P>
-      <View className="mt-5 w-[80%]">
-        <P className="text-center font-inter-medium text-xs leading-6 text-zinc-500 dark:text-zinc-400">
+      style={{
+        paddingBottom: 200,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <P
+        style={{
+          fontFamily: fonts['inter-medium'],
+          fontSize: 24,
+          letterSpacing: -0.5,
+        }}>
+        Vazio!
+      </P>
+      <View
+        style={{
+          marginTop: 20,
+          width: '80%',
+        }}>
+        <P
+          style={{
+            textAlign: 'center',
+            fontFamily: 'Inter-Medium',
+            fontSize: 12,
+            lineHeight: 24,
+          }}>
           Sua pesquisa não retornou resultados, talvez esteja no começo do mês
           ainda 😉.
         </P>
       </View>
 
-      <View className="mt-5 w-[80%] flex-row items-center rounded-2xl bg-[#305a96]/20 p-5">
+      <View
+        style={{
+          marginTop: 20,
+          width: '80%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderRadius: 16,
+          backgroundColor: 'rgba(48, 90, 150, 0.2)',
+          padding: 20,
+        }}>
         <Feather name="phone-call" size={20} color="#305a96" />
-        <P className="ml-5 font-inter-medium text-xs leading-5 text-[#305a96]">
+        <P
+          style={{
+            marginLeft: 20,
+            fontFamily: fonts['inter-medium'],
+            fontSize: 12,
+            lineHeight: 20,
+            color: '#305a96',
+          }}>
           Caso esteja tendo problemas com a visualização entre em contato com o
           suporte.
         </P>

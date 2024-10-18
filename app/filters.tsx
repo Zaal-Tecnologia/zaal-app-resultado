@@ -66,7 +66,12 @@ export default function Filters() {
                     ]}
                   />
 
-                  <P className="font-inter-semibold text-xs capitalize">
+                  <P
+                    style={{
+                      fontFamily: fonts['inter-semibold'],
+                      fontSize: 12,
+                      textTransform: 'capitalize',
+                    }}>
                     {item}
                   </P>
                 </Pressable>
@@ -110,7 +115,14 @@ export default function Filters() {
                   ]}
                 />
 
-                <P className="font-inter-semibold text-xs capitalize">{item}</P>
+                <P
+                  style={{
+                    fontFamily: fonts['inter-semibold'],
+                    fontSize: 12,
+                    textTransform: 'capitalize',
+                  }}>
+                  {item}
+                </P>
               </Pressable>
             ))}
           </View>
@@ -152,7 +164,12 @@ export default function Filters() {
                   ]}
                 />
 
-                <P className="font-inter-semibold text-xs capitalize">
+                <P
+                  style={{
+                    fontFamily: fonts['inter-semibold'],
+                    fontSize: 12,
+                    textTransform: 'capitalize',
+                  }}>
                   {item === 'QNT' ? 'QUANTIDADE' : 'VALOR'}
                 </P>
               </Pressable>
@@ -202,7 +219,14 @@ export default function Filters() {
                   ]}
                 />
 
-                <P className="font-inter-semibold text-xs capitalize">{item}</P>
+                <P
+                  style={{
+                    fontFamily: fonts['inter-semibold'],
+                    fontSize: 12,
+                    textTransform: 'capitalize',
+                  }}>
+                  {item}
+                </P>
               </Pressable>
             ))}
           </View>

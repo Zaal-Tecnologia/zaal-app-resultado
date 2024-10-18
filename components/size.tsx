@@ -6,6 +6,7 @@ import { useSize } from '~/hooks/use-filters'
 
 import { P } from './p'
 import { useTheme } from '~/hooks/use-theme'
+import { fonts } from '~/styles/fonts'
 
 export function Size() {
   const { setSize, size } = useSize()
@@ -40,8 +41,22 @@ export function Size() {
                   setOpen((prev) => !prev)
                   setSize(item)
                 }}
-                className="h-12 flex-row items-center justify-center rounded-full px-5">
-                <P className="font-inter-semibold text-sm uppercase">{item}</P>
+                style={{
+                  height: 48,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 24,
+                  paddingHorizontal: 20,
+                }}>
+                <P
+                  style={{
+                    fontFamily: fonts['inter-semibold'],
+                    fontSize: 14,
+                    textTransform: 'uppercase',
+                  }}>
+                  {item}
+                </P>
               </Pressable>
             ))}
           </View>

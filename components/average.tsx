@@ -1,6 +1,7 @@
 import { View } from 'react-native'
 import { useTheme } from '~/hooks/use-theme'
 import { P } from './p'
+import { fonts } from '~/styles/fonts'
 
 export function Average({
   smaller,
@@ -14,27 +15,57 @@ export function Average({
   const { BACKGROUND_SECONDARY } = useTheme()
 
   return (
-    <View className="mt-2.5 flex-row items-center px-10">
-      <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">máx.</P> {smaller || 0}
+    <View
+      style={{
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+      }}>
+      <P
+        style={{
+          fontFamily: fonts['urbanist-semibold'],
+          fontSize: 14,
+          letterSpacing: -0.5,
+        }}>
+        <P style={{ fontFamily: fonts['inter-medium'] }}>máx.</P> {smaller || 0}
       </P>
 
       <View
-        className="mx-5 h-[2px] flex-1"
-        style={{ backgroundColor: BACKGROUND_SECONDARY }}
+        style={{
+          backgroundColor: BACKGROUND_SECONDARY,
+          marginHorizontal: 20,
+          height: 2,
+          flex: 1,
+        }}
       />
 
-      <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">média </P> {average || 0}
+      <P
+        style={{
+          fontFamily: fonts['urbanist-semibold'],
+          fontSize: 14,
+          letterSpacing: -0.5,
+        }}>
+        <P style={{ fontFamily: fonts['inter-medium'] }}>média </P>{' '}
+        {average || 0}
       </P>
 
       <View
-        className="mx-5 h-[2px] flex-1"
-        style={{ backgroundColor: BACKGROUND_SECONDARY }}
+        style={{
+          backgroundColor: BACKGROUND_SECONDARY,
+          marginHorizontal: 20,
+          height: 2,
+          flex: 1,
+        }}
       />
 
-      <P className="font-urbanist-semibold text-sm -tracking-wider">
-        <P className="font-inter-medium">mín.</P> {bigger || 0}
+      <P
+        style={{
+          fontFamily: fonts['urbanist-semibold'],
+          fontSize: 14,
+          letterSpacing: -0.5,
+        }}>
+        <P style={{ fontFamily: fonts['inter-medium'] }}>mín.</P> {bigger || 0}
       </P>
     </View>
   )

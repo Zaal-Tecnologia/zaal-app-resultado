@@ -29,6 +29,7 @@ import { generateToken } from '~/utils/generate-token'
 import type { CompanyResponseDTO } from '~/types/company-response-dto'
 import type { UserResponseDTO } from '~/types/user-response-dto'
 import { saveToken } from '~/utils/secure-store'
+import { fonts } from '~/styles/fonts'
 
 const Schema = z.object({
   empresaId: z.string(),
@@ -226,7 +227,14 @@ export function AddUserForm(props: Props) {
         <Container style={{ paddingHorizontal: 40 }}>
           <View>
             <View>
-              <P className="mb-1.5 ml-1.5 font-inter-medium text-xs -tracking-wide">
+              <P
+                style={{
+                  marginBottom: 6,
+                  marginLeft: 6,
+                  fontFamily: fonts['inter-medium'],
+                  fontSize: 12,
+                  letterSpacing: -0.5,
+                }}>
                 Código de liberação da empresa
               </P>
 
@@ -235,11 +243,16 @@ export function AddUserForm(props: Props) {
                 name="empresaId"
                 render={({ field }) => (
                   <TextInput
-                    className="h-14 rounded-xl border px-4 font-inter-medium text-[13px]"
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
                       borderColor: BORDER_PRIMARY,
+                      height: 56,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      paddingHorizontal: 16,
+                      fontFamily: fonts['inter-medium'],
+                      fontSize: 13,
                     }}
                     cursorColor={zinc[800]}
                     placeholder="Digite o código de liberação da empresa"
@@ -250,8 +263,15 @@ export function AddUserForm(props: Props) {
               />
             </View>
 
-            <View className="mt-5">
-              <P className="mb-1.5 ml-1.5 font-inter-medium text-xs -tracking-wide">
+            <View style={{ marginTop: 20 }}>
+              <P
+                style={{
+                  marginBottom: 6,
+                  marginLeft: 6,
+                  fontFamily: fonts['inter-medium'],
+                  fontSize: 12,
+                  letterSpacing: -0.5,
+                }}>
                 Código de liberação do dispositivo
               </P>
 
@@ -260,11 +280,16 @@ export function AddUserForm(props: Props) {
                 name="dispositivoHash"
                 render={({ field }) => (
                   <TextInput
-                    className="h-14 rounded-xl border px-4 font-inter-medium text-[13px]"
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
                       borderColor: BORDER_PRIMARY,
+                      height: 56,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      paddingHorizontal: 16,
+                      fontFamily: fonts['inter-medium'],
+                      fontSize: 13,
                     }}
                     cursorColor={zinc[800]}
                     placeholder="Digite o código de liberação do dispositivo"
@@ -275,8 +300,15 @@ export function AddUserForm(props: Props) {
               />
             </View>
 
-            <View className="mt-5">
-              <P className="mb-1.5 ml-1.5 font-inter-medium text-xs -tracking-wide">
+            <View style={{ marginTop: 20 }}>
+              <P
+                style={{
+                  marginBottom: 6,
+                  marginLeft: 6,
+                  fontFamily: fonts['inter-medium'],
+                  fontSize: 12,
+                  letterSpacing: -0.5,
+                }}>
                 Usuário
               </P>
 
@@ -285,12 +317,17 @@ export function AddUserForm(props: Props) {
                 name="login"
                 render={({ field }) => (
                   <TextInput
-                    className="h-14 rounded-xl border px-4 font-inter-medium text-[13px]"
                     cursorColor={zinc[800]}
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
                       borderColor: BORDER_PRIMARY,
+                      height: 56,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      paddingHorizontal: 16,
+                      fontFamily: fonts['inter-medium'],
+                      fontSize: 13,
                     }}
                     placeholder="Digite o nome de usuário"
                     onChangeText={field.onChange}
@@ -300,8 +337,15 @@ export function AddUserForm(props: Props) {
               />
             </View>
 
-            <View className="mt-5">
-              <P className="mb-1.5 ml-1.5 font-inter-medium text-xs -tracking-wide">
+            <View style={{ marginTop: 20 }}>
+              <P
+                style={{
+                  marginBottom: 6,
+                  marginLeft: 6,
+                  fontFamily: fonts['inter-medium'],
+                  fontSize: 12,
+                  letterSpacing: -0.5,
+                }}>
                 Senha
               </P>
 
@@ -310,12 +354,17 @@ export function AddUserForm(props: Props) {
                 name="senha"
                 render={({ field }) => (
                   <TextInput
-                    className="zinc[800] h-14 rounded-xl border px-4 font-inter-medium text-[13px] "
                     cursorColor={zinc[800]}
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
                       borderColor: BORDER_PRIMARY,
+                      height: 56,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      paddingHorizontal: 16,
+                      fontFamily: fonts['inter-medium'],
+                      fontSize: 13,
                     }}
                     secureTextEntry
                     placeholder="Digite sua senha"
@@ -329,11 +378,27 @@ export function AddUserForm(props: Props) {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSubmit(onSubmit)}
-              className="mt-5 h-14 w-full items-center justify-center rounded-xl border-2 border-[#305a96]/40 bg-[#305a96]">
+              style={{
+                marginTop: 20,
+                height: 56,
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 16,
+                borderWidth: 2,
+                borderColor: 'rgba(48, 90, 150, 0.4)',
+                backgroundColor: '#305a96',
+              }}>
               {isPending ? (
                 <ActivityIndicator color={white} size={20} />
               ) : (
-                <Text className="font-inter-medium text-[13px] -tracking-wide text-white">
+                <Text
+                  style={{
+                    fontFamily: fonts['inter-medium'],
+                    fontSize: 13,
+                    letterSpacing: -0.5,
+                    color: '#FFFFFF',
+                  }}>
                   Confirmar
                 </Text>
               )}
@@ -341,15 +406,35 @@ export function AddUserForm(props: Props) {
 
             {errors.length > 0 && (
               <>
-                <View className="mt-5 rounded-xl border-2 border-red-100/50 bg-red-200/50 p-5">
-                  <View className="mb-5 flex-row items-center justify-start">
+                <View
+                  style={{
+                    marginTop: 20,
+                    borderRadius: 16,
+                    borderWidth: 2,
+                    borderColor: 'rgba(254, 226, 226, 0.5)',
+                    backgroundColor: 'rgba(254, 226, 226, 0.5)',
+                    padding: 20,
+                  }}>
+                  <View
+                    style={{
+                      marginBottom: 20,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                    }}>
                     <Ionicons name="alert-circle" color={red[500]} size={32} />
-                    <P className="ml-2.5 font-inter-medium text-xs text-red-500">
+                    <P
+                      style={{
+                        marginLeft: 10,
+                        fontFamily: fonts['inter-medium'],
+                        fontSize: 12,
+                        color: '#f87171',
+                      }}>
                       TIVEMOS ALGUNS PROBLEMAS
                     </P>
 
                     <TouchableOpacity
-                      className="ml-auto"
+                      style={{ marginLeft: 'auto' }}
                       activeOpacity={0.8}
                       hitSlop={20}
                       onPress={() => setErrors([])}>
@@ -360,7 +445,12 @@ export function AddUserForm(props: Props) {
                   {errors.map((item) => (
                     <Text
                       key={item}
-                      className="mt-1.5 font-inter-medium text-xs text-red-500">
+                      style={{
+                        marginTop: 6,
+                        fontFamily: fonts['inter-medium'],
+                        fontSize: 12,
+                        color: '#f87171',
+                      }}>
                       {item}
                     </Text>
                   ))}

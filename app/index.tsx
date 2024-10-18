@@ -6,6 +6,7 @@ import { useUsers } from '~/hooks/use-users'
 
 import { P } from '~/components/p'
 import { AddUserForm } from '~/components/add-user-form'
+import { fonts } from '~/styles/fonts'
 
 export default function Home() {
   const { user } = useUsers()
@@ -19,8 +20,8 @@ export default function Home() {
         <ScrollView
           contentContainerStyle={{ paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}>
-          <View className="flex-1 justify-center">
-            <View className="justify-center">
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ justifyContent: 'center' }}>
               <Image
                 source={require('../assets/logo-fundo-preto.png')}
                 style={{
@@ -33,8 +34,12 @@ export default function Home() {
               />
 
               <P
-                style={{ marginHorizontal: 32 }}
-                className="mt-10 font-urbanist-regular text-[32px] -tracking-wide">
+                style={{
+                  marginHorizontal: 32,
+                  marginTop: 40,
+                  fontSize: 32,
+                  fontFamily: fonts['urbanist-regular'],
+                }}>
                 Seja bem-vindo ao Zaal Resultado
               </P>
 
