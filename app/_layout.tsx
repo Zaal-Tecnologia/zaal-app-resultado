@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ToastProvider } from 'react-native-toast-notifications'
-import { white, zinc } from 'tailwindcss/colors'
+import {colors} from '../styles/colors'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 
@@ -41,7 +41,7 @@ export default function Layout() {
     <GestureHandlerRootView
       style={{
         flex: 1,
-        backgroundColor: theme ? (theme === 'dark' ? zinc[900] : white) : white,
+        backgroundColor: theme ? (theme === 'dark' ? colors.zinc[900] : colors.white) : colors.white,
       }}>
       <QueryClientProvider client={queryClient}>
         <ToastProvider textStyle={{ fontFamily: 'inter-medium', fontSize: 11 }}>
@@ -56,16 +56,16 @@ export default function Layout() {
               headerStyle: {
                 backgroundColor: theme
                   ? theme === 'dark'
-                    ? zinc[900]
-                    : white
-                  : white,
+                    ? colors.zinc[900]
+                    : colors.white
+                  : colors.white,
               },
               headerLeft() {
                 return <CustomHeaderBackButton />
               },
               headerShadowVisible: false,
               contentStyle: {
-                backgroundColor: theme === 'dark' ? zinc[900] : white,
+                backgroundColor: theme === 'dark' ? colors.zinc[900] : colors.white,
               },
             }}>
             <Stack.Screen name="home" options={{ headerShown: false }} />

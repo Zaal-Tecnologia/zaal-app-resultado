@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import { Pressable, TextProps, ViewProps, View } from 'react-native'
-import { white, zinc } from 'tailwindcss/colors'
+import { colors } from '../styles/colors'
 
 import { useChart, useExpand } from '~/hooks/use-filters'
 
@@ -8,8 +8,8 @@ import { Icon } from './icon'
 import { P } from './p'
 import { ExpandButton } from './expand-button'
 import { Size } from './size'
-import { FilterShow } from './filter'
 import { fonts } from '~/styles/fonts'
+import { FilterShow } from './filter-show'
 
 function Root(props: ViewProps) {
   const { expand } = useExpand()
@@ -19,7 +19,7 @@ function Root(props: ViewProps) {
       style={[
         {
           borderBottomWidth: expand ? 1 : 0,
-          borderColor: expand ? zinc[200] : white,
+          borderColor: expand ? colors.zinc[200] : colors.white,
           marginBottom: !expand ? 20 : 0,
           paddingBottom: expand ? 20 : 0,
           flexDirection: 'row',

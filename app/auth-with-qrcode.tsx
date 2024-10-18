@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { white } from 'tailwindcss/colors'
+import { colors } from '../styles/colors'
 import { useRouter } from 'expo-router'
 import { CameraView, useCameraPermissions } from 'expo-camera/next'
 
@@ -91,7 +91,7 @@ export default function AuthWithQRCode() {
                 left: 0,
                 width: 50,
                 height: 8,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -102,7 +102,7 @@ export default function AuthWithQRCode() {
                 left: 0,
                 width: 8,
                 height: 50,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -113,7 +113,7 @@ export default function AuthWithQRCode() {
                 right: 0,
                 width: 50,
                 height: 8,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -124,7 +124,7 @@ export default function AuthWithQRCode() {
                 right: 0,
                 width: 8,
                 height: 50,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -136,7 +136,7 @@ export default function AuthWithQRCode() {
                 left: 0,
                 width: 50,
                 height: 8,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -147,7 +147,7 @@ export default function AuthWithQRCode() {
                 left: 0,
                 width: 8,
                 height: 50,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -158,7 +158,7 @@ export default function AuthWithQRCode() {
                 right: 0,
                 width: 50,
                 height: 8,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />
@@ -169,7 +169,7 @@ export default function AuthWithQRCode() {
                 right: 0,
                 width: 8,
                 height: 50,
-                backgroundColor: white,
+                backgroundColor: colors.white,
                 zIndex: 50,
               }}
             />

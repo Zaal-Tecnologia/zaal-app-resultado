@@ -8,7 +8,7 @@ import {
   View,
   ScrollView,
 } from 'react-native'
-import { red, white, zinc } from 'tailwindcss/colors'
+import { colors } from '../styles/colors'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -254,7 +254,7 @@ export function AddUserForm(props: Props) {
                       fontFamily: fonts['inter-medium'],
                       fontSize: 13,
                     }}
-                    cursorColor={zinc[800]}
+                    cursorColor={colors.zinc[800]}
                     placeholder="Digite o código de liberação da empresa"
                     onChangeText={field.onChange}
                     value={field.value}
@@ -291,7 +291,7 @@ export function AddUserForm(props: Props) {
                       fontFamily: fonts['inter-medium'],
                       fontSize: 13,
                     }}
-                    cursorColor={zinc[800]}
+                    cursorColor={colors.zinc[800]}
                     placeholder="Digite o código de liberação do dispositivo"
                     onChangeText={field.onChange}
                     value={field.value}
@@ -317,7 +317,7 @@ export function AddUserForm(props: Props) {
                 name="login"
                 render={({ field }) => (
                   <TextInput
-                    cursorColor={zinc[800]}
+                    cursorColor={colors.zinc[800]}
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
@@ -354,7 +354,7 @@ export function AddUserForm(props: Props) {
                 name="senha"
                 render={({ field }) => (
                   <TextInput
-                    cursorColor={zinc[800]}
+                    cursorColor={colors.zinc[800]}
                     style={{
                       backgroundColor: BACKGROUND_SECONDARY,
                       color: TEXT_PRIMARY,
@@ -390,7 +390,7 @@ export function AddUserForm(props: Props) {
                 backgroundColor: '#305a96',
               }}>
               {isPending ? (
-                <ActivityIndicator color={white} size={20} />
+                <ActivityIndicator color={colors.white} size={20} />
               ) : (
                 <Text
                   style={{
@@ -422,7 +422,7 @@ export function AddUserForm(props: Props) {
                       alignItems: 'center',
                       justifyContent: 'flex-start',
                     }}>
-                    <Ionicons name="alert-circle" color={red[500]} size={32} />
+                    <Ionicons name="alert-circle" color={colors.red[500]} size={32} />
                     <P
                       style={{
                         marginLeft: 10,
@@ -438,7 +438,7 @@ export function AddUserForm(props: Props) {
                       activeOpacity={0.8}
                       hitSlop={20}
                       onPress={() => setErrors([])}>
-                      <Ionicons name="close" size={20} color={red[500]} />
+                      <Ionicons name="close" size={20} color={colors.red[500]} />
                     </TouchableOpacity>
                   </View>
 

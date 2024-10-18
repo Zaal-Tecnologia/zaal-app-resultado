@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import colors, { green } from 'tailwindcss/colors'
+import { colors } from '../../../styles/colors'
 
 import { api } from '~/api/api'
 import { currency } from '~/utils/currency'
@@ -164,7 +164,7 @@ const s = StyleSheet.create({
     marginTop: 12,
   },
   cardTitle: {
-    color: green[500],
+    color: colors.green[500],
     fontFamily: fonts['inter-semibold'],
     fontSize: 10,
     letterSpacing: -0.025,

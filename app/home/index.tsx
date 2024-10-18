@@ -1,6 +1,5 @@
 import { Link, Stack, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import colors from 'tailwindcss/colors'
 
 import { WIDTH } from '~/utils/chart-size'
 
@@ -19,6 +18,7 @@ import { useTheme } from '~/hooks/use-theme'
 
 import { fonts } from '~/styles/fonts'
 import { FilterShow } from '~/components/filter-show'
+import { colors } from '~/styles/colors'
 
 export default function Home() {
   const { branch } = useBranch()

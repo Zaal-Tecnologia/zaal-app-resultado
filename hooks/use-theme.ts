@@ -1,20 +1,18 @@
-import { useColorScheme } from 'nativewind'
 import { useCallback, useMemo } from 'react'
-import { white, zinc } from 'tailwindcss/colors'
+import { colors } from '../styles/colors'
 import { useStorageTheme } from './use-storage-theme'
+import { Appearance } from 'react-native'
 
 export function useTheme() {
-  const { setColorScheme } = useColorScheme()
-
   const { setTheme: setItem, theme } = useStorageTheme()
 
   const setTheme = useCallback(
     async (theme: 'light' | 'dark') => {
-      setColorScheme(theme)
+      Appearance.setColorScheme(theme === 'dark' ? 'light' : 'dark')
 
       setItem(theme)
     },
-    [setColorScheme, setItem],
+    [setItem],
   )
 
   const {
@@ -23,12 +21,12 @@ export function useTheme() {
     BORDER_PRIMARY,
     TEXT_PRIMARY,
   } = useMemo(() => {
-    const BACKGROUND_PRIMARY = theme === 'dark' ? zinc[900] : white
-    const BACKGROUND_SECONDARY = theme === 'dark' ? zinc[800] : zinc[100]
+    const BACKGROUND_PRIMARY = theme === 'dark' ? colors.zinc[900] : colors.white
+    const BACKGROUND_SECONDARY = theme === 'dark' ? colors.zinc[800] : colors.zinc[100]
 
-    const TEXT_PRIMARY = theme === 'dark' ? white : zinc[800]
+    const TEXT_PRIMARY = theme === 'dark' ? colors.white : colors.zinc[800]
 
-    const BORDER_PRIMARY = theme === 'dark' ? zinc[700] : zinc[200]
+    const BORDER_PRIMARY = theme === 'dark' ? colors.zinc[700] : colors.zinc[200]
 
     return {
       BACKGROUND_PRIMARY,

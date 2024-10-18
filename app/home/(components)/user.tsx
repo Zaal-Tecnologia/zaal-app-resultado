@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import { Image, StyleSheet, View } from 'react-native'
-import colors from 'tailwindcss/colors'
+import {colors} from '../../../styles/colors'
 
 import { Button } from '~/components/button'
 import { Greeting } from '~/components/greeting'
