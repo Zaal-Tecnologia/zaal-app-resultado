@@ -26,20 +26,20 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#E33530"
+      "backgroundColor": "#e30613"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.zaal.resultado",
       "buildNumber": "9"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#E33530"
+        "backgroundColor": "#e30613"
       },
       "versionCode": 9,
       "package": "com.zaal.result"
