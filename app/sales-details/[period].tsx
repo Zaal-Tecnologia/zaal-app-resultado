@@ -146,12 +146,14 @@ export default function SalesDetails() {
         }>
         <Stack.Screen options={{ headerShown: false }} />
 
-        <Link href="/home/">
+   
+        <Link href="/home/" asChild>
           <Pressable style={s.headerLeftContent}>
             <Icon name="arrow-back" size={16} />
             <P style={s.title}>Vendas</P>
           </Pressable>
         </Link>
+      
 
         <MemoizedSalesPreviewByPage
           bestSellerName={undefined}
